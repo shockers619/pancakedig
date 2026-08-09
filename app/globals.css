@@ -547,11 +547,13 @@ header.site-header .wrap { display: flex; align-items: center; justify-content: 
   background: var(--court-navy-3);
   color: var(--chalk);
 }
-.badge-club { background: #2C4A6E; }
-.badge-venue { background: #5B3FA6; }
-.badge-training { background: #A62F6B; }
-.badge-officiating { background: #2A8A7D; }
-.badge-tryout { background: #B37E1E; }
+.badge-club { background: #3F80C9; color: var(--net-graphite); }
+.badge-venue { background: #7C5CE0; }
+.badge-training { background: #D23B84; }
+.badge-officiating { background: #2FA592; }
+.badge-tryout { background: #E0A22B; color: var(--net-graphite); }
+.badge-opening { background: #E1552F; }
+.badge-showcase { background: #4FAE7A; color: var(--net-graphite); }
 .listing-featured { font-family: var(--font-mono); font-size: 9.5px; font-weight: 700; color: var(--volley-yellow); }
 .listing-posted { font-family: var(--font-mono); font-size: 10.5px; color: var(--chalk-faint); }
 
@@ -622,6 +624,36 @@ header.site-header .wrap { display: flex; align-items: center; justify-content: 
   display: inline-flex;
   align-items: center;
   flex-shrink: 0;
+}
+
+/* ---------- Live Board ticker: "Just Posted" (ported from FloorBalance, PD palette) ---------- */
+.board-zone { background: var(--net-graphite); padding: 40px 0 8px; }
+.board-inner { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+.board { border: 1px solid rgba(244,246,242,0.1); border-radius: 6px; overflow: hidden; background: var(--court-navy-2); }
+.board-head { background: repeating-linear-gradient(45deg, var(--antenna-red) 0 9px, #b93b2f 9px 18px); padding: 3px; }
+.board-head-inner { background: var(--net-graphite); padding: 11px 18px; display: flex; align-items: center; justify-content: space-between; }
+.board-head-title { font-family: var(--font-display); font-weight: 800; font-size: 15px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--chalk); }
+.board-live { display: flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 10px; color: var(--good); font-weight: 700; text-transform: uppercase; }
+.board-live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--good); animation: pulse 1.8s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+.board-rows { display: flex; flex-direction: column; }
+.board-row { padding: 13px 18px; border-bottom: 1px solid rgba(244,246,242,0.08); display: flex; gap: 12px; align-items: center; }
+.board-row:last-child { border-bottom: none; }
+.board-row-head { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.board-tag { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.03em; text-transform: uppercase; padding: 3px 8px; border-radius: 3px; flex-shrink: 0; white-space: nowrap; font-weight: 700; }
+.board-row-body { min-width: 0; overflow: hidden; flex: 1; }
+.board-row-body strong { display: block; color: var(--chalk); font-weight: 700; font-size: 15px; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: var(--font-display); }
+.board-row-meta { color: var(--chalk-dim); font-size: 11.5px; font-family: var(--font-mono); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.board-row-logo { width: 34px; height: 34px; flex-shrink: 0; }
+.board-view { font-family: var(--font-mono); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; color: var(--chalk); border: 2px solid rgba(244,246,242,0.2); background: none; padding: 7px 14px; border-radius: 3px; cursor: pointer; white-space: nowrap; margin-left: auto; flex-shrink: 0; }
+.board-view:hover { border-color: var(--ace-teal); color: var(--ace-teal); }
+@media (max-width: 640px) {
+  .board-row { flex-wrap: wrap; gap: 8px; }
+  .board-row-head { width: 100%; }
+  .board-row-logo { margin-left: auto; }
+  .board-row-body { width: 100%; }
+  .board-row-body strong, .board-row-meta { white-space: normal; overflow: visible; text-overflow: clip; }
+  .board-view { width: 100%; text-align: center; margin-left: 0; }
 }
 
 /* ---------- Modal ---------- */

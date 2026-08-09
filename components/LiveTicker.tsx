@@ -1,0 +1,51 @@
+'use client'
+import { useState } from 'react'
+import { Listing, REGION_NAMES, TYPE_LABELS, formatDivisionRange, formatGender } from '@/lib/constants'
+import ListingModal from './ListingModal'
+
+// "⚡ Live Board — Just Posted" — the 5 most recent listings as a compact ticker,
+// ported from FloorBalance's LiveBoard (PD palette). Listings arrive already
+// sorted newest-first from the homepage query, so slice the top 5.
+export default function LiveTicker({ listings }: { listings: Listing[] }) {
+  const recent = listings.slice(0, 5)
+  const [selected, setSelected] = useState<Listing | null>(null)
+  if (recent.length === 0) return null
+
+  return (
+    <div className="board-zone">
+      <div className="board-inner">
+        <div className="board">
+          <div className="board-head">
+            <div className="board-head-inner">
+              <span className="board-head-title">⚡ Live Board — Just Posted</span>
+              <span className="board-live"><span className="board-live-dot" />LIVE</span>
+            </div>
+          </div>
+          <div className="board-rows">
+            {recent.map(l => (
+              <div className="board-row" key={l.id}>
+                <div className="board-row-head">
+                  <span className={`board-tag badge-${l.type}`}>{TYPE_LABELS[l.type] || l.type}</span>
+                </div>
+                <div className="board-row-body">
+                  <strong>{l.title || l.club}</strong>
+                  <div className="board-row-meta">
+                    📍 {REGION_NAMES[l.region] || l.region}
+                    {(l.venue || l.city || l.state) ? ` · ${[l.venue, l.city, l.state?.toUpperCase()].filter(Boolean).join(', ')}` : ''}
+                    {l.division ? ` · ${formatDivisionRange(l.division)}` : ''}
+                    {l.gender ? ` · ${formatGender(l.gender)}` : ''}
+                  </div>
+                </div>
+                {l.logo_url && (
+                  <img className="board-row-logo logo-frame" src={l.logo_url} alt={`${l.club} logo`} />
+                )}
+                <button className="board-view" onClick={() => setSelected(l)}>View Details</button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      {selected && <ListingModal listing={selected} onClose={() => setSelected(null)} />}
+    </div>
+  )
+}

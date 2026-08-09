@@ -3,6 +3,7 @@ import SearchPanel from '@/components/SearchPanel'
 import PricingSection from '@/components/PricingSection'
 import PostListingButton from '@/components/PostListingButton'
 import LiveBoard from '@/components/LiveBoard'
+import LiveTicker from '@/components/LiveTicker'
 import { createServerSupabaseClient } from '@/lib/supabase-server'
 import { SEED_LISTINGS } from '@/lib/seed-listings'
 import { Listing } from '@/lib/constants'
@@ -81,6 +82,8 @@ export default async function Home() {
           <SearchPanel />
         </div>
       </section>
+
+      <LiveTicker listings={listings} />
 
       <LiveBoard listings={listings} isSample={isSample} />
 
