@@ -2,8 +2,50 @@ import { VolleyballIcon } from '@/components/VolleyballIcon'
 import SearchPanel from '@/components/SearchPanel'
 import PricingSection from '@/components/PricingSection'
 import PostListingButton from '@/components/PostListingButton'
+import LiveBoard from '@/components/LiveBoard'
+import { createServerSupabaseClient } from '@/lib/supabase-server'
+import { SEED_LISTINGS } from '@/lib/seed-listings'
+import { Listing } from '@/lib/constants'
 
-export default function Home() {
+// ISR: render is cached and Supabase is re-queried at most every 30 min instead
+// of on every request. Expired-event filtering is done against today's date at
+// render time, so a cached payload stays correct. Keeps egress low.
+export const revalidate = 1800
+
+// Reads every approved listing (paging past PostgREST's 1000-row cap), drops
+// expired events, and falls back to SAMPLE listings when the DB is empty or
+// unreachable — so the site is never blank, even before Supabase is set up.
+async function getListings(): Promise<{ listings: Listing[]; isSample: boolean }> {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
+    return { listings: SEED_LISTINGS, isSample: true }
+  }
+  try {
+    const supabase = createServerSupabaseClient()
+    const today = new Date().toISOString().split('T')[0]
+    const PAGE = 1000
+    const raw: Listing[] = []
+    for (let from = 0; ; from += PAGE) {
+      const { data, error } = await supabase
+        .from('listings')
+        .select('*')
+        .eq('status', 'approved')
+        .order('created_at', { ascending: false })
+        .range(from, from + PAGE - 1)
+      if (error) { console.error('Homepage listings query error:', error); break }
+      if (!data || data.length === 0) break
+      raw.push(...(data as Listing[]))
+      if (data.length < PAGE) break
+    }
+    const live = raw.filter(l => !(l.expires_at && l.expires_at < today))
+    if (live.length > 0) return { listings: live, isSample: false }
+    return { listings: SEED_LISTINGS, isSample: true }
+  } catch {
+    return { listings: SEED_LISTINGS, isSample: true }
+  }
+}
+
+export default async function Home() {
+  const { listings, isSample } = await getListings()
   return (
     <>
       <header className="site-header">
@@ -39,6 +81,8 @@ export default function Home() {
           <SearchPanel />
         </div>
       </section>
+
+      <LiveBoard listings={listings} isSample={isSample} />
 
       <PricingSection />
 

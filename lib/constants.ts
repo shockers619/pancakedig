@@ -96,6 +96,13 @@ export type Listing = {
   verified?: boolean
   claimed?: boolean
   featured?: boolean
+  status?: 'pending' | 'approved' | 'rejected'
+  user_id?: string
+  // event-only fields (type === 'showcase'); evergreen listings leave these unset
+  event_subtype?: string
+  event_date?: string
+  event_date_end?: string
+  expires_at?: string      // events drop off the site the day after this date
   created_at: string
 }
 
