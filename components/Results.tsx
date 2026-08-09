@@ -1,7 +1,8 @@
 'use client'
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Listing } from '@/lib/constants'
+import SearchPanel from './SearchPanel'
 import ListingCard from './ListingCard'
 import ListingModal from './ListingModal'
 import NotifyModal from './NotifyModal'
@@ -20,6 +21,17 @@ export default function Results({ listings, isSample }: { listings: Listing[]; i
   const [page, setPage] = useState(1)
   const [selected, setSelected] = useState<Listing | null>(null)
   const [notifyOpen, setNotifyOpen] = useState(false)
+  const sortRef = useRef<HTMLDivElement>(null)
+
+  // Close the Sort menu when clicking anywhere outside it (matches FloorBalance).
+  useEffect(() => {
+    if (!sortOpen) return
+    const handler = (e: MouseEvent) => {
+      if (sortRef.current && !sortRef.current.contains(e.target as Node)) setSortOpen(false)
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [sortOpen])
 
   const csv = (k: string) => { const v = sp.get(k); return v ? v.split(',').map(s => s.trim()).filter(Boolean) : [] }
   const types = csv('type'), regions = csv('region'), states = csv('state'),
@@ -72,6 +84,7 @@ export default function Results({ listings, isSample }: { listings: Listing[]; i
   return (
     <section className="section results-section" id="results">
       <div className="wrap">
+        <div style={{ marginBottom: '30px' }}><SearchPanel /></div>
         <div className="results-toprow">
           <div className="result-count">
             <strong>{filtered.length.toLocaleString()}</strong>{' '}
@@ -87,7 +100,7 @@ export default function Results({ listings, isSample }: { listings: Listing[]; i
               Verified by Pancake Dig
             </div>
 
-            <div className="sort-select" onClick={e => e.stopPropagation()}>
+            <div className="sort-select" ref={sortRef} onClick={e => e.stopPropagation()}>
               <span>Sort by</span>
               <div style={{ position: 'relative' }}>
                 <div className="sort-box" onClick={() => setSortOpen(o => !o)}>

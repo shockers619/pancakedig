@@ -1,5 +1,4 @@
 import { VolleyballIcon } from '@/components/VolleyballIcon'
-import SearchPanel from '@/components/SearchPanel'
 import PricingSection from '@/components/PricingSection'
 import PostListingButton from '@/components/PostListingButton'
 import { Suspense } from 'react'
@@ -91,8 +90,6 @@ export default async function Home() {
               <div><div className="hero-stat-num"><em>JVA·USAV·AAU</em></div><div className="hero-stat-label">All in one place</div></div>
             </div>
           )}
-
-          <SearchPanel />
         </div>
       </section>
 
