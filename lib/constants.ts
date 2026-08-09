@@ -91,7 +91,12 @@ export type Listing = {
   details?: string
   email?: string
   phone?: string
+  contact_name?: string
   website?: string
+  facebook_url?: string
+  instagram_url?: string
+  x_url?: string
+  tiktok_url?: string
   logo_url?: string
   verified?: boolean
   claimed?: boolean

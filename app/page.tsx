@@ -48,6 +48,9 @@ async function getListings(): Promise<{ listings: Listing[]; isSample: boolean }
 
 export default async function Home() {
   const { listings, isSample } = await getListings()
+  const clubCount = listings.filter(l => l.type === 'club').length
+  const venueCount = listings.filter(l => l.type === 'venue').length
+  const trainingCount = listings.filter(l => l.type === 'training').length
   return (
     <>
       <header className="site-header">
@@ -79,6 +82,15 @@ export default async function Home() {
             volleyball programs — boys and girls, indoor and beach — by area, division,
             level, and organization.
           </p>
+
+          {!isSample && (clubCount > 0 || venueCount > 0) && (
+            <div className="hero-stats">
+              <div><div className="hero-stat-num">{clubCount}</div><div className="hero-stat-label">Clubs</div></div>
+              <div><div className="hero-stat-num">{venueCount}</div><div className="hero-stat-label">Venues</div></div>
+              <div><div className="hero-stat-num">{trainingCount}</div><div className="hero-stat-label">Training</div></div>
+              <div><div className="hero-stat-num"><em>JVA·USAV·AAU</em></div><div className="hero-stat-label">All in one place</div></div>
+            </div>
+          )}
 
           <SearchPanel />
         </div>

@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation'
 import { Listing } from '@/lib/constants'
 import ListingCard from './ListingCard'
 import ListingModal from './ListingModal'
+import NotifyModal from './NotifyModal'
 
 const PAGE_SIZE = 10
 
@@ -18,6 +19,7 @@ export default function Results({ listings, isSample }: { listings: Listing[]; i
   const [sortOpen, setSortOpen] = useState(false)
   const [page, setPage] = useState(1)
   const [selected, setSelected] = useState<Listing | null>(null)
+  const [notifyOpen, setNotifyOpen] = useState(false)
 
   const csv = (k: string) => { const v = sp.get(k); return v ? v.split(',').map(s => s.trim()).filter(Boolean) : [] }
   const types = csv('type'), regions = csv('region'), states = csv('state'),
@@ -104,6 +106,10 @@ export default function Results({ listings, isSample }: { listings: Listing[]; i
                 )}
               </div>
             </div>
+
+            <button className="notify-btn" onClick={() => setNotifyOpen(true)}>
+              🔔 Notify me when something new matches
+            </button>
           </div>
         </div>
 
@@ -129,6 +135,7 @@ export default function Results({ listings, isSample }: { listings: Listing[]; i
       </div>
 
       {selected && <ListingModal listing={selected} onClose={() => setSelected(null)} />}
+      {notifyOpen && <NotifyModal onClose={() => setNotifyOpen(false)} />}
     </section>
   )
 }
