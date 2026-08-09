@@ -11,7 +11,7 @@ export const SEED_LISTINGS: Listing[] = [
     region: 'midwest', state: 'il', city: 'Naperville',
     division: '13U, 14U, 15U, 16U, 17U, 18U', gender: 'girls',
     tiers: ['National', 'American'], governing_body: 'JVA',
-    details: '⚠️ SAMPLE LISTING — This is an example of how a club profile appears on Pancake Dig. Post your own free listing at pancakedig.com.\n\nGirls club program with National and American teams competing on the JVA circuit.',
+    details: '⚠️ SAMPLE LISTING — This is an example of how a club profile appears on Pancake Dig. Post your own free listing at pancakedig.com.\n\nGirls club program with National and American teams competing in JVA tournaments.',
     verified: false, claimed: false, featured: true, created_at: '2026-07-28T14:00:00Z',
   },
   {
