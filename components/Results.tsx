@@ -1,6 +1,6 @@
 'use client'
 import { useState, useMemo, useEffect, useRef } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 import { Listing } from '@/lib/constants'
 import SearchPanel from './SearchPanel'
 import ListingCard from './ListingCard'
@@ -16,6 +16,7 @@ const SORT_LABELS: Record<Sort, string> = {
 
 export default function Results({ listings, isSample }: { listings: Listing[]; isSample?: boolean }) {
   const sp = useSearchParams()
+  const router = useRouter()
   const [sort, setSort] = useState<Sort>('recent')
   const [sortOpen, setSortOpen] = useState(false)
   const [page, setPage] = useState(1)
@@ -89,6 +90,12 @@ export default function Results({ listings, isSample }: { listings: Listing[]; i
           <div className="result-count">
             <strong>{filtered.length.toLocaleString()}</strong>{' '}
             {hasFilter ? `listing${filtered.length !== 1 ? 's' : ''} found` : `${isSample ? 'sample listing' : 'total listing'}${filtered.length !== 1 ? 's' : ''} — and growing`}
+            {hasFilter && (
+              <button className="clear-filters-btn" style={{ marginLeft: '12px' }}
+                onClick={() => { router.replace('/', { scroll: false }); setPage(1) }}>
+                Clear filters
+              </button>
+            )}
           </div>
 
           <div className="results-right">
