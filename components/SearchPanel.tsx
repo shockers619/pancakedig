@@ -1,10 +1,12 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
+import { useRouter } from 'next/navigation'
 import { US_STATES } from '@/lib/constants'
 import { REGIONS, TYPES, EVENT_TYPES, SURFACES, LEVELS, ORGANIZATIONS, GENDERS, DIVISIONS, REGION_KEY, toggle } from '@/lib/filterOptions'
 import { Dropdown } from './Dropdown'
 
 export default function SearchPanel() {
+  const router = useRouter()
   const [openMenu, setOpenMenu] = useState('')
   const [types, setTypes] = useState<string[]>([])
   const [eventTypes, setEventTypes] = useState<string[]>([])
@@ -39,6 +41,24 @@ export default function SearchPanel() {
     .sort((a, b) => a[1].name.localeCompare(b[1].name))
 
   const showEventType = types.includes('showcase')
+
+  // Apply filters by writing them to the URL; the Results section reads them
+  // and filters client-side. (Level/Surface are UI-only for now — no seeded data
+  // supports them yet, so applying them would hide everything.)
+  const applySearch = () => {
+    const p = new URLSearchParams()
+    if (types.length) p.set('type', types.join(','))
+    const regionKeys = regions.map(r => REGION_KEY[r]).filter(Boolean)
+    if (regionKeys.length) p.set('region', regionKeys.join(','))
+    if (states.length) p.set('state', states.join(','))
+    if (divisions.length) p.set('division', divisions.join(','))
+    if (genders.length) p.set('gender', genders.map(g => g.toLowerCase()).join(','))
+    if (orgs.length) p.set('org', orgs.join(','))
+    const qs = p.toString()
+    router.replace(qs ? `/?${qs}` : '/', { scroll: false })
+    setOpenMenu('')
+    requestAnimationFrame(() => document.getElementById('results')?.scrollIntoView({ behavior: 'smooth', block: 'start' }))
+  }
 
   return (
     <div className="search-panel">
@@ -186,7 +206,7 @@ export default function SearchPanel() {
         </Dropdown>
       </div>
 
-      <button className="btn btn-primary search-submit">Search</button>
+      <button className="btn btn-primary search-submit" onClick={applySearch}>Search</button>
     </div>
   )
 }

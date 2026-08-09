@@ -2,8 +2,9 @@ import { VolleyballIcon } from '@/components/VolleyballIcon'
 import SearchPanel from '@/components/SearchPanel'
 import PricingSection from '@/components/PricingSection'
 import PostListingButton from '@/components/PostListingButton'
-import LiveBoard from '@/components/LiveBoard'
+import { Suspense } from 'react'
 import LiveTicker from '@/components/LiveTicker'
+import Results from '@/components/Results'
 import { createServerSupabaseClient } from '@/lib/supabase-server'
 import { SEED_LISTINGS } from '@/lib/seed-listings'
 import { Listing } from '@/lib/constants'
@@ -85,7 +86,9 @@ export default async function Home() {
 
       <LiveTicker listings={listings} />
 
-      <LiveBoard listings={listings} isSample={isSample} />
+      <Suspense fallback={null}>
+        <Results listings={listings} isSample={isSample} />
+      </Suspense>
 
       <PricingSection />
 
