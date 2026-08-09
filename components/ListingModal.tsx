@@ -14,7 +14,7 @@ export default function ListingModal({ listing: l, onClose }: { listing: Listing
 
         {/* Float, not flex — see house style #3. */}
         {l.logo_url && (
-          <img src={l.logo_url} alt={`${l.club} logo`} className="modal-logo logo-frame" />
+          <img src={l.logo_url} alt={`${l.club} logo`} className={`modal-logo logo-frame${l.logo_dark ? ' logo-frame-dark' : ''}`} />
         )}
         <div className="listing-badges" style={{ marginBottom: '16px' }}>
           <span className={`listing-type-tag badge-${l.type}`}>{TYPE_LABELS[l.type] || l.type}</span>

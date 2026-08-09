@@ -37,7 +37,7 @@ export default function LiveTicker({ listings }: { listings: Listing[] }) {
                   </div>
                 </div>
                 {l.logo_url && (
-                  <img className="board-row-logo logo-frame" src={l.logo_url} alt={`${l.club} logo`} />
+                  <img className={`board-row-logo logo-frame${l.logo_dark ? ' logo-frame-dark' : ''}`} src={l.logo_url} alt={`${l.club} logo`} />
                 )}
                 <button className="board-view" onClick={() => setSelected(l)}>View Details</button>
               </div>

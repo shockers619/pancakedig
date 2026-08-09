@@ -98,6 +98,7 @@ export type Listing = {
   x_url?: string
   tiktok_url?: string
   logo_url?: string
+  logo_dark?: boolean   // logo is white/reverse — render on a dark frame
   verified?: boolean
   claimed?: boolean
   featured?: boolean
