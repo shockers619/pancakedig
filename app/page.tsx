@@ -117,9 +117,9 @@ export default async function Home() {
           </div>
           <a href="https://sitesbyed.com" target="_blank" rel="noopener noreferrer" className="footer-credit">
             <span className="footer-credit-label">Site created by</span>
-            <span className="footer-credit-name">Sites by <em>Ed</em></span>
+            <img className="footer-credit-logo" src="/sitesbyed-white.png" alt="Sites by Ed" />
           </a>
-          <div className="foot-note">© 2026 Pancake Dig · Not affiliated with JVA, USA Volleyball, or the AAU.</div>
+          <div className="foot-note">© 2026 Pancake Dig · Not affiliated with JVA, USAV, or AAU.</div>
         </div>
       </footer>
     </>

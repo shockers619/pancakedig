@@ -740,9 +740,9 @@ footer .footer-links { display: flex; align-items: center; gap: 16px; flex-wrap:
 footer .foot-note { font-size: 11px; color: var(--chalk-faint); font-family: var(--font-mono); letter-spacing: 0.02em; }
 footer .footer-credit { display: flex; flex-direction: column; align-items: center; gap: 1px; text-decoration: none; }
 footer .footer-credit-label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--chalk-faint); }
-footer .footer-credit-name { font-family: var(--font-display); font-weight: 700; font-size: 15px; color: var(--chalk-dim); letter-spacing: 0.01em; }
-footer .footer-credit-name em { font-family: var(--font-hand); font-style: normal; font-size: 21px; color: var(--volley-yellow); margin-left: 1px; }
-footer .footer-credit:hover .footer-credit-name { color: var(--chalk); }
+footer .footer-credit-logo { height: 22px; width: auto; display: block; }
+footer .footer-credit { transition: opacity .18s ease; }
+footer .footer-credit:hover { opacity: 0.82; }
 
 @media (max-width: 760px) {
   .search-grid { grid-template-columns: 1fr; }
