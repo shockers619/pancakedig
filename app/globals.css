@@ -70,7 +70,7 @@
    ============================================================ */
 
 
-@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800;900&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800;900&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Caveat:wght@600;700&display=swap');
 
 :root {
   --court-navy: #10263B;
@@ -88,6 +88,7 @@
   --font-display: 'Big Shoulders Display', sans-serif;
   --font-body: 'IBM Plex Sans', sans-serif;
   --font-mono: 'IBM Plex Mono', monospace;
+  --font-hand: 'Caveat', cursive;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -228,12 +229,40 @@ header.site-header .wrap { display: flex; align-items: center; justify-content: 
 
 /* ---------- Hero ---------- */
 .hero {
-  padding: 88px 0 72px;
+  padding: 72px 0 52px;
   position: relative;
+  overflow: hidden;
   background:
     radial-gradient(ellipse 900px 500px at 85% -10%, rgba(53,196,181,0.14), transparent 60%),
     linear-gradient(180deg, var(--court-navy) 0%, var(--court-navy-2) 100%);
 }
+.hero .wrap { position: relative; z-index: 2; }
+
+/* Hand-drawn court linework filling the empty right side (warm-clubhouse look) */
+.hero-court {
+  position: absolute;
+  right: -70px; top: 50%;
+  transform: translateY(-50%) rotate(-4deg);
+  width: 620px; max-width: 55%;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.85;
+}
+@media (max-width: 900px) { .hero-court { display: none; } }
+
+/* Handwritten script accent under the headline */
+.hero-script {
+  font-family: var(--font-hand);
+  font-weight: 700;
+  font-size: 34px;
+  line-height: 1;
+  color: var(--volley-yellow);
+  margin: 18px 0 4px;
+  display: inline-block;
+  position: relative;
+}
+.hero-script svg { position: absolute; left: 0; right: 0; bottom: -12px; width: 100%; height: 12px; }
+@media (max-width: 640px) { .hero-script { font-size: 28px; } }
 .hero-eyebrow {
   font-family: var(--font-mono);
   font-size: 12px;
@@ -627,7 +656,7 @@ header.site-header .wrap { display: flex; align-items: center; justify-content: 
 }
 
 /* ---------- Live Board ticker: "Just Posted" (ported from FloorBalance, PD palette) ---------- */
-.board-zone { background: var(--net-graphite); padding: 40px 0 8px; }
+.board-zone { background: var(--net-graphite); padding: 26px 0 8px; }
 .board-inner { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
 .board { border: 1px solid rgba(244,246,242,0.1); border-radius: 6px; overflow: hidden; background: var(--court-navy-2); }
 .board-head { background: repeating-linear-gradient(45deg, var(--antenna-red) 0 9px, #b93b2f 9px 18px); padding: 3px; }
@@ -657,12 +686,24 @@ header.site-header .wrap { display: flex; align-items: center; justify-content: 
 }
 
 /* ---------- Search results: count / sort / verified / pagination ---------- */
-.results-section { padding: 48px 0 88px; }
+.results-section { padding: 30px 0 80px; }
 .results-toprow { display: flex; align-items: center; justify-content: space-between; gap: 16px 24px; flex-wrap: wrap; margin-bottom: 26px; }
 .result-count { font-family: var(--font-mono); font-size: 13px; color: var(--chalk-dim); }
 .result-count strong { color: var(--volley-yellow); font-size: 1.3em; font-family: var(--font-display); font-weight: 800; }
 .results-right { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-.verified-legend { display: flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 600; color: var(--chalk); }
+/* Ink-stamp "Verified" badge (warm-clubhouse) */
+.verified-legend {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: var(--font-mono); font-size: 10.5px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--ace-teal);
+  border: 2px solid var(--ace-teal);
+  border-radius: 5px;
+  padding: 6px 11px;
+  transform: rotate(-3deg);
+  opacity: 0.92;
+  box-shadow: inset 0 0 0 1px rgba(53,196,181,0.25);
+}
 .sort-select { position: relative; display: flex; align-items: center; gap: 8px; }
 .sort-select > span { font-family: var(--font-mono); font-size: 10px; color: var(--chalk-faint); text-transform: uppercase; letter-spacing: 0.06em; }
 .sort-box { display: flex; align-items: center; gap: 8px; background: var(--net-graphite); border: 2px solid rgba(244,246,242,0.16); border-radius: 4px; padding: 8px 12px; cursor: pointer; font-family: var(--font-mono); font-size: 11px; color: var(--chalk); min-width: 150px; }

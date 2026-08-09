@@ -72,9 +72,35 @@ export default async function Home() {
       </div></div>
 
       <section className="hero">
+        <svg className="hero-court" viewBox="0 0 420 320" fill="none" aria-hidden="true">
+          <defs>
+            <filter id="sketch" x="-6%" y="-6%" width="112%" height="112%">
+              <feTurbulence type="turbulence" baseFrequency="0.018" numOctaves={2} seed={4} result="n" />
+              <feDisplacementMap in="SourceGraphic" in2="n" scale={5} />
+            </filter>
+          </defs>
+          <g filter="url(#sketch)" strokeLinecap="round">
+            <rect x="46" y="46" width="328" height="228" stroke="#35C4B5" strokeWidth={2.5} opacity={0.5} />
+            <line x1="150" y1="46" x2="150" y2="274" stroke="#35C4B5" strokeWidth={2} opacity={0.3} />
+            <line x1="270" y1="46" x2="270" y2="274" stroke="#35C4B5" strokeWidth={2} opacity={0.3} />
+            <line x1="210" y1="34" x2="210" y2="286" stroke="#FFC42B" strokeWidth={2.5} opacity={0.7} />
+            <line x1="210" y1="30" x2="210" y2="46" stroke="#E14B3C" strokeWidth={3} opacity={0.8} />
+            <line x1="210" y1="274" x2="210" y2="290" stroke="#E14B3C" strokeWidth={3} opacity={0.8} />
+            <circle cx="332" cy="96" r="30" stroke="#FFC42B" strokeWidth={2.5} opacity={0.85} />
+            <path d="M306 88 Q332 80 358 90" stroke="#FFC42B" strokeWidth={2} opacity={0.7} />
+            <path d="M314 118 Q328 94 324 68" stroke="#FFC42B" strokeWidth={2} opacity={0.7} />
+            <path d="M350 120 Q338 94 346 70" stroke="#FFC42B" strokeWidth={2} opacity={0.7} />
+          </g>
+        </svg>
         <div className="wrap">
           <div className="hero-eyebrow">JVA · USAV · AAU — ONE DIRECTORY</div>
           <h1>Every club.<br/>Every level.<br/>One good <em>dig</em>.</h1>
+          <div className="hero-script">
+            finally — all in one place
+            <svg viewBox="0 0 260 12" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M3 8 Q65 2 130 6 T257 5" stroke="#FFC42B" strokeWidth="2.5" fill="none" strokeLinecap="round" />
+            </svg>
+          </div>
           <p className="hero-sub">
             Three governing bodies, three sets of rules, three overlapping seasons —
             and no single place that shows all of it. Search real grassroots
