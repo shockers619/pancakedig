@@ -113,15 +113,12 @@ export default async function Home() {
               <a href="mailto:info@pancakedig.com" style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: 'var(--chalk)', fontWeight: 500 }}>
                 info@pancakedig.com
               </a>
-              <span style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: 'var(--chalk)', fontWeight: 700 }}>/</span>
-              <a href="https://x.com/PancakeDig" target="_blank" rel="noopener noreferrer" style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: 'var(--chalk)', fontWeight: 500, display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
-                <svg viewBox="0 0 24 24" style={{ width: '13px', height: '13px', fill: 'currentColor', flexShrink: 0 }}>
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.748l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                </svg>
-                @PancakeDig
-              </a>
             </div>
           </div>
+          <a href="https://sitesbyed.com" target="_blank" rel="noopener noreferrer" className="footer-credit">
+            <span className="footer-credit-label">Site created by</span>
+            <span className="footer-credit-name">Sites by <em>Ed</em></span>
+          </a>
           <div className="foot-note">© 2026 Pancake Dig · Not affiliated with JVA, USA Volleyball, or the AAU.</div>
         </div>
       </footer>
