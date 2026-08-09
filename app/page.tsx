@@ -87,7 +87,7 @@ export default async function Home() {
               <div><div className="hero-stat-num">{clubCount}</div><div className="hero-stat-label">Clubs</div></div>
               <div><div className="hero-stat-num">{venueCount}</div><div className="hero-stat-label">Venues</div></div>
               <div><div className="hero-stat-num">{trainingCount}</div><div className="hero-stat-label">Training</div></div>
-              <div><div className="hero-stat-num"><em>JVA·USAV·AAU</em></div><div className="hero-stat-label">All in one place</div></div>
+              <div><div className="hero-stat-num" style={{ fontSize: '22px', letterSpacing: '0.02em', whiteSpace: 'nowrap' }}><em>JVA · USAV · AAU</em></div><div className="hero-stat-label">All in one place</div></div>
             </div>
           )}
         </div>
