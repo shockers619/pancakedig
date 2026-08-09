@@ -238,31 +238,19 @@ header.site-header .wrap { display: flex; align-items: center; justify-content: 
 }
 .hero .wrap { position: relative; z-index: 2; }
 
-/* Hand-drawn court linework filling the empty right side (warm-clubhouse look) */
-.hero-court {
+/* Oversized brand volleyball, bleeding off the right edge (refined hero anchor) */
+.hero-ball {
   position: absolute;
-  right: -70px; top: 50%;
-  transform: translateY(-50%) rotate(-4deg);
-  width: 620px; max-width: 55%;
+  right: -130px; top: 50%;
+  transform: translateY(-50%) rotate(-12deg);
   z-index: 1;
   pointer-events: none;
-  opacity: 0.85;
+  line-height: 0;
+  opacity: 0.96;
+  filter: drop-shadow(0 24px 48px rgba(0,0,0,0.3));
 }
-@media (max-width: 900px) { .hero-court { display: none; } }
-
-/* Handwritten script accent under the headline */
-.hero-script {
-  font-family: var(--font-hand);
-  font-weight: 700;
-  font-size: 34px;
-  line-height: 1;
-  color: var(--volley-yellow);
-  margin: 18px 0 4px;
-  display: inline-block;
-  position: relative;
-}
-.hero-script svg { position: absolute; left: 0; right: 0; bottom: -12px; width: 100%; height: 12px; }
-@media (max-width: 640px) { .hero-script { font-size: 28px; } }
+.hero-ball svg { width: 600px; height: 600px; max-width: 46vw; }
+@media (max-width: 860px) { .hero-ball { display: none; } }
 .hero-eyebrow {
   font-family: var(--font-mono);
   font-size: 12px;
