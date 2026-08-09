@@ -238,19 +238,6 @@ header.site-header .wrap { display: flex; align-items: center; justify-content: 
 }
 .hero .wrap { position: relative; z-index: 2; }
 
-/* Oversized brand volleyball, bleeding off the right edge (refined hero anchor) */
-.hero-ball {
-  position: absolute;
-  right: -130px; top: 50%;
-  transform: translateY(-50%) rotate(-12deg);
-  z-index: 1;
-  pointer-events: none;
-  line-height: 0;
-  opacity: 0.96;
-  filter: drop-shadow(0 24px 48px rgba(0,0,0,0.3));
-}
-.hero-ball svg { width: 600px; height: 600px; max-width: 46vw; }
-@media (max-width: 860px) { .hero-ball { display: none; } }
 .hero-eyebrow {
   font-family: var(--font-mono);
   font-size: 12px;
@@ -645,7 +632,7 @@ header.site-header .wrap { display: flex; align-items: center; justify-content: 
 
 /* ---------- Live Board ticker: "Just Posted" (ported from FloorBalance, PD palette) ---------- */
 .board-zone { background: var(--net-graphite); padding: 26px 0 8px; }
-.board-inner { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+.board-inner { max-width: 940px; margin: 0 auto; padding: 0 24px; }
 .board { border: 1px solid rgba(244,246,242,0.1); border-radius: 6px; overflow: hidden; background: var(--court-navy-2); }
 .board-head { background: repeating-linear-gradient(45deg, var(--antenna-red) 0 9px, #b93b2f 9px 18px); padding: 3px; }
 .board-head-inner { background: var(--net-graphite); padding: 11px 18px; display: flex; align-items: center; justify-content: space-between; }

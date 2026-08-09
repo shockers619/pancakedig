@@ -72,7 +72,6 @@ export default async function Home() {
       </div></div>
 
       <section className="hero">
-        <div className="hero-ball" aria-hidden="true"><VolleyballIcon size={540} /></div>
         <div className="wrap">
           <div className="hero-eyebrow">JVA · USAV · AAU — ONE DIRECTORY</div>
           <h1>Every club.<br/>Every level.<br/>One good <em>dig</em>.</h1>
