@@ -125,7 +125,7 @@ export default async function Home() {
             <span className="footer-credit-label">Site created by</span>
             <img className="footer-credit-logo" src="/sitesbyed-white.png" alt="Sites by Ed" />
           </a>
-          <div className="foot-note">© 2026 Pancake Dig · Not affiliated with JVA, USAV, or AAU.</div>
+          <div className="foot-note">© 2026 Pancake Dig · Not affiliated with any organization.</div>
         </div>
       </footer>
     </>
