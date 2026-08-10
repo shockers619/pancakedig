@@ -1,7 +1,8 @@
-import { Listing, REGION_NAMES, TYPE_LABELS, formatDivisionRange, formatGender } from '@/lib/constants'
+import { Listing, REGION_NAMES, TYPE_LABELS, formatDivisionRange, formatGender, formatEventDate } from '@/lib/constants'
 import { VerifiedBadge } from './VerifiedBadge'
 
 export default function ListingCard({ listing: l, onClick }: { listing: Listing; onClick: () => void }) {
+  const bodies = (l.governing_body || '').split(',').map(s => s.trim()).filter(Boolean)
   return (
     <div className="listing-card">
       <div>
@@ -23,10 +24,18 @@ export default function ListingCard({ listing: l, onClick }: { listing: Listing;
         <div className="listing-meta">
           📍 {REGION_NAMES[l.region] || l.region}
           {(l.venue || l.city || l.state) ? ` · ${[l.venue, l.city, l.state?.toUpperCase()].filter(Boolean).join(', ')}` : ''}
-          {l.division ? ` · ${formatDivisionRange(l.division)}` : ''}
-          {l.gender ? ` ${formatGender(l.gender)}` : ''}
-          {l.governing_body ? ` · ${l.governing_body}` : ''}
         </div>
+
+        {(l.event_date || l.event_subtype || l.division || l.gender || l.surface || bodies.length > 0) && (
+          <div className="listing-chips">
+            {l.event_date && <span className="listing-chip chip-event">{formatEventDate(l.event_date, l.event_date_end)}</span>}
+            {l.event_subtype && <span className="listing-chip">{l.event_subtype}</span>}
+            {l.division && <span className="listing-chip">{formatDivisionRange(l.division)}</span>}
+            {l.gender && <span className="listing-chip">{formatGender(l.gender)}</span>}
+            {l.surface && <span className="listing-chip">{l.surface}</span>}
+            {bodies.map(b => <span key={b} className="listing-chip chip-org">{b}</span>)}
+          </div>
+        )}
       </div>
 
       <div className="listing-card-actions">

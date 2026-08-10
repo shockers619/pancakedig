@@ -36,7 +36,12 @@ async function getListings(): Promise<{ listings: Listing[]; isSample: boolean }
       raw.push(...(data as Listing[]))
       if (data.length < PAGE) break
     }
-    const live = raw.filter(l => !(l.expires_at && l.expires_at < today))
+    const live = raw.filter(l => {
+      if (l.expires_at && l.expires_at < today) return false          // explicit expiry passed
+      const eventEnd = l.event_date_end || l.event_date
+      if (eventEnd && eventEnd < today) return false                   // event date passed -> auto-archive
+      return true
+    })
     if (live.length > 0) return { listings: live, isSample: false }
     return { listings: SEED_LISTINGS, isSample: true }
   } catch {

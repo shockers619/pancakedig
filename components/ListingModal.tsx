@@ -1,4 +1,4 @@
-import { Listing, REGION_NAMES, TYPE_LABELS, formatDivisionRange, formatGender } from '@/lib/constants'
+import { Listing, REGION_NAMES, TYPE_LABELS, formatDivisionRange, formatGender, formatEventDate } from '@/lib/constants'
 import { VerifiedBadge } from './VerifiedBadge'
 import { FacebookIcon, InstagramIcon, XIcon, TikTokIcon, LinkIcon } from './SocialIcons'
 
@@ -35,6 +35,9 @@ export default function ListingModal({ listing: l, onClose }: { listing: Listing
                 {[l.venue, l.city, l.state?.toUpperCase()].filter(Boolean).join(', ')}
               </span>
             </div>
+          )}
+          {l.event_date && (
+            <div style={{ fontSize: '13px', color: 'var(--ace-teal)', fontWeight: 600 }}>Event Date: {formatEventDate(l.event_date, l.event_date_end)}</div>
           )}
           {/* Line 2: no icon at all — division + gender (Level has its own labeled row below) */}
           {(l.division || l.gender) && (

@@ -22,11 +22,11 @@ export const EVENT_TYPES = ['Tournaments', 'Camps & Clinics', 'Recruiting Showca
 
 export const SURFACES = ['Indoor', 'Beach', 'Grass', 'Snow']
 
-export const LEVELS = ['Open / National', 'Club / USA / American', 'Regional / Select', 'Rec / Instructional']
+export const LEVELS = ['Open / National', 'Premier / USA / Freedom', 'Club / Regional / Select', 'Rec / Instructional']
 
 // USAV/JVA/AAU = the big indoor circuits; LOVB = the growing junior club network;
-// AVP = grassroots beach (AVPFirst/AVP America); USYVL = rec youth; Independent = none.
-export const ORGANIZATIONS = ['USAV', 'JVA', 'AAU', 'LOVB', 'AVP', 'USYVL', 'Independent']
+// AVP America = grassroots beach; NFHS = high school; USYVL = rec youth; Independent = none.
+export const ORGANIZATIONS = ['USAV', 'JVA', 'AAU', 'LOVB', 'AVP America', 'NFHS / High School', 'USYVL', 'Independent']
 
 export const GENDERS = ['Boys', 'Girls', 'Coed']
 

@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
+import { createPortal } from 'react-dom'
 import { US_STATES } from '@/lib/constants'
 import { REGIONS, TYPES, EVENT_TYPES, SURFACES, LEVELS, ORGANIZATIONS, GENDERS, DIVISIONS, REGION_KEY, toggle } from '@/lib/filterOptions'
 import { Dropdown } from './Dropdown'
@@ -47,7 +48,8 @@ export default function PostListingModal({ open, onClose }: { open: boolean; onC
     return () => document.removeEventListener('mousedown', handler)
   }, [])
 
-  if (!open) return null
+  // Only portal on the client (document exists there); server render returns null anyway.
+  if (!open || typeof document === 'undefined') return null
 
   const availableStates = Object.entries(US_STATES)
     .filter(([, s]) => !region || s.region === REGION_KEY[region])
@@ -81,7 +83,7 @@ export default function PostListingModal({ open, onClose }: { open: boolean; onC
     setSubmitted(true)
   }
 
-  return (
+  return createPortal(
     <div
       onMouseDown={e => { overlayShouldClose.current = e.target === e.currentTarget && !openMenu }}
       onClick={e => { if (e.target === e.currentTarget && overlayShouldClose.current) close() }}
@@ -258,6 +260,7 @@ export default function PostListingModal({ open, onClose }: { open: boolean; onC
           </div>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }

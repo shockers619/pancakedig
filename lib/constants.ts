@@ -146,3 +146,17 @@ export function formatGender(gender?: string): string {
   if (gender === 'coed') return 'Boys & Girls'
   return ''
 }
+
+// Formats an event date (or date range) for display, e.g. "Oct 12, 2026" or
+// "Oct 12 – 14, 2026". Dates are stored as plain YYYY-MM-DD; parse at local noon
+// so the day never shifts across time zones.
+export function formatEventDate(start?: string, end?: string): string {
+  if (!start) return ''
+  const opt: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric', year: 'numeric' }
+  const s = new Date(start + 'T12:00:00').toLocaleDateString('en-US', opt)
+  if (end && end !== start) {
+    const e = new Date(end + 'T12:00:00').toLocaleDateString('en-US', opt)
+    return `${s} – ${e}`
+  }
+  return s
+}
