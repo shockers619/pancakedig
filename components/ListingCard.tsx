@@ -41,7 +41,7 @@ export default function ListingCard({ listing: l, onClick }: { listing: Listing;
       <div className="listing-card-actions">
         {/* Desktop: logo lives in the actions row instead (house style #2) */}
         {l.logo_url && (
-          <img className={`listing-card-logo logo-desktop-only logo-frame${l.logo_dark ? ' logo-frame-dark' : ''}`} src={l.logo_url} alt={`${l.club} logo`} style={{ width: '48px', height: '48px', flexShrink: 0 }} />
+          <img className={`listing-card-logo logo-desktop-only logo-frame${l.logo_dark ? ' logo-frame-dark' : ''}`} src={l.logo_url} alt={`${l.club} logo`} style={{ width: '64px', height: '64px', flexShrink: 0 }} />
         )}
         {l.claimed === false && (
           <button className="claim-btn-compact">Claim This Listing</button>

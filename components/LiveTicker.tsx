@@ -33,7 +33,7 @@ export default function LiveTicker({ listings }: { listings: Listing[] }) {
                     📍 {REGION_NAMES[l.region] || l.region}
                     {(l.venue || l.city || l.state) ? ` · ${[l.venue, l.city, l.state?.toUpperCase()].filter(Boolean).join(', ')}` : ''}
                     {l.division ? ` · ${formatDivisionRange(l.division)}` : ''}
-                    {l.gender ? ` · ${formatGender(l.gender)}` : ''}
+                    {l.gender ? <span className="board-gender"> · {formatGender(l.gender)}</span> : ''}
                   </div>
                 </div>
                 {l.logo_url && (

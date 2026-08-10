@@ -696,6 +696,7 @@ header.site-header .wrap { display: flex; align-items: center; justify-content: 
   .board-row-logo { width: 46px; height: 46px; margin-left: auto; }
   .board-row-body { flex: 1; min-width: 0; }
   .board-row-body strong, .board-row-meta { white-space: normal; overflow: visible; text-overflow: clip; }
+  .board-gender { display: none; }   /* keep the compact ticker to one line on mobile */
   .board-view { width: 100%; text-align: center; margin-left: 0; }
 }
 
@@ -762,8 +763,8 @@ header.site-header .wrap { display: flex; align-items: center; justify-content: 
   .listing-card > div:first-child { padding-right: 68px; }
   .listing-card-logo.logo-mobile-only { position: absolute; top: 20px; right: 20px; width: 54px !important; height: 54px !important; }
   .listing-card-actions { width: 100%; }
-  .listing-card .listing-cta { flex: 1; text-align: center; height: 48px; display: flex; align-items: center; justify-content: center; }
-  .listing-card .claim-btn-compact { flex: 1; text-align: center; height: 48px; display: flex; align-items: center; justify-content: center; }
+  .listing-card .listing-cta { flex: 1; text-align: center; height: 40px; padding-top: 0; padding-bottom: 0; display: flex; align-items: center; justify-content: center; }
+  .listing-card .claim-btn-compact { flex: 1; text-align: center; height: 40px; padding-top: 0; padding-bottom: 0; display: flex; align-items: center; justify-content: center; }
 }
 
 
