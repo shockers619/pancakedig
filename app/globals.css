@@ -113,7 +113,7 @@ a { color: inherit; text-decoration: none; }
    at the ends. Full-bleed; mesh holes are transparent so the dark bg reads as netting. */
 .net-line {
   position: relative;
-  height: 34px;
+  height: 36px;
   margin: 0;
   background-color: transparent;
   background-image:
@@ -121,29 +121,29 @@ a { color: inherit; text-decoration: none; }
     linear-gradient(var(--chalk), var(--chalk)),   /* thin bottom cable */
     linear-gradient(var(--chalk), var(--chalk)),   /* left side band (closes the net) */
     linear-gradient(var(--chalk), var(--chalk)),   /* right side band */
-    repeating-linear-gradient(90deg, color-mix(in srgb, var(--chalk), transparent 45%) 0 1px, transparent 1px 18px), /* vertical cords */
-    repeating-linear-gradient(0deg,  color-mix(in srgb, var(--chalk), transparent 45%) 0 1px, transparent 1px 18px); /* horizontal cords */
+    repeating-linear-gradient(90deg, color-mix(in srgb, var(--chalk), transparent 45%) 0 1px, transparent 1px 12px), /* vertical cords */
+    repeating-linear-gradient(0deg,  color-mix(in srgb, var(--chalk), transparent 45%) 0 1px, transparent 1px 12px); /* horizontal cords */
   background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, repeat, repeat;
-  background-size: 100% 5px, 100% 2px, 4px 100%, 4px 100%, auto, auto;
-  background-position: left top, left bottom, left top, right top, left top, left top;
+  background-size: 100% 4px, 100% 2px, 4px 100%, 4px 100%, auto, auto;
+  /* mesh anchored at center so the rows/columns are symmetric (midline centered) */
+  background-position: left top, left bottom, left top, right top, center center, center center;
 }
-/* red/white antennas standing at each net end, just inside the side bands */
+/* red/white antennas set ~4% in from each end — the net overhangs the antenna, as in a
+   regulation setup. Identical on header and footer. */
 .net-line::before, .net-line::after {
   content: '';
   position: absolute;
-  top: -20px;
+  top: -34px;
   width: 6px;
-  height: 54px;
+  height: 72px;
   border-radius: 3px;
   background: repeating-linear-gradient(180deg, var(--antenna-red) 0 8px, var(--chalk) 8px 16px);
   box-shadow: 0 1px 2px rgba(0,0,0,0.35);
 }
-.net-line::before { left: 12px; }
-.net-line::after { right: 12px; }
-/* header net: raised above the sticky header (z-index 100) so the antennas actually
-   rise up above the net and into the header bar */
+.net-line::before { left: 4%; }
+.net-line::after { right: 4%; }
+/* header net: raised above the sticky header (z-index 100) so its antennas show */
 .net-line--header { z-index: 101; }
-.net-line--header::before, .net-line--header::after { top: -50px; height: 84px; }
 
 /* ---------- Logo treatment (see house style #4) ---------- */
 .logo-frame {
