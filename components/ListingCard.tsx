@@ -25,6 +25,7 @@ export default function ListingCard({ listing: l, onClick }: { listing: Listing;
           {(l.venue || l.city || l.state) ? ` · ${[l.venue, l.city, l.state?.toUpperCase()].filter(Boolean).join(', ')}` : ''}
           {l.division ? ` · ${formatDivisionRange(l.division)}` : ''}
           {l.gender ? ` ${formatGender(l.gender)}` : ''}
+          {l.governing_body ? ` · ${l.governing_body}` : ''}
         </div>
       </div>
 

@@ -21,8 +21,9 @@ create table if not exists listings (
   venue          text,
   division       text,                   -- comma-separated tokens: "14U, 15U, 16U" — never a hyphen range
   gender         text,                   -- boys | girls | coed
-  tiers          text[],                 -- e.g. {National, American}
-  governing_body text,                   -- JVA | USAV | AAU | Independent
+  tiers          text[],                 -- competitive level(s): {"Open / National","Regional / Select",...} — a club can span several
+  governing_body text,                   -- one OR MORE bodies, comma-separated: "USAV" | "USAV, JVA" | "USAV, JVA, AAU" (clubs multi-affiliate)
+  surface        text,                   -- indoor-only directory, so "Indoor" for every listing
   details        text,
   email          text,
   phone          text,

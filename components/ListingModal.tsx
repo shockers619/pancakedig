@@ -36,17 +36,20 @@ export default function ListingModal({ listing: l, onClose }: { listing: Listing
               </span>
             </div>
           )}
-          {/* Line 2: no icon at all */}
-          {(l.division || l.gender || (l.tiers && l.tiers.length > 0)) && (
+          {/* Line 2: no icon at all — division + gender (Level has its own labeled row below) */}
+          {(l.division || l.gender) && (
             <div style={{ fontSize: '13px', color: 'var(--chalk-dim)' }}>
-              {[
-                [l.division ? formatDivisionRange(l.division) : null, l.gender ? formatGender(l.gender) : null].filter(Boolean).join(', ') || null,
-                l.tiers && l.tiers.length > 0 ? l.tiers.join(', ') : null,
-              ].filter(Boolean).join(' · ')}
+              {[l.division ? formatDivisionRange(l.division) : null, l.gender ? formatGender(l.gender) : null].filter(Boolean).join(', ')}
             </div>
           )}
           {l.governing_body && (
             <div style={{ fontSize: '13px', color: 'var(--chalk-dim)' }}>Plays under: {l.governing_body}</div>
+          )}
+          {l.tiers && l.tiers.length > 0 && (
+            <div style={{ fontSize: '13px', color: 'var(--chalk-dim)' }}>Level: {l.tiers.join(', ')}</div>
+          )}
+          {l.surface && (
+            <div style={{ fontSize: '13px', color: 'var(--chalk-dim)' }}>Surface: {l.surface}</div>
           )}
         </div>
 

@@ -50,7 +50,10 @@ export default function Results({ listings, isSample }: { listings: Listing[]; i
         const match = genders.includes(g) || (g === 'coed' && (genders.includes('boys') || genders.includes('girls')))
         if (!match) return false
       }
-      if (orgs.length && !orgs.includes(l.governing_body || '')) return false
+      if (orgs.length) {
+        const bodies = (l.governing_body || '').split(',').map(s => s.trim()).filter(Boolean)
+        if (!orgs.some(o => bodies.includes(o))) return false
+      }
       return true
     })
     const cityOf = (l: Listing) => l.venue || l.city || ''

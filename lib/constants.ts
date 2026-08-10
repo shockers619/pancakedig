@@ -86,8 +86,9 @@ export type Listing = {
   venue?: string
   division?: string   // comma-separated tokens, e.g. "14U, 15U, 16U" — see house style #5
   gender?: 'boys' | 'girls' | 'coed'
-  tiers?: string[]    // volleyball's real vocabulary — Open, National, American, Liberty, USA, JVA National, etc.
-  governing_body?: 'JVA' | 'USAV' | 'AAU' | 'Independent'
+  tiers?: string[]    // competitive level(s) the club fields, e.g. ["Open / National", "Regional / Select"]. A club can span several.
+  governing_body?: string  // one OR MORE sanctioning bodies, comma-separated: "USAV", "USAV, JVA", "USAV, JVA, AAU" — clubs commonly multi-affiliate
+  surface?: string    // indoor-only directory, so "Indoor" for every listing (kept explicit for the detail view + future-proofing)
   details?: string
   email?: string
   phone?: string

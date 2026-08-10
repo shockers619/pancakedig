@@ -20,7 +20,9 @@ export const TYPES: [string, string][] = [
 
 export const EVENT_TYPES = ['Tournaments', 'Camps & Clinics', 'Recruiting Showcases', 'Leagues', 'Open Gyms']
 
-export const SURFACES = ['Indoor', 'Beach', 'Grass', 'Snow']
+// Indoor-only directory — surface never varies, so the filter offers just Indoor
+// (beach/grass/snow were removed: advertising them over-promised what PD covers).
+export const SURFACES = ['Indoor']
 
 export const LEVELS = ['Open / National', 'Club / USA / American', 'Regional / Select', 'Rec / Instructional']
 
