@@ -75,7 +75,7 @@ export default async function Home() {
 
       <section className="hero">
         <div className="wrap">
-          <div className="hero-strap">National Grassroots Volleyball Directory <span>·</span> Boys &amp; Girls <span>·</span> JVA · USAV · AAU <span>·</span> All Surfaces</div>
+          <div className="hero-strap">National Grassroots Volleyball Directory <span>·</span> Boys &amp; Girls <span>·</span> USAV · JVA · AAU · AVP · LOVB <span>·</span> All Surfaces</div>
           <h1>One good <em>dig</em>.</h1>
           <p className="hero-sub">
             Multiple governing bodies, different rules, overlapping seasons —
