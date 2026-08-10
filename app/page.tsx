@@ -101,6 +101,11 @@ export default async function Home() {
       {/* PricingSection parked until we monetize (real traffic first) — component kept
           in components/PricingSection.tsx for a future launch. Re-import + render to bring back. */}
 
+      {/* Net-line divider above the footer, mirroring the one under the header */}
+      <div className="net-line"><div className="net-line-ties">
+        {Array.from({ length: 24 }).map((_, i) => <span key={i} />)}
+      </div></div>
+
       <footer>
         <div className="wrap footer-inner">
           <div className="footer-left">
