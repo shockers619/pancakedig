@@ -20,8 +20,7 @@ export const TYPES: [string, string][] = [
 
 export const EVENT_TYPES = ['Tournaments', 'Camps & Clinics', 'Recruiting Showcases', 'Leagues', 'Open Gyms']
 
-// Surfaces we actually carry listings for. Snow omitted — no real US programs.
-export const SURFACES = ['Indoor', 'Beach', 'Grass']
+export const SURFACES = ['Indoor', 'Beach', 'Grass', 'Snow']
 
 export const LEVELS = ['Open / National', 'Club / USA / American', 'Regional / Select', 'Rec / Instructional']
 

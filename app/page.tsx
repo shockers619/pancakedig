@@ -73,8 +73,8 @@ export default async function Home() {
 
       <section className="hero">
         <div className="wrap">
-          <div className="hero-eyebrow">JVA · USAV · AAU — ONE DIRECTORY</div>
-          <h1>Every club.<br/>Every level.<br/>One good <em>dig</em>.</h1>
+          <div className="hero-strap">National Grassroots Volleyball Directory <span>·</span> Boys &amp; Girls <span>·</span> JVA · USAV · AAU <span>·</span> All Surfaces</div>
+          <h1>One good <em>dig</em>.</h1>
           <p className="hero-sub">
             Three governing bodies, three sets of rules, three overlapping seasons —
             and no single place that shows all of it. Search real grassroots
