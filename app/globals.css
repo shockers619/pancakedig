@@ -121,12 +121,14 @@ a { color: inherit; text-decoration: none; }
     linear-gradient(var(--chalk), var(--chalk)),   /* thin bottom cable */
     linear-gradient(var(--chalk), var(--chalk)),   /* left side band (closes the net) */
     linear-gradient(var(--chalk), var(--chalk)),   /* right side band */
-    repeating-linear-gradient(90deg, color-mix(in srgb, var(--chalk), transparent 45%) 0 1px, transparent 1px 12px), /* vertical cords */
-    repeating-linear-gradient(0deg,  color-mix(in srgb, var(--chalk), transparent 45%) 0 1px, transparent 1px 12px); /* horizontal cords */
-  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, repeat, repeat;
-  background-size: 100% 4px, 100% 2px, 4px 100%, 4px 100%, auto, auto;
-  /* mesh anchored at center so the rows/columns are symmetric (midline centered) */
-  background-position: left top, left bottom, left top, right top, center center, center center;
+    linear-gradient(color-mix(in srgb, var(--chalk), transparent 45%), color-mix(in srgb, var(--chalk), transparent 45%)), /* horizontal cord 1 */
+    linear-gradient(color-mix(in srgb, var(--chalk), transparent 45%), color-mix(in srgb, var(--chalk), transparent 45%)), /* horizontal cord 2 */
+    repeating-linear-gradient(90deg, color-mix(in srgb, var(--chalk), transparent 45%) 0 1px, transparent 1px 12px);        /* vertical cords */
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, repeat;
+  background-size: 100% 4px, 100% 2px, 4px 100%, 4px 100%, 100% 1px, 100% 1px, auto;
+  /* the two horizontal cords sit at exact thirds of the interior (4px top band, 2px
+     bottom line -> mesh 4-34px), so the three rows are equal (10px each) */
+  background-position: left top, left bottom, left top, right top, left 14px, left 24px, center top;
 }
 /* red/white antennas set ~4% in from each end — the net overhangs the antenna, as in a
    regulation setup. Identical on header and footer. */
