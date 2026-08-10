@@ -285,7 +285,7 @@ header.site-header .wrap { display: flex; align-items: center; justify-content: 
 
 /* ---------- Search bar ---------- */
 .search-panel {
-  background: var(--court-navy-3);
+  background: var(--court-navy-2);
   border: 1px solid rgba(244,246,242,0.1);
   border-radius: 6px;
   padding: 22px;
@@ -636,11 +636,12 @@ header.site-header .wrap { display: flex; align-items: center; justify-content: 
 }
 
 /* ---------- Live Board ticker: "Just Posted" (ported from FloorBalance, PD palette) ---------- */
-.board-zone { background: var(--net-graphite); padding: 20px 0 20px; }
+/* Live Board blends up into the hero — same navy as the "One good dig" background */
+.board-zone { background: var(--court-navy-2); padding: 8px 0 28px; }
 .board-inner { max-width: 940px; margin: 0 auto; padding: 0 24px; }
 .board { border: 1px solid rgba(244,246,242,0.1); border-radius: 6px; overflow: hidden; background: var(--court-navy-2); }
 .board-head { background: repeating-linear-gradient(45deg, var(--antenna-red) 0 9px, #b93b2f 9px 18px); padding: 3px; }
-.board-head-inner { background: var(--net-graphite); padding: 11px 18px; display: flex; align-items: center; justify-content: space-between; }
+.board-head-inner { background: var(--court-navy-2); padding: 11px 18px; display: flex; align-items: center; justify-content: space-between; }
 .board-head-title { font-family: var(--font-display); font-weight: 800; font-size: 15px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--chalk); }
 .board-live { display: flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 10px; color: var(--good); font-weight: 700; text-transform: uppercase; }
 .board-live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--good); animation: pulse 1.8s infinite; }
@@ -666,7 +667,8 @@ header.site-header .wrap { display: flex; align-items: center; justify-content: 
 }
 
 /* ---------- Search results: count / sort / verified / pagination ---------- */
-.results-section { padding: 30px 0 80px; }
+/* Search + listings sit in the darker "browse" zone; navy cards pop against it */
+.results-section { padding: 34px 0 80px; background: var(--net-graphite); }
 .results-toprow { display: flex; align-items: center; justify-content: space-between; gap: 16px 24px; flex-wrap: wrap; margin-bottom: 26px; }
 .result-count { font-family: var(--font-mono); font-size: 13px; color: var(--chalk-dim); }
 .result-count strong { color: var(--volley-yellow); font-size: 1.3em; font-family: var(--font-display); font-weight: 800; }
