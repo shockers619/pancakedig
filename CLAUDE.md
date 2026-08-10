@@ -41,7 +41,7 @@ Note: the actual project lives in this `pancakedig/` directory (the git repo roo
 
 ## What this is
 
-Pancake Dig is a national directory for grassroots **indoor club** volleyball — search real programs, directors claim free listings. It is a deliberate sibling of another product, "FloorBalance": same job, intentionally separate brand/domain/visual identity. Much logic and many conventions are ported from FloorBalance rather than reinvented; comments throughout say so.
+Pancake Dig is a national directory for grassroots club volleyball across **all surfaces — indoor, beach, and grass** — search real programs, directors claim free listings. It is a deliberate sibling of another product, "FloorBalance": same job, intentionally separate brand/domain/visual identity. Much logic and many conventions are ported from FloorBalance rather than reinvented; comments throughout say so.
 
 The backend engine (Supabase read path) is now ported from FloorBalance. Still presentational/not-yet-built: the homepage **search panel** (no live filtering), the **posting** write path, **auth**, **claim**, the **admin approval queue**, and **Stripe**. See `README.md` for the ordered plan.
 
@@ -72,7 +72,7 @@ Next.js 14 App Router, TypeScript (`strict: false`), no CSS framework — all st
 These are documented at length in the `globals.css` header and enforced across components. The important ones:
 
 - **`division` is a comma-separated list of individual `NU` tokens** (e.g. `"14U, 15U, 16U"`), never a hyphen range and never free text like "All Ages". Filtering is substring-based, so a range silently breaks matching for every value but the endpoints. Displays are collapsed to a range only at render time via `formatDivisionRange`. Valid divisions run 10U–18U; 10U is the intentional floor.
-- **Indoor only.** Beach volleyball uses a graduation-class age system, not age-based divisions — do not add beach listings under the same `division` field without a separate design decision first.
+- **Multi-surface (indoor + beach + grass).** Every listing has a `surface` ("Indoor" | "Beach" | "Grass"). Indoor listings use the NU `division` age tokens; **beach/grass use a graduation-class age system, not NU divisions, so leave `division` NULL for them** (don't force wrong age tokens). This was a deliberate decision (2026-08-10) that superseded the earlier indoor-only scope.
 - **Listing detail views use only the 📍 location-pin emoji** — no other emoji icons in a detail box. Never let an icon split from its text across a line break; wrap the value (not the whole line) in `white-space: nowrap`.
 - **Logo placement is breakpoint-driven**, rendered twice and toggled with `.logo-mobile-only` / `.logo-desktop-only` CSS classes rather than one flex row — a flex row's height matches its tallest child and silently creates dead space. Modal/detail logos use `float: right` (`.modal-logo`), not flex, for the same reason.
 - Every listing logo `<img>` uses the shared `.logo-frame` class (off-white card) so inconsistent source backgrounds don't clash with the dark theme.

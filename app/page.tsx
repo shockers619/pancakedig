@@ -78,8 +78,8 @@ export default async function Home() {
           <p className="hero-sub">
             Three governing bodies, three sets of rules, three overlapping seasons —
             and no single place that shows all of it. Search real grassroots
-            volleyball programs — boys and girls, indoor and beach — by area, division,
-            level, and organization.
+            volleyball programs — boys and girls, indoor, beach, and grass — by area,
+            division, level, and organization.
           </p>
 
           {!isSample && (clubCount > 0 || venueCount > 0) && (

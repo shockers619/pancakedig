@@ -36,8 +36,8 @@ export default function Results({ listings, isSample }: { listings: Listing[]; i
 
   const csv = (k: string) => { const v = sp.get(k); return v ? v.split(',').map(s => s.trim()).filter(Boolean) : [] }
   const types = csv('type'), regions = csv('region'), states = csv('state'),
-        divisions = csv('division'), genders = csv('gender'), orgs = csv('org')
-  const hasFilter = [types, regions, states, divisions, genders, orgs].some(a => a.length > 0)
+        divisions = csv('division'), genders = csv('gender'), orgs = csv('org'), surfaces = csv('surface')
+  const hasFilter = [types, regions, states, divisions, genders, orgs, surfaces].some(a => a.length > 0)
 
   const filtered = useMemo(() => {
     const out = listings.filter(l => {
@@ -54,6 +54,7 @@ export default function Results({ listings, isSample }: { listings: Listing[]; i
         const bodies = (l.governing_body || '').split(',').map(s => s.trim()).filter(Boolean)
         if (!orgs.some(o => bodies.includes(o))) return false
       }
+      if (surfaces.length && !surfaces.includes(l.surface || '')) return false
       return true
     })
     const cityOf = (l: Listing) => l.venue || l.city || ''

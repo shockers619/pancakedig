@@ -43,8 +43,8 @@ export default function SearchPanel() {
   const showEventType = types.includes('showcase')
 
   // Apply filters by writing them to the URL; the Results section reads them
-  // and filters client-side. (Level/Surface are UI-only for now — no seeded data
-  // supports them yet, so applying them would hide everything.)
+  // and filters client-side. (Level stays UI-only — a club spans several levels,
+  // so filtering by one would mislead; Surface IS wired now that we carry it.)
   const applySearch = () => {
     const p = new URLSearchParams()
     if (types.length) p.set('type', types.join(','))
@@ -54,6 +54,7 @@ export default function SearchPanel() {
     if (divisions.length) p.set('division', divisions.join(','))
     if (genders.length) p.set('gender', genders.map(g => g.toLowerCase()).join(','))
     if (orgs.length) p.set('org', orgs.join(','))
+    if (surfaces.length) p.set('surface', surfaces.join(','))
     const qs = p.toString()
     router.replace(qs ? `/?${qs}` : '/', { scroll: false })
     setOpenMenu('')
