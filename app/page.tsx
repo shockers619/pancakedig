@@ -66,7 +66,7 @@ export default async function Home() {
           </div>
         </div>
       </header>
-      <div className="net-line" />
+      <div className="net-line net-line--header"><div className="net-panel" /></div>
 
       <section className="hero">
         <div className="wrap">
@@ -100,7 +100,7 @@ export default async function Home() {
           in components/PricingSection.tsx for a future launch. Re-import + render to bring back. */}
 
       {/* Volleyball-net divider above the footer, matching the header */}
-      <div className="net-line" />
+      <div className="net-line"><div className="net-panel" /></div>
 
       <footer>
         <div className="wrap footer-inner">

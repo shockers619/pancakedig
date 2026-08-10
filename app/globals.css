@@ -111,32 +111,49 @@ a { color: inherit; text-decoration: none; }
 /* Volleyball-net motif divider: white top tape band, square mesh netting, and
    red/white antennas near each end. Full-bleed; the mesh holes are transparent so
    the dark background shows through and reads as real netting. Used on header + footer. */
+/* A netted panel (top tape + square mesh + white side bands with red/white antennas)
+   suspended between thin cables that run out to the posts — matching a real net. */
 .net-line {
   position: relative;
-  height: 30px;
+  height: 34px;
   margin: 0;
   background-color: transparent;
   background-image:
-    linear-gradient(var(--chalk), var(--chalk)),                                                                     /* top tape band */
-    repeating-linear-gradient(90deg, color-mix(in srgb, var(--chalk), transparent 52%) 0 1px, transparent 1px 15px), /* vertical cords */
-    repeating-linear-gradient(0deg,  color-mix(in srgb, var(--chalk), transparent 52%) 0 1px, transparent 1px 15px); /* horizontal cords */
-  background-repeat: no-repeat, repeat, repeat;
-  background-size: 100% 4px, auto, auto;
-  background-position: top left;
+    linear-gradient(var(--chalk), var(--chalk)),   /* top cable to the posts */
+    linear-gradient(var(--chalk), var(--chalk));   /* bottom cable to the posts */
+  background-repeat: no-repeat, no-repeat;
+  background-size: 100% 2px, 100% 2px;
+  background-position: left top, left bottom;
 }
-/* red/white striped antennas standing well above the net at each end */
-.net-line::before, .net-line::after {
+.net-panel {
+  position: absolute;
+  top: 0; bottom: 0; left: 8%; right: 8%;
+  border-left: 4px solid var(--chalk);    /* white side bands = the net ends */
+  border-right: 4px solid var(--chalk);
+  background-color: transparent;
+  background-image:
+    linear-gradient(var(--chalk), var(--chalk)),                                                                     /* thick top tape */
+    repeating-linear-gradient(90deg, color-mix(in srgb, var(--chalk), transparent 45%) 0 1px, transparent 1px 18px), /* vertical cords */
+    repeating-linear-gradient(0deg,  color-mix(in srgb, var(--chalk), transparent 45%) 0 1px, transparent 1px 18px); /* horizontal cords */
+  background-repeat: no-repeat, repeat, repeat;
+  background-size: 100% 5px, auto, auto;
+  background-position: left top, left top, left top;
+}
+/* red/white antennas mounted on the side bands at each net end */
+.net-panel::before, .net-panel::after {
   content: '';
   position: absolute;
-  top: -26px;
+  top: -20px;
   width: 6px;
-  height: 56px;
+  height: 54px;
   border-radius: 3px;
   background: repeating-linear-gradient(180deg, var(--antenna-red) 0 8px, var(--chalk) 8px 16px);
   box-shadow: 0 1px 2px rgba(0,0,0,0.35);
 }
-.net-line::before { left: 20px; }
-.net-line::after { right: 20px; }
+.net-panel::before { left: -5px; }
+.net-panel::after { right: -5px; }
+/* header net: antennas rise taller, up into the header bar */
+.net-line--header .net-panel::before, .net-line--header .net-panel::after { top: -44px; height: 78px; }
 
 /* ---------- Logo treatment (see house style #4) ---------- */
 .logo-frame {
