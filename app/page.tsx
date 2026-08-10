@@ -66,9 +66,7 @@ export default async function Home() {
           </div>
         </div>
       </header>
-      <div className="net-line"><div className="net-line-ties">
-        {Array.from({ length: 24 }).map((_, i) => <span key={i} />)}
-      </div></div>
+      <div className="net-line" />
 
       <section className="hero">
         <div className="wrap">
@@ -101,10 +99,8 @@ export default async function Home() {
       {/* PricingSection parked until we monetize (real traffic first) — component kept
           in components/PricingSection.tsx for a future launch. Re-import + render to bring back. */}
 
-      {/* Net-line divider above the footer, mirroring the one under the header */}
-      <div className="net-line"><div className="net-line-ties">
-        {Array.from({ length: 24 }).map((_, i) => <span key={i} />)}
-      </div></div>
+      {/* Volleyball-net divider above the footer, matching the header */}
+      <div className="net-line" />
 
       <footer>
         <div className="wrap footer-inner">

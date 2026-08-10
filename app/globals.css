@@ -108,40 +108,34 @@ a { color: inherit; text-decoration: none; }
    A taut horizontal cable with small vertical tie marks and a
    red/white antenna stripe at one end, used wherever FloorBalance
    would use a plain divider or the orange top-bar rule. */
+/* Volleyball-net motif divider: white top tape band, square mesh netting, and
+   red/white antennas near each end. Full-bleed; the mesh holes are transparent so
+   the dark background shows through and reads as real netting. Used on header + footer. */
 .net-line {
   position: relative;
-  height: 3px;
-  background: linear-gradient(90deg, var(--chalk-faint), var(--chalk) 8%, var(--chalk) 92%, var(--chalk-faint));
+  height: 30px;
   margin: 0;
+  background-color: transparent;
+  background-image:
+    linear-gradient(var(--chalk), var(--chalk)),                                                                     /* top tape band */
+    repeating-linear-gradient(90deg, color-mix(in srgb, var(--chalk), transparent 52%) 0 1px, transparent 1px 15px), /* vertical cords */
+    repeating-linear-gradient(0deg,  color-mix(in srgb, var(--chalk), transparent 52%) 0 1px, transparent 1px 15px); /* horizontal cords */
+  background-repeat: no-repeat, repeat, repeat;
+  background-size: 100% 4px, auto, auto;
+  background-position: top left;
 }
-.net-line::before {
+/* red/white striped antennas standing at each end of the net */
+.net-line::before, .net-line::after {
   content: '';
   position: absolute;
-  left: 0; top: -8px;
-  width: 6px; height: 19px;
-  background: repeating-linear-gradient(180deg, var(--antenna-red) 0 5px, var(--chalk) 5px 10px);
-  border-radius: 1px;
+  top: -13px;
+  width: 5px;
+  height: 40px;
+  border-radius: 3px;
+  background: repeating-linear-gradient(180deg, var(--antenna-red) 0 7px, var(--chalk) 7px 14px);
 }
-.net-line::after {
-  content: '';
-  position: absolute;
-  right: 0; top: -8px;
-  width: 6px; height: 19px;
-  background: repeating-linear-gradient(180deg, var(--antenna-red) 0 5px, var(--chalk) 5px 10px);
-  border-radius: 1px;
-}
-.net-line-ties {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-}
-.net-line-ties span {
-  width: 1px;
-  height: 9px;
-  background: var(--chalk-faint);
-}
+.net-line::before { left: 16px; }
+.net-line::after { right: 16px; }
 
 /* ---------- Logo treatment (see house style #4) ---------- */
 .logo-frame {
