@@ -30,6 +30,12 @@ export default function PostListingModal({ open, onClose }: { open: boolean; onC
   const [error, setError] = useState('')
   const [submitted, setSubmitted] = useState(false)
   const activeMenuRef = useRef<HTMLDivElement>(null)
+  // Only arm "click backdrop to close the modal" when the mousedown lands
+  // directly on the overlay AND no dropdown is open. React's onMouseDown fires
+  // before the document mousedown listener below (which closes the open menu),
+  // so `openMenu` here still reflects whether a dropdown was open — letting the
+  // first outside-click dismiss just the dropdown, not the whole modal.
+  const overlayShouldClose = useRef(false)
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -76,7 +82,10 @@ export default function PostListingModal({ open, onClose }: { open: boolean; onC
   }
 
   return (
-    <div onClick={close} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 500, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', overflowY: 'auto' }}>
+    <div
+      onMouseDown={e => { overlayShouldClose.current = e.target === e.currentTarget && !openMenu }}
+      onClick={e => { if (e.target === e.currentTarget && overlayShouldClose.current) close() }}
+      style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 500, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', overflowY: 'auto' }}>
       <div onClick={e => e.stopPropagation()} style={{ background: 'var(--court-navy-2)', border: '2px solid rgba(244,246,242,0.12)', maxWidth: '640px', width: '100%', maxHeight: '90vh', overflowY: 'auto', padding: '28px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '18px' }}>
           <div>
