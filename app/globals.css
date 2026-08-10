@@ -124,18 +124,19 @@ a { color: inherit; text-decoration: none; }
   background-size: 100% 4px, auto, auto;
   background-position: top left;
 }
-/* red/white striped antennas standing at each end of the net */
+/* red/white striped antennas standing well above the net at each end */
 .net-line::before, .net-line::after {
   content: '';
   position: absolute;
-  top: -13px;
-  width: 5px;
-  height: 40px;
+  top: -26px;
+  width: 6px;
+  height: 56px;
   border-radius: 3px;
-  background: repeating-linear-gradient(180deg, var(--antenna-red) 0 7px, var(--chalk) 7px 14px);
+  background: repeating-linear-gradient(180deg, var(--antenna-red) 0 8px, var(--chalk) 8px 16px);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.35);
 }
-.net-line::before { left: 16px; }
-.net-line::after { right: 16px; }
+.net-line::before { left: 20px; }
+.net-line::after { right: 20px; }
 
 /* ---------- Logo treatment (see house style #4) ---------- */
 .logo-frame {
