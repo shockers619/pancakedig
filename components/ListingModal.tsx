@@ -4,6 +4,7 @@ import { FacebookIcon, InstagramIcon, XIcon, TikTokIcon, LinkIcon } from './Soci
 
 export default function ListingModal({ listing: l, onClose }: { listing: Listing; onClose: () => void }) {
   const hasSocial = l.facebook_url || l.instagram_url || l.x_url || l.tiktok_url
+  const bodies = (l.governing_body || '').split(',').map(s => s.trim()).filter(Boolean)
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal" onClick={e => e.stopPropagation()}>
@@ -39,20 +40,15 @@ export default function ListingModal({ listing: l, onClose }: { listing: Listing
           {l.event_date && (
             <div style={{ fontSize: '13px', color: 'var(--ace-teal)', fontWeight: 600 }}>Event Date: {formatEventDate(l.event_date, l.event_date_end)}</div>
           )}
-          {/* Line 2: no icon at all — division + gender (Level has its own labeled row below) */}
-          {(l.division || l.gender) && (
-            <div style={{ fontSize: '13px', color: 'var(--chalk-dim)' }}>
-              {[l.division ? formatDivisionRange(l.division) : null, l.gender ? formatGender(l.gender) : null].filter(Boolean).join(', ')}
+          {/* Metadata as chips — same style as the result cards */}
+          {(l.division || l.gender || l.surface || bodies.length > 0 || (l.tiers && l.tiers.length > 0)) && (
+            <div className="listing-chips" style={{ marginTop: '2px' }}>
+              {l.division && <span className="listing-chip">{formatDivisionRange(l.division)}</span>}
+              {l.gender && <span className="listing-chip">{formatGender(l.gender)}</span>}
+              {l.surface && <span className="listing-chip">{l.surface}</span>}
+              {bodies.map(b => <span key={b} className="listing-chip chip-org">{b}</span>)}
+              {(l.tiers || []).map(t => <span key={t} className="listing-chip chip-level">{t}</span>)}
             </div>
-          )}
-          {l.governing_body && (
-            <div style={{ fontSize: '13px', color: 'var(--chalk-dim)' }}>Plays under: {l.governing_body}</div>
-          )}
-          {l.tiers && l.tiers.length > 0 && (
-            <div style={{ fontSize: '13px', color: 'var(--chalk-dim)' }}>Level: {l.tiers.join(', ')}</div>
-          )}
-          {l.surface && (
-            <div style={{ fontSize: '13px', color: 'var(--chalk-dim)' }}>Surface: {l.surface}</div>
           )}
         </div>
 

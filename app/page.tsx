@@ -65,7 +65,7 @@ export default async function Home() {
               <span className="logo-tag">GRASSROOTS VOLLEYBALL DIRECTORY</span>
             </span>
           </div>
-          <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+          <div className="header-actions" style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
             <a className="btn btn-outline">Sign In</a>
             <PostListingButton />
           </div>
@@ -75,7 +75,15 @@ export default async function Home() {
 
       <section className="hero">
         <div className="wrap">
-          <div className="hero-strap">National Grassroots Volleyball Directory <span>·</span> Boys &amp; Girls <span>·</span> USAV · JVA · AAU · AVP · LOVB <span>·</span> All Surfaces</div>
+          <div className="hero-strap">
+            <span className="strap-seg">National Grassroots Volleyball Directory</span>
+            <span className="strap-sep">·</span>
+            <span className="strap-seg">Boys &amp; Girls</span>
+            <span className="strap-sep">·</span>
+            <span className="strap-seg">USAV · JVA · AAU · AVP · LOVB</span>
+            <span className="strap-sep">·</span>
+            <span className="strap-seg">All Surfaces</span>
+          </div>
           <h1>One good <em>dig</em>.</h1>
           <p className="hero-sub">
             Multiple governing bodies, different rules, overlapping seasons —
