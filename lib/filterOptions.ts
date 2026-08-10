@@ -24,7 +24,9 @@ export const SURFACES = ['Indoor', 'Beach', 'Grass', 'Snow']
 
 export const LEVELS = ['Open / National', 'Club / USA / American', 'Regional / Select', 'Rec / Instructional']
 
-export const ORGANIZATIONS = ['USAV', 'JVA', 'AAU', 'USYVL', 'Independent']
+// USAV/JVA/AAU = the big indoor circuits; LOVB = the growing junior club network;
+// AVP = grassroots beach (AVPFirst/AVP America); USYVL = rec youth; Independent = none.
+export const ORGANIZATIONS = ['USAV', 'JVA', 'AAU', 'LOVB', 'AVP', 'USYVL', 'Independent']
 
 export const GENDERS = ['Boys', 'Girls', 'Coed']
 
