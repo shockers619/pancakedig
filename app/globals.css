@@ -640,7 +640,7 @@ header.site-header .wrap { display: flex; align-items: center; justify-content: 
 .board-zone { background: var(--court-navy-2); padding: 8px 0 28px; }
 .board-inner { max-width: 940px; margin: 0 auto; padding: 0 24px; }
 .board { border: 1px solid rgba(244,246,242,0.1); border-radius: 6px; overflow: hidden; background: var(--court-navy-2); }
-.board-head { background: repeating-linear-gradient(45deg, var(--antenna-red) 0 9px, #b93b2f 9px 18px); padding: 3px; }
+.board-head { background: repeating-linear-gradient(45deg, var(--volley-yellow) 0 9px, color-mix(in srgb, var(--volley-yellow), black 22%) 9px 18px); padding: 3px; }
 .board-head-inner { background: var(--court-navy-2); padding: 11px 18px; display: flex; align-items: center; justify-content: space-between; }
 .board-head-title { font-family: var(--font-display); font-weight: 800; font-size: 15px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--chalk); }
 .board-live { display: flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 10px; color: var(--good); font-weight: 700; text-transform: uppercase; }

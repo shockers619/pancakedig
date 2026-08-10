@@ -1,5 +1,4 @@
 import { VolleyballIcon } from '@/components/VolleyballIcon'
-import PricingSection from '@/components/PricingSection'
 import PostListingButton from '@/components/PostListingButton'
 import { Suspense } from 'react'
 import LiveTicker from '@/components/LiveTicker'
@@ -99,7 +98,8 @@ export default async function Home() {
         <Results listings={listings} isSample={isSample} />
       </Suspense>
 
-      <PricingSection />
+      {/* PricingSection parked until we monetize (real traffic first) — component kept
+          in components/PricingSection.tsx for a future launch. Re-import + render to bring back. */}
 
       <footer>
         <div className="wrap footer-inner">

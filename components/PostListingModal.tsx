@@ -90,7 +90,7 @@ export default function PostListingModal({ open, onClose }: { open: boolean; onC
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '18px' }}>
           <div>
             <div style={{ fontFamily: 'var(--font-display)', fontSize: '24px', fontWeight: 800, color: 'var(--chalk)' }}>Post a Listing</div>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--chalk-faint)', marginTop: '4px' }}>Free during growth stage</div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--chalk-faint)', marginTop: '4px' }}>Free to list your program</div>
           </div>
           <button onClick={close} style={{ background: 'none', border: 'none', color: 'var(--chalk-faint)', fontSize: '22px', cursor: 'pointer', lineHeight: 1 }}>×</button>
         </div>
