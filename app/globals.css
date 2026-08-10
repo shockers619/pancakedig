@@ -108,39 +108,27 @@ a { color: inherit; text-decoration: none; }
    A taut horizontal cable with small vertical tie marks and a
    red/white antenna stripe at one end, used wherever FloorBalance
    would use a plain divider or the orange top-bar rule. */
-/* Volleyball-net motif divider: white top tape band, square mesh netting, and
-   red/white antennas near each end. Full-bleed; the mesh holes are transparent so
-   the dark background shows through and reads as real netting. Used on header + footer. */
-/* A netted panel (top tape + square mesh + white side bands with red/white antennas)
-   suspended between thin cables that run out to the posts — matching a real net. */
+/* Volleyball-net divider: a bold white top band + square mesh spanning the FULL width,
+   bold white side bands closing each end, a thin bottom cable, and red/white antennas
+   at the ends. Full-bleed; mesh holes are transparent so the dark bg reads as netting. */
 .net-line {
   position: relative;
   height: 34px;
   margin: 0;
   background-color: transparent;
   background-image:
-    linear-gradient(var(--chalk), var(--chalk)),   /* top cable to the posts */
-    linear-gradient(var(--chalk), var(--chalk));   /* bottom cable to the posts */
-  background-repeat: no-repeat, no-repeat;
-  background-size: 100% 2px, 100% 2px;
-  background-position: left top, left bottom;
-}
-.net-panel {
-  position: absolute;
-  top: 0; bottom: 0; left: 8%; right: 8%;
-  border-left: 4px solid var(--chalk);    /* white side bands = the net ends */
-  border-right: 4px solid var(--chalk);
-  background-color: transparent;
-  background-image:
-    linear-gradient(var(--chalk), var(--chalk)),                                                                     /* thick top tape */
+    linear-gradient(var(--chalk), var(--chalk)),   /* bold top band (full width) */
+    linear-gradient(var(--chalk), var(--chalk)),   /* thin bottom cable */
+    linear-gradient(var(--chalk), var(--chalk)),   /* left side band (closes the net) */
+    linear-gradient(var(--chalk), var(--chalk)),   /* right side band */
     repeating-linear-gradient(90deg, color-mix(in srgb, var(--chalk), transparent 45%) 0 1px, transparent 1px 18px), /* vertical cords */
     repeating-linear-gradient(0deg,  color-mix(in srgb, var(--chalk), transparent 45%) 0 1px, transparent 1px 18px); /* horizontal cords */
-  background-repeat: no-repeat, repeat, repeat;
-  background-size: 100% 5px, auto, auto;
-  background-position: left top, left top, left top;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, repeat, repeat;
+  background-size: 100% 5px, 100% 2px, 4px 100%, 4px 100%, auto, auto;
+  background-position: left top, left bottom, left top, right top, left top, left top;
 }
-/* red/white antennas mounted on the side bands at each net end */
-.net-panel::before, .net-panel::after {
+/* red/white antennas standing at each net end, just inside the side bands */
+.net-line::before, .net-line::after {
   content: '';
   position: absolute;
   top: -20px;
@@ -150,10 +138,12 @@ a { color: inherit; text-decoration: none; }
   background: repeating-linear-gradient(180deg, var(--antenna-red) 0 8px, var(--chalk) 8px 16px);
   box-shadow: 0 1px 2px rgba(0,0,0,0.35);
 }
-.net-panel::before { left: -5px; }
-.net-panel::after { right: -5px; }
-/* header net: antennas rise taller, up into the header bar */
-.net-line--header .net-panel::before, .net-line--header .net-panel::after { top: -44px; height: 78px; }
+.net-line::before { left: 12px; }
+.net-line::after { right: 12px; }
+/* header net: raised above the sticky header (z-index 100) so the antennas actually
+   rise up above the net and into the header bar */
+.net-line--header { z-index: 101; }
+.net-line--header::before, .net-line--header::after { top: -50px; height: 84px; }
 
 /* ---------- Logo treatment (see house style #4) ---------- */
 .logo-frame {
