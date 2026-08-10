@@ -76,13 +76,13 @@ export default async function Home() {
       <section className="hero">
         <div className="wrap">
           <div className="hero-strap">
-            <span className="strap-seg">National Grassroots Volleyball Directory</span>
-            <span className="strap-sep">·</span>
-            <span className="strap-seg">Boys &amp; Girls</span>
-            <span className="strap-sep">·</span>
-            <span className="strap-seg">USAV · JVA · AAU · AVP · LOVB</span>
-            <span className="strap-sep">·</span>
-            <span className="strap-seg">All Surfaces</span>
+            <span className="strap-seg s-dir">National Grassroots Volleyball Directory</span>
+            <span className="strap-sep sep-1">·</span>
+            <span className="strap-seg s-bg">Boys &amp; Girls</span>
+            <span className="strap-sep sep-2">·</span>
+            <span className="strap-seg s-org">USAV · JVA · AAU · AVP · LOVB</span>
+            <span className="strap-sep sep-3">·</span>
+            <span className="strap-seg s-surf">All Surfaces</span>
           </div>
           <h1>One good <em>dig</em>.</h1>
           <p className="hero-sub">
@@ -133,7 +133,7 @@ export default async function Home() {
             <span className="footer-credit-label">Site created by</span>
             <img className="footer-credit-logo" src="/sitesbyed-white.png" alt="Sites by Ed" />
           </a>
-          <div className="foot-note">© 2026 Pancake Dig · Not affiliated with any organization.</div>
+          <div className="foot-note">© 2026 Pancake Dig<span className="foot-sep"> · </span><span className="foot-disclaimer">Not affiliated with any organization.</span></div>
         </div>
       </footer>
     </>

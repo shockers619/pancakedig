@@ -115,10 +115,6 @@ export default function PostListingModal({ open, onClose }: { open: boolean; onC
                     {v === 'showcase' && type === 'showcase' && (
                       <div style={{ marginLeft: '26px', borderLeft: '2px solid rgba(255,196,43,0.25)', paddingLeft: '10px' }}>
                         <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9.5px', color: 'var(--chalk-faint)', textTransform: 'uppercase', letterSpacing: '0.06em', padding: '6px 0 2px' }}>Event Type</div>
-                        <label className="msel-option all-option" style={{ padding: '7px 8px' }}>
-                          <input type="checkbox" checked={eventTypes.length === EVENT_TYPES.length} onChange={() => setEventTypes(eventTypes.length === EVENT_TYPES.length ? [] : [...EVENT_TYPES])} />
-                          <span>Select All</span>
-                        </label>
                         {EVENT_TYPES.map(e => (
                           <label key={e} className="msel-option" style={{ padding: '7px 8px' }}>
                             <input type="checkbox" checked={eventTypes.includes(e)} onChange={() => setEventTypes(toggle(eventTypes, e))} />

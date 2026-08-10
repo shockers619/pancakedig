@@ -137,10 +137,10 @@ a { color: inherit; text-decoration: none; }
   position: absolute;
   top: -34px;
   width: 6px;
-  height: 72px;
+  height: 70px;   /* base flush with the net's bottom edge (net is 36px; -34 + 70 = 36) */
   border-radius: 3px;
   background: repeating-linear-gradient(180deg, var(--antenna-red) 0 8px, var(--chalk) 8px 16px);
-  box-shadow: 0 1px 2px rgba(0,0,0,0.35);
+  box-shadow: 0 0 2px rgba(0,0,0,0.35);
 }
 .net-line::before { left: 4%; }
 .net-line::after { right: 4%; }
@@ -230,7 +230,6 @@ header.site-header .wrap { display: flex; align-items: center; justify-content: 
   .header-actions { width: 100%; justify-content: center; }
   .logo { font-size: 19px; gap: 6px; }
   .logo svg { width: 30px; height: 30px; }
-  .logo-tag { display: none; }
   .btn { padding: 9px 14px; font-size: 11px; }
 }
 
@@ -267,11 +266,16 @@ header.site-header .wrap { display: flex; align-items: center; justify-content: 
   flex: none;
 }
 .hero-strap .strap-sep { color: var(--volley-yellow); opacity: 0.9; }
-/* Mobile strapline: stack each segment on its own line; drop connecting bullets + lead dot.
-   Placed after the base .hero-strap so align-items wins the source-order cascade. */
+/* Mobile strapline: three lines — (1) Directory, (2) organizations, (3) Boys & Girls · All
+   Surfaces. Reordered with flex order; full-width items force the first two onto their own
+   lines. Placed after the base .hero-strap so these win the source-order cascade. */
 @media (max-width: 640px) {
-  .hero-strap { flex-direction: column; align-items: flex-start; gap: 3px; }
-  .hero-strap .strap-sep, .hero-strap::before { display: none; }
+  .hero-strap { align-items: flex-start; column-gap: 8px; row-gap: 3px; }
+  .hero-strap::before { display: none; }
+  .s-dir { order: 1; flex-basis: 100%; }
+  .s-org { order: 2; flex-basis: 100%; }
+  .s-bg, .sep-2, .s-surf { order: 3; }
+  .sep-1, .sep-3 { display: none; }
 }
 .hero h1 {
   font-family: var(--font-display);
@@ -770,6 +774,9 @@ footer .footer-inner .foot-note { justify-self: end; text-align: right; }
   footer .footer-inner { grid-template-columns: 1fr; justify-items: center; text-align: center; }
   footer .footer-inner .foot-note { justify-self: center; text-align: center; }
   footer .footer-left { justify-content: center; }
+  /* disclaimer drops to its own line under the copyright so it doesn't break mid-phrase */
+  .foot-note .foot-sep { display: none; }
+  .foot-note .foot-disclaimer { display: block; }
 }
 footer .footer-left { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
 footer .footer-links { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
