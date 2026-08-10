@@ -78,7 +78,7 @@ export default async function Home() {
           <div className="hero-strap">National Grassroots Volleyball Directory <span>·</span> Boys &amp; Girls <span>·</span> JVA · USAV · AAU <span>·</span> All Surfaces</div>
           <h1>One good <em>dig</em>.</h1>
           <p className="hero-sub">
-            Three governing bodies, three sets of rules, three overlapping seasons —
+            Multiple governing bodies, different rules, overlapping seasons —
             and no single place that shows all of it. Search real grassroots
             volleyball programs — boys and girls, indoor, beach, and grass — by area,
             division, level, and organization.
@@ -89,7 +89,7 @@ export default async function Home() {
               <div><div className="hero-stat-num">{clubCount}</div><div className="hero-stat-label">Clubs</div></div>
               <div><div className="hero-stat-num">{venueCount}</div><div className="hero-stat-label">Venues</div></div>
               <div><div className="hero-stat-num">{trainingCount}</div><div className="hero-stat-label">Training</div></div>
-              <div><div className="hero-stat-num" style={{ fontSize: '22px', letterSpacing: '0.02em', whiteSpace: 'nowrap' }}><em>JVA · USAV · AAU</em></div><div className="hero-stat-label">All in one place</div></div>
+              <div><div className="hero-stat-num" style={{ fontSize: '19px', letterSpacing: '0.02em', whiteSpace: 'nowrap' }}><em>USAV · JVA · AAU · AVP · LOVB</em></div><div className="hero-stat-label">All in one place</div></div>
             </div>
           )}
         </div>
