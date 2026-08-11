@@ -28,9 +28,10 @@ export const SURFACES = ['Indoor', 'Beach', 'Grass']
 export const LEVELS = ['Open / National', 'Premier / USA / Freedom', 'Club / Regional / Select', 'Rec / Instructional']
 
 // USAV/JVA/AAU = the big indoor circuits; LOVB = the growing junior club network;
-// AVP America = grassroots beach; NFHS = high school; USYVL = rec youth; Independent = confirmed none;
-// Unverified = org unknown/unrecorded (a data-gap filter, mainly for filling listings in).
-export const ORGANIZATIONS = ['USAV', 'JVA', 'AAU', 'LOVB', 'AVP America', 'NFHS / High School', 'USYVL', 'Independent', 'Unverified']
+// AVP America = grassroots beach; NFHS = high school; USYVL = rec youth; Independent = confirmed none.
+// (Note: ?org=Unverified is still a valid URL filter for the internal data-gap worklist —
+// it's just kept out of the public dropdown so the storefront doesn't advertise gaps.)
+export const ORGANIZATIONS = ['USAV', 'JVA', 'AAU', 'LOVB', 'AVP America', 'NFHS / High School', 'USYVL', 'Independent']
 
 export const GENDERS = ['Boys', 'Girls', 'Coed']
 

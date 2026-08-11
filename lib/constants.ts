@@ -157,18 +157,23 @@ export function formatGender(gender?: string): string {
   return ''
 }
 
-// Types where a sanctioning body is a real eligibility concept (you need USAV
-// membership to enter a USAV event, etc.). Facilities (venue/training) aren't
-// "missing" an org, so they get no placeholder when it's blank.
-const ORG_SANCTIONED_TYPES = new Set(['club', 'showcase', 'tryout', 'opening'])
+// Events / roster openings: org is an eligibility gate (you need USAV membership to
+// enter a USAV event), so it ALWAYS renders — "Unverified" when unknown. Clubs and
+// tryouts: org is background, so it shows only when known (no public "Unverified"
+// chip — that word collides with the "Verified by Pancake Dig" trust mark). Facilities
+// (venue/training): org doesn't apply.
+const ORG_PLACEHOLDER_TYPES = new Set(['showcase', 'opening'])
+// Types where a blank org is a fillable gap for the internal ?org=Unverified worklist
+// (broader than the placeholder set — clubs are tracked here but don't show the chip).
+const ORG_TRACKED_TYPES = new Set(['club', 'showcase', 'tryout', 'opening'])
 
 export type OrgChip = { label: string; kind: 'body' | 'independent' | 'unverified' }
 
 // Single source of truth for how a listing's organization renders as chip(s).
 // - one or more bodies recorded → each as a gold body chip
 // - the literal value "Independent" → a confirmed-none chip (distinct look)
-// - blank on a sanctioned type → "Unverified" (unknown; needs filling in)
-// - blank on a facility type → nothing (org doesn't apply)
+// - blank on an event/opening → "Unverified" (unknown; eligibility matters)
+// - blank on a club/tryout/facility → nothing (background or N/A)
 export function orgChips(l: Listing): OrgChip[] {
   const bodies = (l.governing_body || '').split(',').map(s => s.trim()).filter(Boolean)
   if (bodies.length) {
@@ -177,14 +182,15 @@ export function orgChips(l: Listing): OrgChip[] {
       kind: b.toLowerCase() === 'independent' ? 'independent' : 'body',
     }))
   }
-  return ORG_SANCTIONED_TYPES.has(l.type) ? [{ label: 'Unverified', kind: 'unverified' }] : []
+  return ORG_PLACEHOLDER_TYPES.has(l.type) ? [{ label: 'Unverified', kind: 'unverified' }] : []
 }
 
-// True when a listing's org is unknown (blank on a sanctioned type) — the state
-// a director should be able to filter to and fill in.
+// True when a listing's org is an unfilled gap — the internal worklist state a
+// director can filter to (?org=Unverified). Covers clubs even though they don't
+// render the chip publicly.
 export function isOrgUnverified(l: Listing): boolean {
   const has = (l.governing_body || '').trim().length > 0
-  return !has && ORG_SANCTIONED_TYPES.has(l.type)
+  return !has && ORG_TRACKED_TYPES.has(l.type)
 }
 
 // Formats an event date (or range), collapsing redundant parts so ranges stay short:
