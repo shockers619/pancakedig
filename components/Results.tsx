@@ -22,6 +22,7 @@ export default function Results({ listings, isSample }: { listings: Listing[]; i
   const [page, setPage] = useState(1)
   const [selected, setSelected] = useState<Listing | null>(null)
   const [notifyOpen, setNotifyOpen] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
   const sortRef = useRef<HTMLDivElement>(null)
 
   // Close the Sort menu when clicking anywhere outside it (matches FloorBalance).
@@ -33,6 +34,15 @@ export default function Results({ listings, isSample }: { listings: Listing[]; i
     document.addEventListener('mousedown', handler)
     return () => document.removeEventListener('mousedown', handler)
   }, [sortOpen])
+
+  // Track mobile so the pagination shows fewer page numbers (Next drops to its own line).
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 640px)')
+    const update = () => setIsMobile(mq.matches)
+    update()
+    mq.addEventListener('change', update)
+    return () => mq.removeEventListener('change', update)
+  }, [])
 
   const csv = (k: string) => { const v = sp.get(k); return v ? v.split(',').map(s => s.trim()).filter(Boolean) : [] }
   const types = csv('type'), regions = csv('region'), states = csv('state'),
@@ -75,11 +85,12 @@ export default function Results({ listings, isSample }: { listings: Listing[]; i
 
   const goToPage = (p: number) => {
     setPage(p)
-    document.getElementById('results')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    // scroll to the first listing of the new page, not the search panel above it
+    document.getElementById('results-top')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 
   const pageWindow = () => {
-    const max = 7
+    const max = isMobile ? 6 : 7
     let start = Math.max(1, safePage - Math.floor(max / 2))
     const end = Math.min(totalPages, start + max - 1)
     start = Math.max(1, end - max + 1)
@@ -137,6 +148,7 @@ export default function Results({ listings, isSample }: { listings: Listing[]; i
           </div>
         </div>
 
+        <div id="results-top" style={{ scrollMarginTop: '96px' }} />
         {paged.length === 0 ? (
           <div className="empty-state">
             <div className="empty-state-icon">🏐</div>
