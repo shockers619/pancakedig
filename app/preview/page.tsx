@@ -24,6 +24,23 @@ const DEMO_LISTINGS: Listing[] = [
     verified: false, claimed: true,
     created_at: new Date().toISOString(),
   },
+  {
+    id: 3, type: 'showcase', club: 'Example Sports Complex', title: 'Windy City Junior Classic',
+    region: 'midwest', state: 'il', city: 'Chicago',
+    event_subtype: 'Tournament', event_date: '2026-11-14', event_date_end: '2026-11-15',
+    division: '12U, 13U, 14U, 15U, 16U', gender: 'girls', surface: 'Indoor',
+    details: 'Placeholder event to verify the "Tournament — …" title lead.',
+    verified: true, claimed: false,
+    created_at: new Date().toISOString(),
+  },
+  {
+    id: 4, type: 'opening', club: 'Example Volleyball Club', title: '16U Girls — Setter',
+    region: 'south', state: 'tx', city: 'Dallas',
+    division: '16U', gender: 'girls', surface: 'Indoor',
+    details: 'Placeholder roster opening to verify the "Open Spot — …" title lead.',
+    verified: false, claimed: false,
+    created_at: new Date().toISOString(),
+  },
 ]
 
 export default function DemoListings() {

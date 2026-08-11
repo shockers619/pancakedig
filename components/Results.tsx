@@ -1,7 +1,7 @@
 'use client'
 import { useState, useMemo, useEffect, useRef } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
-import { Listing } from '@/lib/constants'
+import { Listing, isOrgUnverified } from '@/lib/constants'
 import SearchPanel from './SearchPanel'
 import ListingCard from './ListingCard'
 import ListingModal from './ListingModal'
@@ -62,7 +62,9 @@ export default function Results({ listings, isSample }: { listings: Listing[]; i
       }
       if (orgs.length) {
         const bodies = (l.governing_body || '').split(',').map(s => s.trim()).filter(Boolean)
-        if (!orgs.some(o => bodies.includes(o))) return false
+        // "Unverified" is a synthetic value: match listings whose org is unknown on a sanctioned type.
+        const match = orgs.some(o => o === 'Unverified' ? isOrgUnverified(l) : bodies.includes(o))
+        if (!match) return false
       }
       if (surfaces.length && !surfaces.includes(l.surface || '')) return false
       return true

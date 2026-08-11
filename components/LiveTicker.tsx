@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { Listing, REGION_NAMES, TYPE_LABELS, formatDivisionRange, formatGender } from '@/lib/constants'
+import { Listing, REGION_NAMES, TYPE_LABELS, formatDivisionRange, formatGender, eventLead } from '@/lib/constants'
 import ListingModal from './ListingModal'
 
 // "⚡ Live Board — Just Posted" — the 5 most recent listings as a compact ticker,
@@ -28,7 +28,7 @@ export default function LiveTicker({ listings }: { listings: Listing[] }) {
                   <span className={`board-tag badge-${l.type}`}>{TYPE_LABELS[l.type] || l.type}</span>
                 </div>
                 <div className="board-row-body">
-                  <strong>{l.title || l.club}</strong>
+                  <strong>{eventLead(l) && <span className="type-lead">{eventLead(l)} — </span>}{l.title || l.club}</strong>
                   <div className="board-row-meta">
                     📍 {REGION_NAMES[l.region] || l.region}
                     {(l.venue || l.city || l.state) ? ` · ${[l.venue, l.city, l.state?.toUpperCase()].filter(Boolean).join(', ')}` : ''}

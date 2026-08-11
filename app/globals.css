@@ -594,6 +594,10 @@ header.site-header .wrap { display: flex; align-items: center; justify-content: 
   flex-wrap: wrap;
 }
 
+/* Event/opening title lead — "Tournament — …", "Open Spot — …". The label reads
+   as a colored tag ahead of the em dash; keep it on one line so it never orphans. */
+.type-lead { color: var(--volley-yellow); font-weight: 800; white-space: nowrap; }
+
 .listing-meta { font-size: 13px; color: var(--chalk-dim); }
 /* At-a-glance metadata chips on the front of each result card */
 .listing-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 9px; }
@@ -610,6 +614,10 @@ header.site-header .wrap { display: flex; align-items: center; justify-content: 
   white-space: nowrap;
 }
 .listing-chip.chip-org { color: var(--volley-yellow); border-color: rgba(255,196,43,0.4); background: rgba(255,196,43,0.08); }
+/* Confirmed no sanctioning body — gold, but outline-only (a step down in certainty from a named body). */
+.listing-chip.chip-org-independent { color: var(--volley-yellow); border-color: rgba(255,196,43,0.4); background: transparent; }
+/* Org unknown/unrecorded — dashed, dimmed: reads as a gap to fill, not a real body, but stays in the org (gold) family. */
+.listing-chip.chip-org-unverified { color: rgba(255,196,43,0.6); border: 1px dashed rgba(255,196,43,0.38); background: transparent; }
 .listing-chip.chip-event { color: var(--ace-teal); border-color: rgba(53,196,181,0.45); background: rgba(53,196,181,0.1); text-transform: none; letter-spacing: 0; font-weight: 700; }
 
 .listing-card-actions { display: flex; align-items: center; gap: 10px; }

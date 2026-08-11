@@ -140,6 +140,16 @@ export function formatDivisionRange(division?: string): string {
   return groups.join(', ')
 }
 
+// The lead label that prefixes an event/opening title with an em dash, e.g.
+// "Tournament — Summer Slam" or "Open Spot — 16U Setter". Ported from
+// FloorBalance's ListingCard rule (opening → "Open Spot", showcase → its
+// event_subtype). Evergreen listings (club/venue/training) return null.
+export function eventLead(l: { type: string; event_subtype?: string }): string | null {
+  if (l.type === 'opening') return 'Open Spot'
+  if (l.type === 'showcase' && l.event_subtype) return l.event_subtype
+  return null
+}
+
 export function formatGender(gender?: string): string {
   if (gender === 'boys') return 'Boys'
   if (gender === 'girls') return 'Girls'
@@ -147,16 +157,51 @@ export function formatGender(gender?: string): string {
   return ''
 }
 
-// Formats an event date (or date range) for display, e.g. "Oct 12, 2026" or
-// "Oct 12 – 14, 2026". Dates are stored as plain YYYY-MM-DD; parse at local noon
-// so the day never shifts across time zones.
+// Types where a sanctioning body is a real eligibility concept (you need USAV
+// membership to enter a USAV event, etc.). Facilities (venue/training) aren't
+// "missing" an org, so they get no placeholder when it's blank.
+const ORG_SANCTIONED_TYPES = new Set(['club', 'showcase', 'tryout', 'opening'])
+
+export type OrgChip = { label: string; kind: 'body' | 'independent' | 'unverified' }
+
+// Single source of truth for how a listing's organization renders as chip(s).
+// - one or more bodies recorded → each as a gold body chip
+// - the literal value "Independent" → a confirmed-none chip (distinct look)
+// - blank on a sanctioned type → "Unverified" (unknown; needs filling in)
+// - blank on a facility type → nothing (org doesn't apply)
+export function orgChips(l: Listing): OrgChip[] {
+  const bodies = (l.governing_body || '').split(',').map(s => s.trim()).filter(Boolean)
+  if (bodies.length) {
+    return bodies.map(b => ({
+      label: b,
+      kind: b.toLowerCase() === 'independent' ? 'independent' : 'body',
+    }))
+  }
+  return ORG_SANCTIONED_TYPES.has(l.type) ? [{ label: 'Unverified', kind: 'unverified' }] : []
+}
+
+// True when a listing's org is unknown (blank on a sanctioned type) — the state
+// a director should be able to filter to and fill in.
+export function isOrgUnverified(l: Listing): boolean {
+  const has = (l.governing_body || '').trim().length > 0
+  return !has && ORG_SANCTIONED_TYPES.has(l.type)
+}
+
+// Formats an event date (or range), collapsing redundant parts so ranges stay short:
+//   single day        → "Jan 9, 2027"
+//   same month + year → "Jan 9–11, 2027"
+//   same year         → "Sep 12 – Oct 21, 2026"
+//   crosses years     → "Dec 20, 2026 – Jan 5, 2027"
+// Dates are stored as plain YYYY-MM-DD; parse at local noon so the day never shifts across time zones.
 export function formatEventDate(start?: string, end?: string): string {
   if (!start) return ''
-  const opt: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric', year: 'numeric' }
-  const s = new Date(start + 'T12:00:00').toLocaleDateString('en-US', opt)
-  if (end && end !== start) {
-    const e = new Date(end + 'T12:00:00').toLocaleDateString('en-US', opt)
-    return `${s} – ${e}`
-  }
-  return s
+  const S = new Date(start + 'T12:00:00')
+  const mon = (d: Date) => d.toLocaleDateString('en-US', { month: 'short' })
+  const full = (d: Date) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+  if (!end || end === start) return full(S)
+  const E = new Date(end + 'T12:00:00')
+  const sameYear = S.getFullYear() === E.getFullYear()
+  if (sameYear && S.getMonth() === E.getMonth()) return `${mon(S)} ${S.getDate()}–${E.getDate()}, ${E.getFullYear()}`
+  if (sameYear) return `${mon(S)} ${S.getDate()} – ${mon(E)} ${E.getDate()}, ${E.getFullYear()}`
+  return `${full(S)} – ${full(E)}`
 }

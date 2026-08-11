@@ -1,15 +1,18 @@
-import { Listing, REGION_NAMES, TYPE_LABELS, formatDivisionRange, formatGender, formatEventDate } from '@/lib/constants'
+import { Listing, REGION_NAMES, TYPE_LABELS, formatDivisionRange, formatGender, formatEventDate, eventLead, orgChips } from '@/lib/constants'
 import { VerifiedBadge } from './VerifiedBadge'
 import { FacebookIcon, InstagramIcon, XIcon, TikTokIcon, LinkIcon } from './SocialIcons'
 
+const ORG_CHIP_CLASS = { body: 'chip-org', independent: 'chip-org-independent', unverified: 'chip-org-unverified' } as const
+
 export default function ListingModal({ listing: l, onClose }: { listing: Listing; onClose: () => void }) {
   const hasSocial = l.facebook_url || l.instagram_url || l.x_url || l.tiktok_url
-  const bodies = (l.governing_body || '').split(',').map(s => s.trim()).filter(Boolean)
+  const orgs = orgChips(l)
+  const lead = eventLead(l)
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal" onClick={e => e.stopPropagation()}>
         <div className="modal-head">
-          <h2>{l.title || l.club}</h2>
+          <h2>{lead && <span className="type-lead">{lead} — </span>}{l.title || l.club}</h2>
           <button className="modal-close" onClick={onClose}>×</button>
         </div>
 
@@ -40,13 +43,13 @@ export default function ListingModal({ listing: l, onClose }: { listing: Listing
           {l.event_date && (
             <div style={{ fontSize: '13px', color: 'var(--ace-teal)', fontWeight: 600 }}>Event Date: {formatEventDate(l.event_date, l.event_date_end)}</div>
           )}
-          {/* Metadata as chips — same style as the result cards */}
-          {(l.division || l.gender || l.surface || bodies.length > 0 || (l.tiers && l.tiers.length > 0)) && (
+          {/* Metadata as chips — same order as the result cards: org → division → gender → surface → level */}
+          {(l.division || l.gender || l.surface || orgs.length > 0 || (l.tiers && l.tiers.length > 0)) && (
             <div className="listing-chips" style={{ marginTop: '2px' }}>
+              {orgs.map(o => <span key={o.label} className={`listing-chip ${ORG_CHIP_CLASS[o.kind]}`}>{o.label}</span>)}
               {l.division && <span className="listing-chip">{formatDivisionRange(l.division)}</span>}
               {l.gender && <span className="listing-chip">{formatGender(l.gender)}</span>}
               {l.surface && <span className="listing-chip">{l.surface}</span>}
-              {bodies.map(b => <span key={b} className="listing-chip chip-org">{b}</span>)}
               {(l.tiers || []).map(t => <span key={t} className="listing-chip chip-level">{t}</span>)}
             </div>
           )}

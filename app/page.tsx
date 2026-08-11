@@ -51,9 +51,10 @@ async function getListings(): Promise<{ listings: Listing[]; isSample: boolean }
 
 export default async function Home() {
   const { listings, isSample } = await getListings()
-  const clubCount = listings.filter(l => l.type === 'club').length
-  const venueCount = listings.filter(l => l.type === 'venue').length
-  const trainingCount = listings.filter(l => l.type === 'training').length
+  // Scale-forward hero stats: lead with total reach, not a per-type inventory.
+  const totalCount = listings.length
+  const stateCount = new Set(listings.map(l => (l.state || '').toLowerCase()).filter(Boolean)).size
+  const eventCount = listings.filter(l => l.type === 'showcase' || l.type === 'tryout').length
   return (
     <>
       <header className="site-header">
@@ -66,7 +67,8 @@ export default async function Home() {
             </span>
           </div>
           <div className="header-actions" style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-            <a className="btn btn-outline">Sign In</a>
+            {/* Sign In removed until auth + the claim flow are built — a dead button reads as broken.
+                Re-add (wired to the ported FloorBalance AuthSystem) when accounts exist. */}
             <PostListingButton />
           </div>
         </div>
@@ -92,11 +94,11 @@ export default async function Home() {
             division, level, and organization.
           </p>
 
-          {!isSample && (clubCount > 0 || venueCount > 0) && (
+          {!isSample && totalCount > 0 && (
             <div className="hero-stats">
-              <div><div className="hero-stat-num">{clubCount}</div><div className="hero-stat-label">Clubs</div></div>
-              <div><div className="hero-stat-num">{venueCount}</div><div className="hero-stat-label">Venues</div></div>
-              <div><div className="hero-stat-num">{trainingCount}</div><div className="hero-stat-label">Training</div></div>
+              <div><div className="hero-stat-num">{totalCount}</div><div className="hero-stat-label">Listings</div></div>
+              <div><div className="hero-stat-num">{stateCount}</div><div className="hero-stat-label">States</div></div>
+              <div><div className="hero-stat-num">{eventCount}</div><div className="hero-stat-label">Events</div></div>
               <div><div className="hero-stat-num" style={{ fontSize: '19px', letterSpacing: '0.02em', whiteSpace: 'nowrap' }}><em>USAV · JVA · AAU · AVP · LOVB</em></div><div className="hero-stat-label">All in one place</div></div>
             </div>
           )}

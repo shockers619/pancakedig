@@ -20,13 +20,17 @@ export const TYPES: [string, string][] = [
 
 export const EVENT_TYPES = ['Tournaments', 'Camps & Clinics', 'Recruiting Showcases', 'Leagues', 'Open Gyms']
 
-export const SURFACES = ['Indoor', 'Beach', 'Grass', 'Snow']
+// Snow volleyball is a real FIVB discipline but has no US junior/grassroots scene,
+// so it's intentionally omitted — an empty filter would just mislead. Grass stays
+// (an established warm-weather junior format).
+export const SURFACES = ['Indoor', 'Beach', 'Grass']
 
 export const LEVELS = ['Open / National', 'Premier / USA / Freedom', 'Club / Regional / Select', 'Rec / Instructional']
 
 // USAV/JVA/AAU = the big indoor circuits; LOVB = the growing junior club network;
-// AVP America = grassroots beach; NFHS = high school; USYVL = rec youth; Independent = none.
-export const ORGANIZATIONS = ['USAV', 'JVA', 'AAU', 'LOVB', 'AVP America', 'NFHS / High School', 'USYVL', 'Independent']
+// AVP America = grassroots beach; NFHS = high school; USYVL = rec youth; Independent = confirmed none;
+// Unverified = org unknown/unrecorded (a data-gap filter, mainly for filling listings in).
+export const ORGANIZATIONS = ['USAV', 'JVA', 'AAU', 'LOVB', 'AVP America', 'NFHS / High School', 'USYVL', 'Independent', 'Unverified']
 
 export const GENDERS = ['Boys', 'Girls', 'Coed']
 
