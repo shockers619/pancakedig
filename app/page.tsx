@@ -61,7 +61,7 @@ export default async function Home() {
       <header className="site-header">
         <div className="wrap">
           <div className="logo">
-            <VolleyballIcon size={44} />
+            <VolleyballIcon size={52} />
             <span>
               <span className="pancake">PANCAKE</span> <span className="dig">DIG</span>
               <span className="logo-tag">GRASSROOTS VOLLEYBALL DIRECTORY</span>
