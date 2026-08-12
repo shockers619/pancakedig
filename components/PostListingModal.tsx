@@ -27,6 +27,7 @@ export default function PostListingModal({ open, onClose, editing }: { open: boo
   const [orgs, setOrgs] = useState<string[]>([])
   const [genders, setGenders] = useState<string[]>([])
   const [clubName, setClubName] = useState('')
+  const [city, setCity] = useState('')
   const [title, setTitle] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
@@ -82,6 +83,7 @@ export default function PostListingModal({ open, onClose, editing }: { open: boo
     setOrgs(csv(editing.governing_body))
     setGenders(editing.gender && gmap[editing.gender] ? [gmap[editing.gender]] : [])
     setClubName(editing.club || '')
+    setCity(editing.city || '')
     setTitle(NEEDS_TITLE.includes(editing.type) ? (editing.title || '') : '')
     setEmail(editing.email || '')
     setPhone(editing.phone || '')
@@ -105,7 +107,7 @@ export default function PostListingModal({ open, onClose, editing }: { open: boo
 
   const reset = () => {
     setType(''); setEventTypes([]); setRegion(''); setState(''); setDivisions([]); setSurfaces([])
-    setLevels([]); setOrgs([]); setGenders([]); setClubName(''); setTitle(''); setEmail('')
+    setLevels([]); setOrgs([]); setGenders([]); setClubName(''); setCity(''); setTitle(''); setEmail('')
     setPhone(''); setWebsite(''); setFacebook(''); setInstagram(''); setXUrl(''); setTiktok('')
     setDetails(''); setError(''); setSubmitted(false)
   }
@@ -135,6 +137,7 @@ export default function PostListingModal({ open, onClose, editing }: { open: boo
       title: needsTitle ? title.trim() : clubName.trim(),
       region: REGION_KEY[region],
       state: state ? state.toLowerCase() : null,
+      city: city.trim() || null,
       division: divisions.length ? divisions.join(', ') : null,
       gender: genderVal,
       tiers: levels.length ? levels : null,
@@ -302,6 +305,11 @@ export default function PostListingModal({ open, onClose, editing }: { open: boo
                   </label>
                 ))}
               </Dropdown>
+            </div>
+
+            <div>
+              <label className="field-label">City / Town <span style={{ opacity: 0.5, fontWeight: 400, textTransform: 'none' }}>(the town it’s in — any size)</span></label>
+              <input className="text-input" value={city} onChange={e => setCity(e.target.value)} placeholder="e.g. Fort Worth" maxLength={60} />
             </div>
 
             <div>
