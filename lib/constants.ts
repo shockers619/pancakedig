@@ -65,6 +65,11 @@ export const US_STATES: Record<string, { name: string; region: string }> = {
   dc: { name: 'Washington DC', region: 'midatlantic' },
 }
 
+// The single admin account (matches FloorBalance's model): this email sees the
+// approval queue and can approve/reject/verify any listing and resolve claims.
+// Gating is by email on the session; RLS enforces the same email server-side.
+export const ADMIN_EMAIL = 'kirbyrectify@gmail.com'
+
 export const TYPE_LABELS: Record<string, string> = {
   club: 'Club Profile',
   tryout: 'Tryout',

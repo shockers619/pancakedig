@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { US_STATES } from '@/lib/constants'
+import { createClient } from '@/lib/supabase'
 import { REGIONS, TYPES, EVENT_TYPES, SURFACES, LEVELS, ORGANIZATIONS, GENDERS, DIVISIONS, REGION_KEY, toggle } from '@/lib/filterOptions'
 import { Dropdown } from './Dropdown'
 
@@ -11,7 +12,10 @@ import { Dropdown } from './Dropdown'
 // title is just its own name).
 const NEEDS_TITLE = ['tryout', 'opening', 'showcase']
 
-export default function PostListingModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+// `editing` (optional) turns this into an edit form: prefill from the listing and
+// UPDATE it in place instead of inserting a new pending row. Opened this way from
+// the dashboard; RLS ("owner updates own") scopes the update to the owner.
+export default function PostListingModal({ open, onClose, editing }: { open: boolean; onClose: () => void; editing?: any }) {
   const [openMenu, setOpenMenu] = useState('')
   const [type, setType] = useState('')
   const [eventTypes, setEventTypes] = useState<string[]>([])
@@ -30,6 +34,9 @@ export default function PostListingModal({ open, onClose }: { open: boolean; onC
   const [details, setDetails] = useState('')
   const [error, setError] = useState('')
   const [submitted, setSubmitted] = useState(false)
+  const [busy, setBusy] = useState(false)
+  const [user, setUser] = useState<any>(null)
+  const sb = createClient()
   const activeMenuRef = useRef<HTMLDivElement>(null)
   // Only arm "click backdrop to close the modal" when the mousedown lands
   // directly on the overlay AND no dropdown is open. React's onMouseDown fires
@@ -48,6 +55,37 @@ export default function PostListingModal({ open, onClose }: { open: boolean; onC
     return () => document.removeEventListener('mousedown', handler)
   }, [])
 
+  // Track auth so we can require sign-in to post (a listing is tied to its owner).
+  useEffect(() => {
+    sb.auth.getSession().then(({ data }) => setUser(data.session?.user ?? null))
+    const { data: { subscription } } = sb.auth.onAuthStateChange((_e, s) => setUser(s?.user ?? null))
+    return () => subscription.unsubscribe()
+  }, [])
+
+  // Prefill the form when opened in edit mode (reverse-mapping the stored fields
+  // back into the form's controls).
+  useEffect(() => {
+    if (!open || !editing) return
+    const csv = (v?: string) => (v ? v.split(',').map(s => s.trim()).filter(Boolean) : [])
+    const gmap: Record<string, string> = { boys: 'Boys', girls: 'Girls', coed: 'Coed' }
+    setType(editing.type || '')
+    setEventTypes(csv(editing.event_subtype))
+    setRegion(Object.keys(REGION_KEY).find(n => REGION_KEY[n] === editing.region) || '')
+    setState(editing.state || '')
+    setDivisions(csv(editing.division))
+    setSurfaces(csv(editing.surface))
+    setLevels(Array.isArray(editing.tiers) ? editing.tiers : [])
+    setOrgs(csv(editing.governing_body))
+    setGenders(editing.gender && gmap[editing.gender] ? [gmap[editing.gender]] : [])
+    setClubName(editing.club || '')
+    setTitle(NEEDS_TITLE.includes(editing.type) ? (editing.title || '') : '')
+    setEmail(editing.email || '')
+    setPhone(editing.phone || '')
+    setWebsite(editing.website || '')
+    setDetails(editing.details || '')
+    setError(''); setSubmitted(false)
+  }, [open, editing])
+
   // Only portal on the client (document exists there); server render returns null anyway.
   if (!open || typeof document === 'undefined') return null
 
@@ -65,22 +103,53 @@ export default function PostListingModal({ open, onClose }: { open: boolean; onC
 
   const close = () => { onClose(); setOpenMenu(''); reset() }
 
-  const submit = () => {
+  const submit = async () => {
     if (!type) { setError('Please select a listing type.'); return }
     if (!clubName.trim()) { setError('Club / organization name is required.'); return }
     if (needsTitle && !title.trim()) { setError('Please give this listing a title.'); return }
     if (!region) { setError('Please select a region.'); return }
     if (!email && !phone && !website) { setError('Please provide at least one way to contact you: email, phone, or website.'); return }
     setError('')
-    // No backend is wired up yet for Pancake Dig — this is an honest first
-    // pass on the posting UI, not a working submission pipeline. Logging
-    // the collected data for now rather than pretending it was saved
-    // somewhere real.
-    console.log('Pancake Dig listing draft (not yet submitted to a backend):', {
-      type, eventTypes, region, state, divisions, surfaces, levels, orgs, genders,
-      clubName, title, email, phone, website, details,
-    })
+    // Must be signed in — the listing is tied to its owner (user_id) so they can
+    // edit it later, and RLS only accepts an insert where user_id = auth.uid().
+    const { data: { session } } = await sb.auth.getSession()
+    const u = session?.user
+    if (!u) { setError('Please sign in first (button top-right) so your listing is tied to your account — then submit again.'); return }
+    setBusy(true)
+    const site = website.trim() ? (/^https?:\/\//i.test(website.trim()) ? website.trim() : 'https://' + website.trim()) : null
+    const g = genders.map(s => s.toLowerCase())
+    const genderVal = (g.length > 1 || g.includes('coed')) ? 'coed' : g.includes('boys') ? 'boys' : g.includes('girls') ? 'girls' : null
+    const fields = {
+      type,
+      club: clubName.trim(),
+      title: needsTitle ? title.trim() : clubName.trim(),
+      region: REGION_KEY[region],
+      state: state ? state.toLowerCase() : null,
+      division: divisions.length ? divisions.join(', ') : null,
+      gender: genderVal,
+      tiers: levels.length ? levels : null,
+      governing_body: orgs.length ? orgs.join(', ') : null,
+      surface: surfaces.length ? surfaces.join(', ') : null,
+      event_subtype: (type === 'showcase' && eventTypes.length) ? eventTypes.join(', ') : null,
+      details: details.trim() || null,
+      email: email.trim() || null,
+      phone: phone.trim() || null,
+      website: site,
+    }
+    // Edit → update in place (owner keeps ownership + status). New → insert as pending.
+    const { error: writeErr } = editing
+      ? await sb.from('listings').update(fields).eq('id', editing.id)
+      : await sb.from('listings').insert({ ...fields, status: 'pending', user_id: u.id, verified: false, claimed: false, featured: false })
+    setBusy(false)
+    if (writeErr) { setError('Could not save — ' + writeErr.message); return }
     setSubmitted(true)
+    // Confirm to the poster — best-effort, never blocks.
+    if (!editing && u.email) {
+      fetch('/api/post-confirmation', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ to: u.email, title: fields.title }),
+      }).catch(() => {})
+    }
   }
 
   return createPortal(
@@ -91,15 +160,17 @@ export default function PostListingModal({ open, onClose }: { open: boolean; onC
       <div onClick={e => e.stopPropagation()} style={{ background: 'var(--court-navy-2)', border: '2px solid rgba(244,246,242,0.12)', maxWidth: '640px', width: '100%', maxHeight: '90vh', overflowY: 'auto', padding: '28px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '18px' }}>
           <div>
-            <div style={{ fontFamily: 'var(--font-display)', fontSize: '24px', fontWeight: 800, color: 'var(--chalk)' }}>Post a Listing</div>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--chalk-faint)', marginTop: '4px' }}>Free to list your program</div>
+            <div style={{ fontFamily: 'var(--font-display)', fontSize: '24px', fontWeight: 800, color: 'var(--chalk)' }}>{editing ? 'Edit Listing' : 'Post a Listing'}</div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--chalk-faint)', marginTop: '4px' }}>{editing ? 'Update your listing' : 'Free to list your program'}</div>
           </div>
           <button onClick={close} style={{ background: 'none', border: 'none', color: 'var(--chalk-faint)', fontSize: '22px', cursor: 'pointer', lineHeight: 1 }}>×</button>
         </div>
 
         {submitted ? (
           <div style={{ padding: '20px 0', fontSize: '14px', lineHeight: 1.6, color: 'var(--chalk)' }}>
-            <p>Thanks — this is a first pass on the posting form, so nothing's gone live yet. Your details are captured and ready for when the real submission flow is wired up.</p>
+            <p>{editing
+              ? <>Your changes were saved.</>
+              : <>Thanks — your listing was submitted and is <strong>pending review</strong>. Once it’s approved it goes live on the directory. You can see and edit it anytime from your account menu.</>}</p>
             <button className="btn btn-primary" style={{ marginTop: '16px' }} onClick={close}>Close</button>
           </div>
         ) : (
@@ -251,8 +322,9 @@ export default function PostListingModal({ open, onClose }: { open: boolean; onC
               <textarea className="text-input" value={details} onChange={e => setDetails(e.target.value)} rows={4} placeholder="Anything families should know." style={{ resize: 'vertical', fontFamily: 'inherit' }} />
             </div>
 
+            {!user && <div style={{ fontSize: '12.5px', color: 'var(--chalk-dim)' }}>You’ll need to <strong style={{ color: 'var(--volley-yellow)' }}>sign in</strong> (top-right) before posting — it ties the listing to your account so you can edit it later.</div>}
             {error && <div style={{ color: 'var(--antenna-red)', fontSize: '12.5px' }}>{error}</div>}
-            <button className="btn btn-primary search-submit" onClick={submit}>Submit Listing</button>
+            <button className="btn btn-primary search-submit" disabled={busy} style={{ opacity: busy ? 0.6 : 1 }} onClick={submit}>{busy ? 'Saving…' : editing ? 'Save Changes' : 'Submit Listing'}</button>
           </div>
         )}
       </div>

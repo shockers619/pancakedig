@@ -772,12 +772,20 @@ header.site-header .wrap { display: flex; align-items: center; justify-content: 
 
 @media (max-width: 480px) {
   .listing-card { grid-template-columns: 1fr; gap: 12px; }
-  /* bigger logo parked top-right in the empty space; keep text clear of it */
-  .listing-card > div:first-child { padding-right: 68px; }
+  /* smaller, tighter title so long names don't dominate the card */
+  .listing-title { font-size: 16px; margin-bottom: 4px; }
+  /* tighter chips so more fit per line and the row uses the full width */
+  .listing-chips { gap: 5px; margin-top: 7px; }
+  .listing-chip { font-size: 10px; padding: 3px 6px; letter-spacing: 0.02em; }
+  /* reserve the top-right logo space ONLY when a logo is actually present —
+     otherwise the text column was silently losing 68px for nothing, forcing
+     chips to wrap and wasting the right side of logo-less cards. */
+  .listing-card.has-logo > div:first-child { padding-right: 68px; }
   .listing-card-logo.logo-mobile-only { position: absolute; top: 20px; right: 20px; width: 54px !important; height: 54px !important; }
   .listing-card-actions { width: 100%; }
-  .listing-card .listing-cta { flex: 1; text-align: center; height: 40px; padding-top: 0; padding-bottom: 0; display: flex; align-items: center; justify-content: center; }
-  .listing-card .claim-btn-compact { flex: 1; text-align: center; height: 40px; padding-top: 0; padding-bottom: 0; display: flex; align-items: center; justify-content: center; }
+  /* match FloorBalance's button proportions: Claim sizes to its text, View Details fills the rest */
+  .listing-card .claim-btn-compact { flex: 0 0 auto; height: 38px; padding: 0 14px; font-size: 11px; letter-spacing: 0.02em; display: flex; align-items: center; justify-content: center; }
+  .listing-card .listing-cta { flex: 1; text-align: center; height: 38px; padding: 0 14px; font-size: 11px; letter-spacing: 0.02em; display: flex; align-items: center; justify-content: center; }
 }
 
 
@@ -806,3 +814,26 @@ footer .footer-credit:hover { opacity: 0.82; }
   .rotation-grid { grid-template-columns: 1fr; }
   .stats-strip { gap: 28px; }
 }
+
+/* ---- Auth: account menu + inline link buttons (accounts foundation) ---- */
+.linklike {
+  background: none; border: none; padding: 0; cursor: pointer;
+  color: var(--volley-yellow); font: inherit; text-decoration: underline;
+}
+.account-menu {
+  position: absolute; top: calc(100% + 6px); right: 0; z-index: 200;
+  min-width: 200px; background: var(--court-navy-2);
+  border: 1px solid rgba(244,246,242,0.14); border-radius: 6px;
+  padding: 6px; box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+.account-menu-email {
+  font-size: 11.5px; color: var(--chalk-dim); padding: 8px 10px;
+  border-bottom: 1px solid rgba(244,246,242,0.1); margin-bottom: 4px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.account-menu-item {
+  display: block; width: 100%; text-align: left; background: none; border: none;
+  color: var(--chalk); font: inherit; font-size: 13px; padding: 8px 10px;
+  border-radius: 4px; cursor: pointer;
+}
+.account-menu-item:hover { background: rgba(244,246,242,0.08); }

@@ -1,5 +1,6 @@
 import { Listing, REGION_NAMES, TYPE_LABELS, formatDivisionRange, formatGender, formatEventDate, eventLead, orgChips } from '@/lib/constants'
 import { VerifiedBadge } from './VerifiedBadge'
+import { ClaimListingButton } from './ClaimListingButton'
 
 // org chip kind → CSS class. Body = gold (unchanged); the org attribute keeps its weight.
 const ORG_CHIP_CLASS = { body: 'chip-org', independent: 'chip-org-independent', unverified: 'chip-org-unverified' } as const
@@ -8,7 +9,7 @@ export default function ListingCard({ listing: l, onClick }: { listing: Listing;
   const orgs = orgChips(l)
   const lead = eventLead(l)
   return (
-    <div className="listing-card">
+    <div className={`listing-card${l.logo_url ? ' has-logo' : ''}`}>
       <div>
         <div className="listing-badges">
           <span className={`listing-type-tag badge-${l.type}`}>{TYPE_LABELS[l.type] || l.type}</span>
@@ -48,9 +49,7 @@ export default function ListingCard({ listing: l, onClick }: { listing: Listing;
         {l.logo_url && (
           <img className={`listing-card-logo logo-desktop-only logo-frame${l.logo_dark ? ' logo-frame-dark' : ''}`} src={l.logo_url} alt={`${l.club} logo`} style={{ width: '64px', height: '64px', flexShrink: 0 }} />
         )}
-        {l.claimed === false && (
-          <button className="claim-btn-compact">Claim This Listing</button>
-        )}
+        {!l.claimed && <ClaimListingButton listingId={l.id} listingTitle={l.title || l.club} compact />}
         <button className="listing-cta" onClick={onClick}>View Details</button>
       </div>
     </div>

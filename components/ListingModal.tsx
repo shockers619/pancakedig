@@ -1,6 +1,7 @@
 import { Listing, REGION_NAMES, TYPE_LABELS, formatDivisionRange, formatGender, formatEventDate, eventLead, orgChips } from '@/lib/constants'
 import { VerifiedBadge } from './VerifiedBadge'
 import { FacebookIcon, InstagramIcon, XIcon, TikTokIcon, LinkIcon } from './SocialIcons'
+import { ClaimListingButton } from './ClaimListingButton'
 
 const ORG_CHIP_CLASS = { body: 'chip-org', independent: 'chip-org-independent', unverified: 'chip-org-unverified' } as const
 
@@ -41,7 +42,7 @@ export default function ListingModal({ listing: l, onClose }: { listing: Listing
             </div>
           )}
           {l.event_date && (
-            <div style={{ fontSize: '13px', color: 'var(--ace-teal)', fontWeight: 600 }}>Event Date: {formatEventDate(l.event_date, l.event_date_end)}</div>
+            <div style={{ fontSize: '13px', color: 'var(--ace-teal)', fontWeight: 600 }}>{formatEventDate(l.event_date, l.event_date_end)}</div>
           )}
           {/* Metadata as chips — same order as the result cards: org → division → gender → surface → level */}
           {(l.division || l.gender || l.surface || orgs.length > 0 || (l.tiers && l.tiers.length > 0)) && (
@@ -86,9 +87,7 @@ export default function ListingModal({ listing: l, onClose }: { listing: Listing
 
           {/* Claim + Share on the same row from day one — house style #6 */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap', marginTop: '8px' }}>
-            {l.claimed === false && (
-              <button className="claim-btn-compact">Claim This Listing</button>
-            )}
+            {!l.claimed && <ClaimListingButton listingId={l.id} listingTitle={l.title || l.club} />}
             <button
               className="share-listing-btn"
               onClick={() => {

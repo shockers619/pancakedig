@@ -1,5 +1,6 @@
 import { VolleyballIcon } from '@/components/VolleyballIcon'
 import PostListingButton from '@/components/PostListingButton'
+import AccountControls from '@/components/AccountControls'
 import { Suspense } from 'react'
 import LiveTicker from '@/components/LiveTicker'
 import Results from '@/components/Results'
@@ -67,8 +68,7 @@ export default async function Home() {
             </span>
           </div>
           <div className="header-actions" style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-            {/* Sign In removed until auth + the claim flow are built — a dead button reads as broken.
-                Re-add (wired to the ported FloorBalance AuthSystem) when accounts exist. */}
+            <AccountControls />
             <PostListingButton />
           </div>
         </div>
