@@ -28,10 +28,11 @@ export const SURFACES = ['Indoor', 'Beach', 'Grass']
 export const LEVELS = ['Open / National', 'Premier / USA / Freedom', 'Club / Regional / Select', 'Rec / Instructional']
 
 // USAV/JVA/AAU = the big indoor circuits; LOVB = the growing junior club network;
-// AVP America = grassroots beach; NFHS = high school; USYVL = rec youth; Independent = confirmed none.
+// AVP America = grassroots beach; NFHS = high school; USYVL = rec youth; Unaffiliated =
+// no sanctioning body (renders no chip — grassroots default, not a badge).
 // (Note: ?org=Unverified is still a valid URL filter for the internal data-gap worklist —
 // it's just kept out of the public dropdown so the storefront doesn't advertise gaps.)
-export const ORGANIZATIONS = ['USAV', 'JVA', 'AAU', 'LOVB', 'AVP America', 'NFHS / High School', 'USYVL', 'Independent']
+export const ORGANIZATIONS = ['USAV', 'JVA', 'AAU', 'LOVB', 'AVP America', 'NFHS / High School', 'USYVL', 'Unaffiliated']
 
 export const GENDERS = ['Boys', 'Girls', 'Coed']
 

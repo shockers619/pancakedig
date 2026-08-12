@@ -162,37 +162,23 @@ export function formatGender(gender?: string): string {
   return ''
 }
 
-// Events / roster openings: org is an eligibility gate (you need USAV membership to
-// enter a USAV event), so it ALWAYS renders — "Unverified" when unknown. Clubs and
-// tryouts: org is background, so it shows only when known (no public "Unverified"
-// chip — that word collides with the "Verified by Pancake Dig" trust mark). Facilities
-// (venue/training): org doesn't apply.
-const ORG_PLACEHOLDER_TYPES = new Set(['showcase', 'opening'])
-// Types where a blank org is a fillable gap for the internal ?org=Unverified worklist
-// (broader than the placeholder set — clubs are tracked here but don't show the chip).
+// Types where a blank org is a fillable gap for the internal ?org=Unverified worklist.
 const ORG_TRACKED_TYPES = new Set(['club', 'showcase', 'tryout', 'opening'])
+// Values that mean "no sanctioning body" — they never render a chip.
+const NON_BODY = new Set(['independent', 'unaffiliated'])
 
-export type OrgChip = { label: string; kind: 'body' | 'independent' | 'unverified' }
-
-// Single source of truth for how a listing's organization renders as chip(s).
-// - one or more bodies recorded → each as a gold body chip
-// - the literal value "Independent" → a confirmed-none chip (distinct look)
-// - blank on an event/opening → "Unverified" (unknown; eligibility matters)
-// - blank on a club/tryout/facility → nothing (background or N/A)
-export function orgChips(l: Listing): OrgChip[] {
-  const bodies = (l.governing_body || '').split(',').map(s => s.trim()).filter(Boolean)
-  if (bodies.length) {
-    return bodies.map(b => ({
-      label: b,
-      kind: b.toLowerCase() === 'independent' ? 'independent' : 'body',
-    }))
-  }
-  return ORG_PLACEHOLDER_TYPES.has(l.type) ? [{ label: 'Unverified', kind: 'unverified' }] : []
+// Org chips = REAL sanctioning bodies only (USAV/JVA/AAU/…). The gold chip is a
+// positive eligibility signal; grassroots listings are commonly unaffiliated, which
+// is the norm — not a feature — so "Unaffiliated" (and unknown org) render NO chip.
+// The confirmed-vs-unknown distinction is kept in the data for the admin worklist,
+// just not shown publicly.
+export function orgChips(l: Listing): string[] {
+  return (l.governing_body || '').split(',').map(s => s.trim())
+    .filter(b => b && !NON_BODY.has(b.toLowerCase()))
 }
 
 // True when a listing's org is an unfilled gap — the internal worklist state a
-// director can filter to (?org=Unverified). Covers clubs even though they don't
-// render the chip publicly.
+// director can filter to (?org=Unverified). Covers clubs even though no chip shows.
 export function isOrgUnverified(l: Listing): boolean {
   const has = (l.governing_body || '').trim().length > 0
   return !has && ORG_TRACKED_TYPES.has(l.type)

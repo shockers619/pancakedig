@@ -3,8 +3,6 @@ import { VerifiedBadge } from './VerifiedBadge'
 import { FacebookIcon, InstagramIcon, XIcon, TikTokIcon, LinkIcon } from './SocialIcons'
 import { ClaimListingButton } from './ClaimListingButton'
 
-const ORG_CHIP_CLASS = { body: 'chip-org', independent: 'chip-org-independent', unverified: 'chip-org-unverified' } as const
-
 export default function ListingModal({ listing: l, onClose }: { listing: Listing; onClose: () => void }) {
   const hasSocial = l.facebook_url || l.instagram_url || l.x_url || l.tiktok_url
   const orgs = orgChips(l)
@@ -47,7 +45,7 @@ export default function ListingModal({ listing: l, onClose }: { listing: Listing
           {/* Metadata as chips — same order as the result cards: org → division → gender → surface → level */}
           {(l.division || l.gender || l.surface || orgs.length > 0 || (l.tiers && l.tiers.length > 0)) && (
             <div className="listing-chips" style={{ marginTop: '2px' }}>
-              {orgs.map(o => <span key={o.label} className={`listing-chip ${ORG_CHIP_CLASS[o.kind]}`}>{o.label}</span>)}
+              {orgs.map(b => <span key={b} className="listing-chip chip-org">{b}</span>)}
               {l.division && <span className="listing-chip">{formatDivisionRange(l.division)}</span>}
               {l.gender && <span className="listing-chip">{formatGender(l.gender)}</span>}
               {l.surface && <span className="listing-chip">{l.surface}</span>}
