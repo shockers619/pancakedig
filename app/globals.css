@@ -109,8 +109,8 @@ a { color: inherit; text-decoration: none; }
    red/white antenna stripe at one end, used wherever FloorBalance
    would use a plain divider or the orange top-bar rule. */
 /* Volleyball-net divider: a bold white top band + square mesh spanning the FULL width,
-   bold white side bands closing each end, a thin bottom cable, and red/white antennas
-   at the ends. Full-bleed; mesh holes are transparent so the dark bg reads as netting. */
+   bold white side bands closing each end, and a thin bottom cable.
+   Full-bleed; mesh holes are transparent so the dark bg reads as netting. */
 .net-line {
   position: relative;
   height: 36px;
@@ -130,21 +130,9 @@ a { color: inherit; text-decoration: none; }
      bottom line -> mesh 4-34px), so the three rows are equal (10px each) */
   background-position: left top, left bottom, left top, right top, left 14px, left 24px, center top;
 }
-/* red/white antennas set ~4% in from each end — the net overhangs the antenna, as in a
-   regulation setup. Identical on header and footer. */
-.net-line::before, .net-line::after {
-  content: '';
-  position: absolute;
-  top: -34px;
-  width: 6px;
-  height: 70px;   /* base flush with the net's bottom edge (net is 36px; -34 + 70 = 36) */
-  border-radius: 3px;
-  background: repeating-linear-gradient(180deg, var(--antenna-red) 0 8px, var(--chalk) 8px 16px);
-  box-shadow: 0 0 2px rgba(0,0,0,0.35);
-}
-.net-line::before { left: 4%; }
-.net-line::after { right: 4%; }
-/* header net: raised above the sticky header (z-index 100) so its antennas show */
+/* Antennas removed by design — the net mesh alone carries the volleyball motif and
+   stays on-palette (the red/white candy-stripe was the only red on the page). */
+/* header net: raised above the sticky header (z-index 100) so the mesh reads cleanly */
 .net-line--header { z-index: 101; }
 
 /* ---------- Logo treatment (see house style #4) ---------- */
