@@ -117,7 +117,8 @@ export default function PostListingModal({ open, onClose, editing }: { open: boo
     if (!clubName.trim()) { setError('Club / organization name is required.'); return }
     if (needsTitle && !title.trim()) { setError('Please give this listing a title.'); return }
     if (!region) { setError('Please select a region.'); return }
-    if (!email && !phone && !website) { setError('Please provide at least one way to contact you: email, phone, or website.'); return }
+    if (!state) { setError('Please select a state.'); return }
+    if (!email && !phone && !website && !facebook && !instagram && !xUrl && !tiktok) { setError('Please provide at least one way to reach you: email, phone, website, or a social link.'); return }
     setError('')
     // Must be signed in — the listing is tied to its owner (user_id) so they can
     // edit it later, and RLS only accepts an insert where user_id = auth.uid().
@@ -193,7 +194,7 @@ export default function PostListingModal({ open, onClose, editing }: { open: boo
                 {TYPES.map(([v, l]) => (
                   <div key={v}>
                     <label className="msel-option">
-                      <input type="radio" checked={type === v} onChange={() => { setType(v); if (v !== 'showcase') { setEventTypes([]); setOpenMenu('') } }} />
+                      <input type="checkbox" checked={type === v} onChange={() => { setType(v); if (v !== 'showcase') { setEventTypes([]); setOpenMenu('') } }} />
                       <span>{l}</span>
                     </label>
                     {v === 'showcase' && type === 'showcase' && (
@@ -214,7 +215,7 @@ export default function PostListingModal({ open, onClose, editing }: { open: boo
               <Dropdown id="p-region" label="Region" required openMenu={openMenu} setOpenMenu={setOpenMenu} activeMenuRef={activeMenuRef} summary={region || 'Select Region'}>
                 {REGIONS.map(([name, states_]) => (
                   <label key={name} className="msel-option">
-                    <input type="radio" checked={region === name} onChange={() => { setRegion(name); setState(''); setOpenMenu('') }} />
+                    <input type="checkbox" checked={region === name} onChange={() => { setRegion(name); setState(''); setOpenMenu('') }} />
                     <div>
                       <span style={{ display: 'block' }}>{name}</span>
                       <span style={{ display: 'block', fontSize: '10.5px', color: 'var(--chalk-faint)', fontFamily: 'var(--font-mono)', marginTop: '1px' }}>{states_}</span>
@@ -223,10 +224,10 @@ export default function PostListingModal({ open, onClose, editing }: { open: boo
                 ))}
               </Dropdown>
 
-              <Dropdown id="p-state" label="State" disabled={!region} openMenu={openMenu} setOpenMenu={setOpenMenu} activeMenuRef={activeMenuRef} summary={!region ? 'Select Region First' : state ? US_STATES[state]?.name : 'Select State'}>
+              <Dropdown id="p-state" label="State" required disabled={!region} openMenu={openMenu} setOpenMenu={setOpenMenu} activeMenuRef={activeMenuRef} summary={!region ? 'Select Region First' : state ? US_STATES[state]?.name : 'Select State'}>
                 {availableStates.map(([abbr, s]) => (
                   <label key={abbr} className="msel-option">
-                    <input type="radio" checked={state === abbr} onChange={() => { setState(abbr); setOpenMenu('') }} />
+                    <input type="checkbox" checked={state === abbr} onChange={() => { setState(abbr); setOpenMenu('') }} />
                     <span>{s.name}</span>
                   </label>
                 ))}
