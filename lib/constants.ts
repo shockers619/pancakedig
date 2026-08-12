@@ -49,7 +49,7 @@ export const US_STATES: Record<string, { name: string; region: string }> = {
   oh: { name: 'Ohio', region: 'midwest' },
   ok: { name: 'Oklahoma', region: 'south' },
   or: { name: 'Oregon', region: 'pacific' },
-  pa: { name: 'Pennsylvania', region: 'midatlantic' },
+  pa: { name: 'Pennsylvania', region: 'northeast' },
   ri: { name: 'Rhode Island', region: 'northeast' },
   sc: { name: 'South Carolina', region: 'southeast' },
   sd: { name: 'South Dakota', region: 'midwest' },

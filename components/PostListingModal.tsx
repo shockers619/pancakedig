@@ -12,6 +12,21 @@ import { Dropdown } from './Dropdown'
 // title is just its own name).
 const NEEDS_TITLE = ['tryout', 'opening', 'showcase']
 
+// The listing card renders `state` separately, so a city like "West Chester, PA"
+// would display as "West Chester, PA, PA". Strip a trailing state suffix that
+// matches the selected state — abbreviation ("PA"/"Pa.") or full name
+// ("Pennsylvania"), with or without a leading comma — leaving just the town.
+function cleanCityTown(raw: string, stateAbbr?: string, stateName?: string): string {
+  let s = (raw || '').trim().replace(/\s+/g, ' ')
+  if (!s) return ''
+  const tokens = [stateAbbr, stateName].filter(Boolean) as string[]
+  for (const t of tokens) {
+    const esc = t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    s = s.replace(new RegExp(',?\\s+' + esc + '\\.?$', 'i'), '').replace(/,\s*$/, '').trim()
+  }
+  return s
+}
+
 // `editing` (optional) turns this into an edit form: prefill from the listing and
 // UPDATE it in place instead of inserting a new pending row. Opened this way from
 // the dashboard; RLS ("owner updates own") scopes the update to the owner.
@@ -135,7 +150,7 @@ export default function PostListingModal({ open, onClose, editing }: { open: boo
       title: needsTitle ? title.trim() : clubName.trim(),
       region: state ? US_STATES[state].region : null,
       state: state ? state.toLowerCase() : null,
-      city: city.trim() || null,
+      city: cleanCityTown(city, state, US_STATES[state]?.name) || null,
       division: divisions.length ? divisions.join(', ') : null,
       gender: genderVal,
       tiers: levels.length ? levels : null,
@@ -295,7 +310,7 @@ export default function PostListingModal({ open, onClose, editing }: { open: boo
 
             <div>
               <label className="field-label">City / Town <span style={{ color: 'var(--antenna-red)' }}>*</span> <span style={{ opacity: 0.5, fontWeight: 400, textTransform: 'none' }}>(the town it’s in — any size)</span></label>
-              <input className="text-input" value={city} onChange={e => setCity(e.target.value)} placeholder="e.g. Fort Worth" maxLength={60} />
+              <input className="text-input" value={city} onChange={e => setCity(e.target.value)} onBlur={() => setCity(cleanCityTown(city, state, US_STATES[state]?.name))} placeholder="e.g. Fort Worth" maxLength={60} />
             </div>
 
             <div>
