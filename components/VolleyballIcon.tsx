@@ -1,10 +1,11 @@
 export function VolleyballIcon({ size = 28 }: { size?: number }) {
   // Mikasa-style paneled volleyball (vector from SVG Repo), recolored to the brand:
-  // yellow panels = --volley-yellow, navy panels = --net-graphite (exact header
-  // background, so on the dark header the navy dissolves in and reads integrated).
+  // yellow panels = --volley-yellow, navy panels = --court-navy-3 (a lighter navy
+  // that CONTRASTS with the near-black header/footer, so the two-tone paneled ball
+  // stays crisp instead of dissolving into the background).
   // Flattened — the original two-tone shading collapsed to solid flat colors.
   const Y = 'var(--volley-yellow)'
-  const N = 'var(--net-graphite)'
+  const N = 'var(--court-navy-3)'
   return (
     <svg viewBox="0 0 511.979 511.979" width={size} height={size} fill="none" aria-hidden="true">
       <path fill={Y} d="M436.652,437.385c80.309-79.887,100.308-206.63,40.982-309.359C442.386,66.943,385.75,25.906,322.627,8.884c-5.562,1.398-191.412,49.794-66.637,247.12C492.322,246.48,436.871,436.635,436.652,437.385z" />
