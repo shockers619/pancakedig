@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { US_STATES } from '@/lib/constants'
 import { createClient } from '@/lib/supabase'
+import { revalidateListings } from '@/lib/revalidate'
 import { TYPES, EVENT_TYPES, SURFACES, LEVELS, ORGANIZATIONS, GENDERS, DIVISIONS, toggle } from '@/lib/filterOptions'
 import { Dropdown } from './Dropdown'
 
@@ -173,6 +174,8 @@ export default function PostListingModal({ open, onClose, editing }: { open: boo
     setBusy(false)
     if (writeErr) { setError('Could not save — ' + writeErr.message); return }
     setSubmitted(true)
+    // Editing an existing (possibly-live) listing changes public content — refresh it.
+    if (editing) revalidateListings()
     // Confirm to the poster — best-effort, never blocks.
     if (!editing && u.email) {
       fetch('/api/post-confirmation', {

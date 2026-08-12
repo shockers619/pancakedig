@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { createClient } from '@/lib/supabase'
+import { revalidateListings } from '@/lib/revalidate'
 import { TYPE_LABELS, REGION_NAMES } from '@/lib/constants'
 
 // Admin control panel (visible only to ADMIN_EMAIL — gated in AccountControls,
@@ -26,6 +27,8 @@ export default function AdminQueue({ open, onClose }: { open: boolean; onClose: 
   const setListingStatus = async (l: any, status: string) => {
     await sb.from('listings').update({ status }).eq('id', l.id)
     setPending(ps => ps.filter(p => p.id !== l.id))
+    // Approving/rejecting changes what's public — refresh the cached listing reads.
+    revalidateListings()
     // On approval, fire the Notify-Me alert to matching subscribers (best-effort).
     if (status === 'approved') {
       fetch('/api/notify-listing', {
@@ -38,6 +41,7 @@ export default function AdminQueue({ open, onClose }: { open: boolean; onClose: 
     if (!confirm('Delete this listing permanently?')) return
     await sb.from('listings').delete().eq('id', id)
     setPending(ps => ps.filter(p => p.id !== id))
+    revalidateListings()
   }
   const resolveClaim = async (claim: any, approve: boolean) => {
     if (approve) {
@@ -46,6 +50,7 @@ export default function AdminQueue({ open, onClose }: { open: boolean; onClose: 
     }
     await sb.from('claim_requests').update({ status: approve ? 'approved' : 'rejected' }).eq('id', claim.id)
     setClaims(cs => cs.filter(c => c.id !== claim.id))
+    if (approve) revalidateListings()
   }
 
   if (!open || typeof document === 'undefined') return null

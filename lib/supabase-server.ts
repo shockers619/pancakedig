@@ -18,7 +18,8 @@ export function createServerSupabaseClient() {
           // OUT of the Data Cache — so we must EXPLICITLY opt reads back in with
           // next.revalidate, or every page stays dynamic and re-queries the DB.
           return method === 'GET'
-            ? fetch(url, { ...opts, next: { revalidate: 1800 } }) // cache reads 30 min
+            // tag lets an admin action bust this cache on demand (see /api/revalidate)
+            ? fetch(url, { ...opts, next: { revalidate: 1800, tags: ['listings'] } }) // cache reads 30 min
             : fetch(url, { ...opts, cache: 'no-store' })          // writes stay fresh
         },
       },

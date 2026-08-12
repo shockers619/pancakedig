@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { createClient } from '@/lib/supabase'
+import { revalidateListings } from '@/lib/revalidate'
 import { TYPE_LABELS } from '@/lib/constants'
 
 // A signed-in user's own listings (posted or claimed), with status + delete.
@@ -32,7 +33,7 @@ export default function Dashboard({ open, onClose, onEdit }: { open: boolean; on
   const del = async (id: number) => {
     if (!confirm('Delete this listing? This cannot be undone.')) return
     const { error } = await sb.from('listings').delete().eq('id', id)
-    if (!error) setRows(rs => rs.filter(r => r.id !== id))
+    if (!error) { setRows(rs => rs.filter(r => r.id !== id)); revalidateListings() }
   }
 
   if (!open || typeof document === 'undefined') return null
