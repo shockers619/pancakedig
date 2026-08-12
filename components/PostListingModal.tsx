@@ -31,6 +31,10 @@ export default function PostListingModal({ open, onClose, editing }: { open: boo
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
   const [website, setWebsite] = useState('')
+  const [facebook, setFacebook] = useState('')
+  const [instagram, setInstagram] = useState('')
+  const [xUrl, setXUrl] = useState('')
+  const [tiktok, setTiktok] = useState('')
   const [details, setDetails] = useState('')
   const [error, setError] = useState('')
   const [submitted, setSubmitted] = useState(false)
@@ -82,6 +86,10 @@ export default function PostListingModal({ open, onClose, editing }: { open: boo
     setEmail(editing.email || '')
     setPhone(editing.phone || '')
     setWebsite(editing.website || '')
+    setFacebook(editing.facebook_url || '')
+    setInstagram(editing.instagram_url || '')
+    setXUrl(editing.x_url || '')
+    setTiktok(editing.tiktok_url || '')
     setDetails(editing.details || '')
     setError(''); setSubmitted(false)
   }, [open, editing])
@@ -98,7 +106,8 @@ export default function PostListingModal({ open, onClose, editing }: { open: boo
   const reset = () => {
     setType(''); setEventTypes([]); setRegion(''); setState(''); setDivisions([]); setSurfaces([])
     setLevels([]); setOrgs([]); setGenders([]); setClubName(''); setTitle(''); setEmail('')
-    setPhone(''); setWebsite(''); setDetails(''); setError(''); setSubmitted(false)
+    setPhone(''); setWebsite(''); setFacebook(''); setInstagram(''); setXUrl(''); setTiktok('')
+    setDetails(''); setError(''); setSubmitted(false)
   }
 
   const close = () => { onClose(); setOpenMenu(''); reset() }
@@ -116,7 +125,7 @@ export default function PostListingModal({ open, onClose, editing }: { open: boo
     const u = session?.user
     if (!u) { setError('Please sign in first (button top-right) so your listing is tied to your account — then submit again.'); return }
     setBusy(true)
-    const site = website.trim() ? (/^https?:\/\//i.test(website.trim()) ? website.trim() : 'https://' + website.trim()) : null
+    const normUrl = (v: string) => { const t = v.trim(); return t ? (/^https?:\/\//i.test(t) ? t : 'https://' + t) : null }
     const g = genders.map(s => s.toLowerCase())
     const genderVal = (g.length > 1 || g.includes('coed')) ? 'coed' : g.includes('boys') ? 'boys' : g.includes('girls') ? 'girls' : null
     const fields = {
@@ -134,7 +143,11 @@ export default function PostListingModal({ open, onClose, editing }: { open: boo
       details: details.trim() || null,
       email: email.trim() || null,
       phone: phone.trim() || null,
-      website: site,
+      website: normUrl(website),
+      facebook_url: normUrl(facebook),
+      instagram_url: normUrl(instagram),
+      x_url: normUrl(xUrl),
+      tiktok_url: normUrl(tiktok),
     }
     // Edit → update in place (owner keeps ownership + status). New → insert as pending.
     const { error: writeErr } = editing
@@ -180,7 +193,7 @@ export default function PostListingModal({ open, onClose, editing }: { open: boo
                 {TYPES.map(([v, l]) => (
                   <div key={v}>
                     <label className="msel-option">
-                      <input type="radio" checked={type === v} onChange={() => { setType(v); if (v !== 'showcase') setEventTypes([]) }} />
+                      <input type="radio" checked={type === v} onChange={() => { setType(v); if (v !== 'showcase') { setEventTypes([]); setOpenMenu('') } }} />
                       <span>{l}</span>
                     </label>
                     {v === 'showcase' && type === 'showcase' && (
@@ -201,7 +214,7 @@ export default function PostListingModal({ open, onClose, editing }: { open: boo
               <Dropdown id="p-region" label="Region" required openMenu={openMenu} setOpenMenu={setOpenMenu} activeMenuRef={activeMenuRef} summary={region || 'Select Region'}>
                 {REGIONS.map(([name, states_]) => (
                   <label key={name} className="msel-option">
-                    <input type="radio" checked={region === name} onChange={() => { setRegion(name); setState('') }} />
+                    <input type="radio" checked={region === name} onChange={() => { setRegion(name); setState(''); setOpenMenu('') }} />
                     <div>
                       <span style={{ display: 'block' }}>{name}</span>
                       <span style={{ display: 'block', fontSize: '10.5px', color: 'var(--chalk-faint)', fontFamily: 'var(--font-mono)', marginTop: '1px' }}>{states_}</span>
@@ -213,7 +226,7 @@ export default function PostListingModal({ open, onClose, editing }: { open: boo
               <Dropdown id="p-state" label="State" disabled={!region} openMenu={openMenu} setOpenMenu={setOpenMenu} activeMenuRef={activeMenuRef} summary={!region ? 'Select Region First' : state ? US_STATES[state]?.name : 'Select State'}>
                 {availableStates.map(([abbr, s]) => (
                   <label key={abbr} className="msel-option">
-                    <input type="radio" checked={state === abbr} onChange={() => setState(abbr)} />
+                    <input type="radio" checked={state === abbr} onChange={() => { setState(abbr); setOpenMenu('') }} />
                     <span>{s.name}</span>
                   </label>
                 ))}
@@ -314,6 +327,16 @@ export default function PostListingModal({ open, onClose, editing }: { open: boo
               <div>
                 <label className="field-label">Website</label>
                 <input className="text-input" value={website} onChange={e => setWebsite(e.target.value)} placeholder="yourclub.com" />
+              </div>
+            </div>
+
+            <div>
+              <label className="field-label">Social Links <span style={{ opacity: 0.5, fontWeight: 400, textTransform: 'none' }}>(optional — often more useful than a website)</span></label>
+              <div className="search-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', marginTop: '6px' }}>
+                <input className="text-input" value={facebook} onChange={e => setFacebook(e.target.value)} placeholder="Facebook — facebook.com/yourclub" />
+                <input className="text-input" value={instagram} onChange={e => setInstagram(e.target.value)} placeholder="Instagram — instagram.com/yourclub" />
+                <input className="text-input" value={xUrl} onChange={e => setXUrl(e.target.value)} placeholder="X — x.com/yourclub" />
+                <input className="text-input" value={tiktok} onChange={e => setTiktok(e.target.value)} placeholder="TikTok — tiktok.com/@yourclub" />
               </div>
             </div>
 
