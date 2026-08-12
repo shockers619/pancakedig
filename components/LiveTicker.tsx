@@ -23,7 +23,14 @@ export default function LiveTicker({ listings }: { listings: Listing[] }) {
           </div>
           <div className="board-rows">
             {recent.map(l => (
-              <div className="board-row" key={l.id}>
+              <div
+                className="board-row"
+                key={l.id}
+                role="button"
+                tabIndex={0}
+                onClick={() => setSelected(l)}
+                onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelected(l) } }}
+              >
                 <div className="board-row-head">
                   <span className={`board-tag badge-${l.type}`}>{TYPE_LABELS[l.type] || l.type}</span>
                 </div>
@@ -39,7 +46,8 @@ export default function LiveTicker({ listings }: { listings: Listing[] }) {
                 {l.logo_url && (
                   <img className={`board-row-logo logo-frame${l.logo_dark ? ' logo-frame-dark' : ''}`} src={l.logo_url} alt={`${l.club} logo`} />
                 )}
-                <button className="board-view" onClick={() => setSelected(l)}>View Details</button>
+                <button className="board-view" onClick={e => { e.stopPropagation(); setSelected(l) }}>View Details</button>
+                <span className="board-chevron" aria-hidden="true">›</span>
               </div>
             ))}
           </div>

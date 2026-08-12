@@ -688,8 +688,11 @@ header.site-header .wrap { display: flex; align-items: center; justify-content: 
 .board-live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--good); animation: pulse 1.8s infinite; }
 @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 .board-rows { display: flex; flex-direction: column; }
-.board-row { padding: 13px 18px; border-bottom: 1px solid rgba(244,246,242,0.08); display: flex; gap: 12px; align-items: center; }
+.board-row { padding: 13px 18px; border-bottom: 1px solid rgba(244,246,242,0.08); display: flex; gap: 12px; align-items: center; cursor: pointer; transition: background 0.12s ease; -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; }
+.board-row:hover { background: rgba(255,196,43,0.04); }
 .board-row:last-child { border-bottom: none; }
+/* Chevron affordance — hidden on desktop (the View Details button is shown there) */
+.board-chevron { display: none; }
 .board-row-head { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 .board-tag { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.03em; text-transform: uppercase; padding: 3px 8px; border-radius: 3px; flex-shrink: 0; white-space: nowrap; font-weight: 700; }
 .board-row-body { min-width: 0; overflow: hidden; flex: 1; }
@@ -705,7 +708,9 @@ header.site-header .wrap { display: flex; align-items: center; justify-content: 
   .board-row-body { flex: 1; min-width: 0; }
   .board-row-body strong, .board-row-meta { white-space: normal; overflow: visible; text-overflow: clip; }
   .board-gender { display: none; }   /* keep the compact ticker to one line on mobile */
-  .board-view { width: 100%; text-align: center; margin-left: 0; }
+  /* Mobile: drop the button, whole row is tappable — chevron signals it */
+  .board-view { display: none; }
+  .board-chevron { display: flex; align-items: center; margin-left: auto; font-size: 30px; line-height: 1; color: var(--volley-yellow); flex-shrink: 0; padding-left: 2px; }
 }
 
 /* ---------- Search results: count / sort / verified / pagination ---------- */
