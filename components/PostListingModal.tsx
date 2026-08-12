@@ -227,10 +227,11 @@ export default function PostListingModal({ open, onClose, editing }: { open: boo
                 ))}
               </Dropdown>
 
-              <Dropdown id="p-state" label="State" required disabled={!region} openMenu={openMenu} setOpenMenu={setOpenMenu} activeMenuRef={activeMenuRef} summary={!region ? 'Select Region First' : state ? US_STATES[state]?.name : 'Select State'}>
+              <Dropdown id="p-state" label="State" required openMenu={openMenu} setOpenMenu={setOpenMenu} activeMenuRef={activeMenuRef} summary={state ? US_STATES[state]?.name : 'Select State'}>
                 {availableStates.map(([abbr, s]) => (
                   <label key={abbr} className="msel-option">
-                    <input type="checkbox" checked={state === abbr} onChange={() => { setState(abbr); setOpenMenu('') }} />
+                    {/* Picking a state auto-fills Region (region is derived from state) */}
+                    <input type="checkbox" checked={state === abbr} onChange={() => { setState(abbr); setRegion(Object.keys(REGION_KEY).find(n => REGION_KEY[n] === s.region) || ''); setOpenMenu('') }} />
                     <span>{s.name}</span>
                   </label>
                 ))}
