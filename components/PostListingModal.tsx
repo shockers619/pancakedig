@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { US_STATES } from '@/lib/constants'
 import { createClient } from '@/lib/supabase'
-import { REGIONS, TYPES, EVENT_TYPES, SURFACES, LEVELS, ORGANIZATIONS, GENDERS, DIVISIONS, REGION_KEY, toggle } from '@/lib/filterOptions'
+import { TYPES, EVENT_TYPES, SURFACES, LEVELS, ORGANIZATIONS, GENDERS, DIVISIONS, toggle } from '@/lib/filterOptions'
 import { Dropdown } from './Dropdown'
 
 // Types where the listing needs a distinct title, separate from the
@@ -19,7 +19,6 @@ export default function PostListingModal({ open, onClose, editing }: { open: boo
   const [openMenu, setOpenMenu] = useState('')
   const [type, setType] = useState('')
   const [eventTypes, setEventTypes] = useState<string[]>([])
-  const [region, setRegion] = useState('')
   const [state, setState] = useState('')
   const [divisions, setDivisions] = useState<string[]>([])
   const [surfaces, setSurfaces] = useState<string[]>([])
@@ -75,7 +74,6 @@ export default function PostListingModal({ open, onClose, editing }: { open: boo
     const gmap: Record<string, string> = { boys: 'Boys', girls: 'Girls', coed: 'Coed' }
     setType(editing.type || '')
     setEventTypes(csv(editing.event_subtype))
-    setRegion(Object.keys(REGION_KEY).find(n => REGION_KEY[n] === editing.region) || '')
     setState(editing.state || '')
     setDivisions(csv(editing.division))
     setSurfaces(csv(editing.surface))
@@ -99,14 +97,14 @@ export default function PostListingModal({ open, onClose, editing }: { open: boo
   // Only portal on the client (document exists there); server render returns null anyway.
   if (!open || typeof document === 'undefined') return null
 
+  // Region is derived from state at submit, so the State list is never gated.
   const availableStates = Object.entries(US_STATES)
-    .filter(([, s]) => !region || s.region === REGION_KEY[region])
     .sort((a, b) => a[1].name.localeCompare(b[1].name))
 
   const needsTitle = NEEDS_TITLE.includes(type)
 
   const reset = () => {
-    setType(''); setEventTypes([]); setRegion(''); setState(''); setDivisions([]); setSurfaces([])
+    setType(''); setEventTypes([]); setState(''); setDivisions([]); setSurfaces([])
     setLevels([]); setOrgs([]); setGenders([]); setClubName(''); setCity(''); setTitle(''); setEmail('')
     setPhone(''); setWebsite(''); setFacebook(''); setInstagram(''); setXUrl(''); setTiktok('')
     setDetails(''); setError(''); setSubmitted(false)
@@ -118,7 +116,6 @@ export default function PostListingModal({ open, onClose, editing }: { open: boo
     if (!type) { setError('Please select a listing type.'); return }
     if (!clubName.trim()) { setError('Club / organization name is required.'); return }
     if (needsTitle && !title.trim()) { setError('Please give this listing a title.'); return }
-    if (!region) { setError('Please select a region.'); return }
     if (!state) { setError('Please select a state.'); return }
     if (!email && !phone && !website && !facebook && !instagram && !xUrl && !tiktok) { setError('Please provide at least one way to reach you: email, phone, website, or a social link.'); return }
     setError('')
@@ -135,7 +132,7 @@ export default function PostListingModal({ open, onClose, editing }: { open: boo
       type,
       club: clubName.trim(),
       title: needsTitle ? title.trim() : clubName.trim(),
-      region: REGION_KEY[region],
+      region: state ? US_STATES[state].region : null,
       state: state ? state.toLowerCase() : null,
       city: city.trim() || null,
       division: divisions.length ? divisions.join(', ') : null,
@@ -215,23 +212,10 @@ export default function PostListingModal({ open, onClose, editing }: { open: boo
                 ))}
               </Dropdown>
 
-              <Dropdown id="p-region" label="Region" required openMenu={openMenu} setOpenMenu={setOpenMenu} activeMenuRef={activeMenuRef} summary={region || 'Select Region'}>
-                {REGIONS.map(([name, states_]) => (
-                  <label key={name} className="msel-option">
-                    <input type="checkbox" checked={region === name} onChange={() => { setRegion(name); setState(''); setOpenMenu('') }} />
-                    <div>
-                      <span style={{ display: 'block' }}>{name}</span>
-                      <span style={{ display: 'block', fontSize: '10.5px', color: 'var(--chalk-faint)', fontFamily: 'var(--font-mono)', marginTop: '1px' }}>{states_}</span>
-                    </div>
-                  </label>
-                ))}
-              </Dropdown>
-
               <Dropdown id="p-state" label="State" required openMenu={openMenu} setOpenMenu={setOpenMenu} activeMenuRef={activeMenuRef} summary={state ? US_STATES[state]?.name : 'Select State'}>
                 {availableStates.map(([abbr, s]) => (
                   <label key={abbr} className="msel-option">
-                    {/* Picking a state auto-fills Region (region is derived from state) */}
-                    <input type="checkbox" checked={state === abbr} onChange={() => { setState(abbr); setRegion(Object.keys(REGION_KEY).find(n => REGION_KEY[n] === s.region) || ''); setOpenMenu('') }} />
+                    <input type="checkbox" checked={state === abbr} onChange={() => { setState(abbr); setOpenMenu('') }} />
                     <span>{s.name}</span>
                   </label>
                 ))}
