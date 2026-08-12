@@ -613,7 +613,7 @@ header.site-header .wrap { display: flex; align-items: center; justify-content: 
   padding: 3px 7px;
   white-space: nowrap;
 }
-.listing-chip.chip-org { color: var(--volley-yellow); border-color: rgba(255,196,43,0.4); background: rgba(255,196,43,0.08); }
+.listing-chip.chip-org { color: var(--volley-yellow); border-color: rgba(255,196,43,0.55); background: rgba(255,196,43,0.15); }
 /* Confirmed no sanctioning body — gold, but outline-only (a step down in certainty from a named body). */
 .listing-chip.chip-org-independent { color: var(--volley-yellow); border-color: rgba(255,196,43,0.4); background: transparent; }
 /* Org unknown/unrecorded — dashed, dimmed: reads as a gap to fill, not a real body, but stays in the org (gold) family. */
