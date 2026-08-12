@@ -117,6 +117,7 @@ export default function PostListingModal({ open, onClose, editing }: { open: boo
     if (!clubName.trim()) { setError('Club / organization name is required.'); return }
     if (needsTitle && !title.trim()) { setError('Please give this listing a title.'); return }
     if (!state) { setError('Please select a state.'); return }
+    if (!city.trim()) { setError('Please add the city or town.'); return }
     if (!email && !phone && !website && !facebook && !instagram && !xUrl && !tiktok) { setError('Please provide at least one way to reach you: email, phone, website, or a social link.'); return }
     setError('')
     // Must be signed in — the listing is tied to its owner (user_id) so they can
@@ -293,7 +294,7 @@ export default function PostListingModal({ open, onClose, editing }: { open: boo
             </div>
 
             <div>
-              <label className="field-label">City / Town <span style={{ opacity: 0.5, fontWeight: 400, textTransform: 'none' }}>(the town it’s in — any size)</span></label>
+              <label className="field-label">City / Town <span style={{ color: 'var(--antenna-red)' }}>*</span> <span style={{ opacity: 0.5, fontWeight: 400, textTransform: 'none' }}>(the town it’s in — any size)</span></label>
               <input className="text-input" value={city} onChange={e => setCity(e.target.value)} placeholder="e.g. Fort Worth" maxLength={60} />
             </div>
 
