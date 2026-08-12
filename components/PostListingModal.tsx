@@ -327,31 +327,32 @@ export default function PostListingModal({ open, onClose, editing }: { open: boo
             <div className="search-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
               <div>
                 <label className="field-label">Email</label>
-                <input className="text-input" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@club.com" />
+                <input className="text-input" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@club.com" maxLength={100} />
               </div>
               <div>
                 <label className="field-label">Phone</label>
-                <input className="text-input" value={phone} onChange={e => setPhone(e.target.value)} placeholder="(555) 555-5555" />
+                <input className="text-input" value={phone} onChange={e => setPhone(e.target.value)} placeholder="(555) 555-5555" maxLength={25} />
               </div>
               <div>
                 <label className="field-label">Website</label>
-                <input className="text-input" value={website} onChange={e => setWebsite(e.target.value)} placeholder="yourclub.com" />
+                <input className="text-input" value={website} onChange={e => setWebsite(e.target.value)} placeholder="yourclub.com" maxLength={200} />
               </div>
             </div>
 
             <div>
               <label className="field-label">Social Links <span style={{ opacity: 0.5, fontWeight: 400, textTransform: 'none' }}>(optional — often more useful than a website)</span></label>
               <div className="search-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', marginTop: '6px' }}>
-                <input className="text-input" value={facebook} onChange={e => setFacebook(e.target.value)} placeholder="Facebook — facebook.com/yourclub" />
-                <input className="text-input" value={instagram} onChange={e => setInstagram(e.target.value)} placeholder="Instagram — instagram.com/yourclub" />
-                <input className="text-input" value={xUrl} onChange={e => setXUrl(e.target.value)} placeholder="X — x.com/yourclub" />
-                <input className="text-input" value={tiktok} onChange={e => setTiktok(e.target.value)} placeholder="TikTok — tiktok.com/@yourclub" />
+                <input className="text-input" value={facebook} onChange={e => setFacebook(e.target.value)} placeholder="Facebook — facebook.com/yourclub" maxLength={200} />
+                <input className="text-input" value={instagram} onChange={e => setInstagram(e.target.value)} placeholder="Instagram — instagram.com/yourclub" maxLength={200} />
+                <input className="text-input" value={xUrl} onChange={e => setXUrl(e.target.value)} placeholder="X — x.com/yourclub" maxLength={200} />
+                <input className="text-input" value={tiktok} onChange={e => setTiktok(e.target.value)} placeholder="TikTok — tiktok.com/@yourclub" maxLength={200} />
               </div>
             </div>
 
             <div>
               <label className="field-label">Details</label>
-              <textarea className="text-input" value={details} onChange={e => setDetails(e.target.value)} rows={4} placeholder="Anything families should know." style={{ resize: 'vertical', fontFamily: 'inherit' }} />
+              <textarea className="text-input" value={details} onChange={e => setDetails(e.target.value)} rows={4} maxLength={1000} placeholder="Anything families should know." style={{ resize: 'vertical', fontFamily: 'inherit' }} />
+              <div style={{ textAlign: 'right', fontSize: '11px', color: 'var(--chalk-faint)', marginTop: '4px', fontFamily: 'var(--font-mono)' }}>{details.length}/1000</div>
             </div>
 
             {!user && <div style={{ fontSize: '12.5px', color: 'var(--chalk-dim)' }}>You’ll need to <strong style={{ color: 'var(--volley-yellow)' }}>sign in</strong> (top-right) before posting — it ties the listing to your account so you can edit it later.</div>}
