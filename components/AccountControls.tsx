@@ -61,7 +61,14 @@ export default function AccountControls() {
         <button className="btn btn-outline" onClick={() => setAuthOpen(true)}>Sign In</button>
       ) : (
         <button ref={btnRef} className="btn btn-outline" onClick={toggleMenu}>
-          {user.email?.split('@')[0] || 'Account'} ▾
+          {/* Prefer a real first name (Google gives us one); never show the raw
+              email handle. Fall back to "Account" for email/password sign-ups. */}
+          {(() => {
+            const m = user.user_metadata || {}
+            const full = m.full_name || m.name || m.given_name || ''
+            const first = full.trim().split(/\s+/)[0]
+            return first || 'Account'
+          })()} ▾
         </button>
       )}
 
