@@ -1,7 +1,7 @@
 'use client'
 import { useState, useMemo, useEffect, useRef } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
-import { Listing, isOrgUnverified } from '@/lib/constants'
+import { Listing, isOrgUnverified, US_STATES } from '@/lib/constants'
 import SearchPanel from './SearchPanel'
 import ListingCard from './ListingCard'
 import ListingModal from './ListingModal'
@@ -71,11 +71,13 @@ export default function Results({ listings, isSample }: { listings: Listing[]; i
     })
     const cityOf = (l: Listing) => l.venue || l.city || ''
     const name = (l: Listing) => l.title || l.club || ''
+    // Sort states by full name (Alabama before Alaska), never by 2-letter code (AK before AL).
+    const stateName = (l: Listing) => US_STATES[(l.state || '').toLowerCase()]?.name || l.state || ''
     const stateFiltered = states.length > 0
     out.sort((a, b) => {
       // Filtering by state auto-arranges results A–Z by city (within state), regardless of the Sort dropdown.
-      if (stateFiltered) return (a.state || '').localeCompare(b.state || '') || cityOf(a).localeCompare(cityOf(b)) || name(a).localeCompare(name(b))
-      if (sort === 'state') return (a.state || '').localeCompare(b.state || '') || cityOf(a).localeCompare(cityOf(b))
+      if (stateFiltered) return stateName(a).localeCompare(stateName(b)) || cityOf(a).localeCompare(cityOf(b)) || name(a).localeCompare(name(b))
+      if (sort === 'state') return stateName(a).localeCompare(stateName(b)) || cityOf(a).localeCompare(cityOf(b))
       if (sort === 'type') return a.type.localeCompare(b.type) || name(a).localeCompare(name(b))
       return 0 // recent = query order (already newest-first)
     })
