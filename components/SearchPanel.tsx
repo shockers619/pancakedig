@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { US_STATES } from '@/lib/constants'
-import { REGIONS, TYPES, EVENT_TYPES, SURFACES, LEVELS, ORGANIZATIONS, GENDERS, DIVISIONS, REGION_KEY, toggle } from '@/lib/filterOptions'
+import { REGIONS, TYPES, EVENT_TYPES, SURFACES, ORG_FILTER_OPTIONS, GENDERS, DIVISIONS, REGION_KEY, toggle } from '@/lib/filterOptions'
 import { Dropdown } from './Dropdown'
 
 export default function SearchPanel() {
@@ -14,7 +14,6 @@ export default function SearchPanel() {
   const [states, setStates] = useState<string[]>([])
   const [divisions, setDivisions] = useState<string[]>([])
   const [surfaces, setSurfaces] = useState<string[]>([])
-  const [levels, setLevels] = useState<string[]>([])
   const [orgs, setOrgs] = useState<string[]>([])
   const [genders, setGenders] = useState<string[]>([])
   const activeMenuRef = useRef<HTMLDivElement>(null)
@@ -43,8 +42,8 @@ export default function SearchPanel() {
   const showEventType = types.includes('showcase')
 
   // Apply filters by writing them to the URL; the Results section reads them
-  // and filters client-side. (Level stays UI-only — a club spans several levels,
-  // so filtering by one would mislead; Surface IS wired now that we carry it.)
+  // and filters client-side. (Level is intentionally NOT a filter — a club spans
+  // every level, so filtering by one can't separate clubs; Surface IS wired.)
   const applySearch = () => {
     const p = new URLSearchParams()
     if (types.length) p.set('type', types.join(','))
@@ -164,27 +163,13 @@ export default function SearchPanel() {
           ))}
         </Dropdown>
 
-        <Dropdown id="level" label="Level" openMenu={openMenu} setOpenMenu={setOpenMenu} activeMenuRef={activeMenuRef} summary={levels.length ? `${levels.length} selected` : 'All Levels'}>
-          <label className="msel-option all-option">
-            <input type="checkbox" checked={levels.length === 0} onChange={() => setLevels([])} />
-            <span>All Levels</span>
-          </label>
-          <div className="msel-divider" />
-          {LEVELS.map(l => (
-            <label key={l} className="msel-option">
-              <input type="checkbox" checked={levels.includes(l)} onChange={() => setLevels(toggle(levels, l))} />
-              <span>{l}</span>
-            </label>
-          ))}
-        </Dropdown>
-
         <Dropdown id="org" label="Organization" openMenu={openMenu} setOpenMenu={setOpenMenu} activeMenuRef={activeMenuRef} summary={orgs.length ? `${orgs.length} selected` : 'All Organizations'}>
           <label className="msel-option all-option">
             <input type="checkbox" checked={orgs.length === 0} onChange={() => setOrgs([])} />
             <span>All Organizations</span>
           </label>
           <div className="msel-divider" />
-          {ORGANIZATIONS.map(o => (
+          {ORG_FILTER_OPTIONS.map(o => (
             <label key={o} className="msel-option">
               <input type="checkbox" checked={orgs.includes(o)} onChange={() => setOrgs(toggle(orgs, o))} />
               <span>{o}</span>

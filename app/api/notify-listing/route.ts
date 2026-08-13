@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { createServerSupabaseClient } from '@/lib/supabase-server'
 import { sendEmail, emailShell, emailButton } from '@/lib/email'
 import { TYPE_LABELS } from '@/lib/constants'
+import { ORG_OTHER, isOrgOther } from '@/lib/filterOptions'
 
 // The real "Notify Me" alert sender: given a newly-approved listing, emails every
 // notify_subscribers row whose saved preferences match it. Fired from the admin
@@ -23,7 +24,12 @@ export async function POST(req: Request) {
       if (s.types?.length && !s.types.includes(listing.type)) return false
       if (s.divisions?.length && listing.division && !s.divisions.some((d: string) => listing.division.includes(d))) return false
       if (s.genders?.length && listing.gender && !s.genders.includes(listing.gender) && listing.gender !== 'coed') return false
-      if (s.orgs?.length && bodies.length && !s.orgs.some((o: string) => bodies.includes(o))) return false
+      // "Unaffiliated / Other" matches any listing outside the recognized five (incl. blank org);
+      // otherwise an exact body match. (Dropped the old bodies.length guard so a blank-org listing
+      // fires only the Unaffiliated/Other alert, not a recognized-org one.)
+      if (s.orgs?.length && !s.orgs.some((o: string) =>
+        o === ORG_OTHER ? isOrgOther(listing.governing_body) : bodies.includes(o)
+      )) return false
       return true
     })
     if (!matching.length) return NextResponse.json({ sent: 0 })

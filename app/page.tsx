@@ -91,7 +91,7 @@ export default async function Home() {
             Multiple governing bodies, different rules, overlapping seasons —
             and no single place that shows all of it. Search real grassroots
             volleyball programs — boys and girls, indoor, beach, and grass — by area,
-            division, level, and organization.
+            division, surface, and organization.
           </p>
 
           {!isSample && totalCount > 0 && (

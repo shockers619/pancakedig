@@ -27,7 +27,7 @@ export default function PricingSection() {
           <ul className="price-features">
             <li>Club Profile stays active for 1 year</li>
             <li>Listing is editable</li>
-            <li>Searchable by area, division, and level</li>
+            <li>Searchable by area, division, and organization</li>
             <li>Reaches people with matching alerts</li>
             <li>No recurring charge</li>
           </ul>
@@ -46,7 +46,7 @@ export default function PricingSection() {
             <li>Any listing — tryouts, roster spots, events, venues</li>
             <li>Listing stays active until filled or removed</li>
             <li>Listing is editable</li>
-            <li>Searchable by area, division, and level</li>
+            <li>Searchable by area, division, and organization</li>
             <li>Reaches people with matching alerts</li>
             <li>No recurring charge</li>
           </ul>
@@ -98,7 +98,7 @@ export default function PricingSection() {
           <ul className="price-features">
             <li>Coach Profile stays active for 6 months</li>
             <li>Listing is editable</li>
-            <li>Searchable by area, division, and level</li>
+            <li>Searchable by area, division, and organization</li>
             <li>Reaches people with matching alerts</li>
             <li>No recurring charge</li>
           </ul>

@@ -2,6 +2,7 @@
 import { useState, useMemo, useEffect, useRef } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { Listing, isOrgUnverified, US_STATES } from '@/lib/constants'
+import { ORG_OTHER, isOrgOther } from '@/lib/filterOptions'
 import SearchPanel from './SearchPanel'
 import ListingCard from './ListingCard'
 import ListingModal from './ListingModal'
@@ -62,8 +63,12 @@ export default function Results({ listings, isSample }: { listings: Listing[]; i
       }
       if (orgs.length) {
         const bodies = (l.governing_body || '').split(',').map(s => s.trim()).filter(Boolean)
-        // "Unverified" is a synthetic value: match listings whose org is unknown on a sanctioned type.
-        const match = orgs.some(o => o === 'Unverified' ? isOrgUnverified(l) : bodies.includes(o))
+        // "Unverified" = synthetic (org unknown on a sanctioned type). "Unaffiliated / Other" =
+        // affiliated with none of the recognized five (sweeps in blank + niche "Other" orgs).
+        const match = orgs.some(o =>
+          o === 'Unverified' ? isOrgUnverified(l)
+          : o === ORG_OTHER ? isOrgOther(l.governing_body)
+          : bodies.includes(o))
         if (!match) return false
       }
       if (surfaces.length && !surfaces.includes(l.surface || '')) return false

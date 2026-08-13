@@ -17,3 +17,8 @@
 .DS_Store
 *.pem
 npm-debug.log*
+
+# build cache
+tsconfig.tsbuildinfo
+# local tooling
+.claude/

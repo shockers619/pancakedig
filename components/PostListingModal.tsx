@@ -4,7 +4,7 @@ import { createPortal } from 'react-dom'
 import { US_STATES } from '@/lib/constants'
 import { createClient } from '@/lib/supabase'
 import { revalidateListings } from '@/lib/revalidate'
-import { TYPES, EVENT_TYPES, SURFACES, LEVELS, ORGANIZATIONS, GENDERS, DIVISIONS, toggle } from '@/lib/filterOptions'
+import { TYPES, EVENT_TYPES, SURFACES, LEVELS, ORG_POST_OPTIONS, GENDERS, DIVISIONS, toggle } from '@/lib/filterOptions'
 import { Dropdown } from './Dropdown'
 
 // Types where the listing needs a distinct title, separate from the
@@ -40,6 +40,10 @@ export default function PostListingModal({ open, onClose, editing }: { open: boo
   const [surfaces, setSurfaces] = useState<string[]>([])
   const [levels, setLevels] = useState<string[]>([])
   const [orgs, setOrgs] = useState<string[]>([])
+  // "Other" org: a free-text affiliation (e.g. USYVL, a regional league) for anything
+  // outside the recognized five — stored into governing_body alongside any checked orgs.
+  const [otherOn, setOtherOn] = useState(false)
+  const [otherOrg, setOtherOrg] = useState('')
   const [genders, setGenders] = useState<string[]>([])
   const [clubName, setClubName] = useState('')
   const [city, setCity] = useState('')
@@ -94,7 +98,12 @@ export default function PostListingModal({ open, onClose, editing }: { open: boo
     setDivisions(csv(editing.division))
     setSurfaces(csv(editing.surface))
     setLevels(Array.isArray(editing.tiers) ? editing.tiers : [])
-    setOrgs(csv(editing.governing_body))
+    // Recognized bodies map back to checkboxes; anything else (a niche org) fills the "Other" text.
+    const storedOrgs = csv(editing.governing_body)
+    setOrgs(storedOrgs.filter(o => ORG_POST_OPTIONS.includes(o)))
+    const otherVals = storedOrgs.filter(o => !ORG_POST_OPTIONS.includes(o))
+    setOtherOn(otherVals.length > 0)
+    setOtherOrg(otherVals.join(', '))
     setGenders(editing.gender && gmap[editing.gender] ? [gmap[editing.gender]] : [])
     setClubName(editing.club || '')
     setCity(editing.city || '')
@@ -121,7 +130,7 @@ export default function PostListingModal({ open, onClose, editing }: { open: boo
 
   const reset = () => {
     setType(''); setEventTypes([]); setState(''); setDivisions([]); setSurfaces([])
-    setLevels([]); setOrgs([]); setGenders([]); setClubName(''); setCity(''); setTitle(''); setEmail('')
+    setLevels([]); setOrgs([]); setOtherOn(false); setOtherOrg(''); setGenders([]); setClubName(''); setCity(''); setTitle(''); setEmail('')
     setPhone(''); setWebsite(''); setFacebook(''); setInstagram(''); setXUrl(''); setTiktok('')
     setDetails(''); setError(''); setSubmitted(false)
   }
@@ -155,7 +164,10 @@ export default function PostListingModal({ open, onClose, editing }: { open: boo
       division: divisions.length ? divisions.join(', ') : null,
       gender: genderVal,
       tiers: levels.length ? levels : null,
-      governing_body: orgs.length ? orgs.join(', ') : null,
+      governing_body: (() => {
+        const all = [...orgs, ...(otherOn && otherOrg.trim() ? [otherOrg.trim()] : [])]
+        return all.length ? all.join(', ') : null
+      })(),
       surface: surfaces.length ? surfaces.join(', ') : null,
       event_subtype: (type === 'showcase' && eventTypes.length) ? eventTypes.join(', ') : null,
       details: details.trim() || null,
@@ -282,18 +294,23 @@ export default function PostListingModal({ open, onClose, editing }: { open: boo
                 ))}
               </Dropdown>
 
-              <Dropdown id="p-org" label="Organization" openMenu={openMenu} setOpenMenu={setOpenMenu} activeMenuRef={activeMenuRef} summary={orgs.length ? orgs.join(', ') : 'Select Organizations'}>
-                <label className="msel-option all-option">
-                  <input type="checkbox" checked={orgs.length === ORGANIZATIONS.length} onChange={() => setOrgs(orgs.length === ORGANIZATIONS.length ? [] : [...ORGANIZATIONS])} />
-                  <span>Select All</span>
-                </label>
-                <div className="msel-divider" />
-                {ORGANIZATIONS.map(o => (
+              <Dropdown id="p-org" label="Organization" openMenu={openMenu} setOpenMenu={setOpenMenu} activeMenuRef={activeMenuRef} summary={[...orgs, ...(otherOn && otherOrg.trim() ? [otherOrg.trim()] : [])].join(', ') || 'Select Organizations'}>
+                {ORG_POST_OPTIONS.map(o => (
                   <label key={o} className="msel-option">
                     <input type="checkbox" checked={orgs.includes(o)} onChange={() => setOrgs(toggle(orgs, o))} />
                     <span>{o}</span>
                   </label>
                 ))}
+                <div className="msel-divider" />
+                <label className="msel-option">
+                  <input type="checkbox" checked={otherOn} onChange={() => { const next = !otherOn; setOtherOn(next); if (!next) setOtherOrg('') }} />
+                  <span>Other (specify)</span>
+                </label>
+                {otherOn && (
+                  <div style={{ padding: '4px 10px 10px' }} onClick={e => e.stopPropagation()}>
+                    <input className="text-input" value={otherOrg} onChange={e => setOtherOrg(e.target.value)} placeholder="e.g. USYVL, regional league" maxLength={40} />
+                  </div>
+                )}
               </Dropdown>
 
               <Dropdown id="p-gender" label="Gender" openMenu={openMenu} setOpenMenu={setOpenMenu} activeMenuRef={activeMenuRef} summary={genders.length ? genders.join(', ') : 'Select Genders'}>

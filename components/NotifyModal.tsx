@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { REGIONS, TYPES, DIVISIONS, GENDERS, ORGANIZATIONS, REGION_KEY, toggle } from '@/lib/filterOptions'
+import { REGIONS, TYPES, DIVISIONS, GENDERS, ORG_FILTER_OPTIONS, REGION_KEY, toggle } from '@/lib/filterOptions'
 
 // "🔔 Notify me when something new matches" — captures an email + preferences
 // and POSTs to /api/notify (stored in notify_subscribers). Ported/adapted from
@@ -77,7 +77,7 @@ export default function NotifyModal({ onClose }: { onClose: () => void }) {
             <Group label="Type" opts={TYPES.map(t => t[1])} sel={types} set={setTypes} />
             <Group label="Division" opts={DIVISIONS} sel={divisions} set={setDivisions} />
             <Group label="Gender" opts={GENDERS} sel={genders} set={setGenders} />
-            <Group label="Organization" opts={ORGANIZATIONS} sel={orgs} set={setOrgs} />
+            <Group label="Organization" opts={ORG_FILTER_OPTIONS} sel={orgs} set={setOrgs} />
 
             <div style={{ borderTop: '1px solid rgba(244,246,242,0.1)', paddingTop: '16px' }}>
               <label className="field-label" style={{ marginBottom: '6px' }}>Email Address *</label>
