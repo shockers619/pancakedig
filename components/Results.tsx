@@ -9,9 +9,9 @@ import NotifyModal from './NotifyModal'
 
 const PAGE_SIZE = 10
 
-type Sort = 'recent' | 'name' | 'state' | 'type'
+type Sort = 'recent' | 'state' | 'type'
 const SORT_LABELS: Record<Sort, string> = {
-  recent: 'Recently Posted', name: 'Name (A–Z)', state: 'State (A–Z)', type: 'Type',
+  recent: 'Recently Posted', state: 'State (A–Z)', type: 'Listing Type',
 }
 
 export default function Results({ listings, isSample }: { listings: Listing[]; isSample?: boolean }) {
@@ -71,8 +71,10 @@ export default function Results({ listings, isSample }: { listings: Listing[]; i
     })
     const cityOf = (l: Listing) => l.venue || l.city || ''
     const name = (l: Listing) => l.title || l.club || ''
+    const stateFiltered = states.length > 0
     out.sort((a, b) => {
-      if (sort === 'name') return name(a).localeCompare(name(b))
+      // Filtering by state auto-arranges results A–Z by city (within state), regardless of the Sort dropdown.
+      if (stateFiltered) return (a.state || '').localeCompare(b.state || '') || cityOf(a).localeCompare(cityOf(b)) || name(a).localeCompare(name(b))
       if (sort === 'state') return (a.state || '').localeCompare(b.state || '') || cityOf(a).localeCompare(cityOf(b))
       if (sort === 'type') return a.type.localeCompare(b.type) || name(a).localeCompare(name(b))
       return 0 // recent = query order (already newest-first)
