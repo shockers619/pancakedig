@@ -43,9 +43,8 @@ export default function LiveTicker({ listings }: { listings: Listing[] }) {
                     {l.gender ? <span className="board-gender"> · {formatGender(l.gender)}</span> : ''}
                   </div>
                 </div>
-                {l.logo_url && (
-                  <img className={`board-row-logo logo-frame${l.logo_dark ? ' logo-frame-dark' : ''}`} src={l.logo_url} alt={`${l.club} logo`} />
-                )}
+                {/* No logo on the Live Board: at ticker scale it's too small to read,
+                    and events have none, so rows looked uneven. Logos live on the cards. */}
                 <button className="board-view" onClick={e => { e.stopPropagation(); setSelected(l) }}>View Details</button>
                 <span className="board-chevron" aria-hidden="true">›</span>
               </div>
