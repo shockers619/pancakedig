@@ -749,7 +749,10 @@ header.site-header .wrap { display: flex; align-items: center; justify-content: 
   display: flex; align-items: flex-start; justify-content: center;
   padding: 60px 20px;
   overflow-y: auto;
-  z-index: 100;
+  /* Must sit above EVERYTHING, including the sticky header (100) and the header
+     net line (.net-line--header, 101) — otherwise the net paints over the modal
+     title and its × close button. */
+  z-index: 1000;
 }
 .modal {
   background: var(--court-navy-2);
