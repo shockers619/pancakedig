@@ -56,7 +56,6 @@ export default async function Home() {
   const totalCount = listings.length
   // DC is a district, not a state — exclude it so the count reads 50, not 51.
   const stateCount = new Set(listings.map(l => (l.state || '').toLowerCase()).filter(s => s && s !== 'dc')).size
-  const eventCount = listings.filter(l => l.type === 'showcase' || l.type === 'tryout').length
   return (
     <>
       <header className="site-header">
@@ -99,7 +98,6 @@ export default async function Home() {
             <div className="hero-stats">
               <div><div className="hero-stat-num">{totalCount}</div><div className="hero-stat-label">Listings</div></div>
               <div><div className="hero-stat-num">{stateCount}</div><div className="hero-stat-label">States</div></div>
-              <div><div className="hero-stat-num">{eventCount}</div><div className="hero-stat-label">Events</div></div>
               <div><div className="hero-stat-num" style={{ fontSize: '19px', letterSpacing: '0.02em', whiteSpace: 'nowrap' }}><em>USAV · JVA · AAU · AVP · LOVB</em></div><div className="hero-stat-label">All in one place</div></div>
             </div>
           )}
