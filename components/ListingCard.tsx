@@ -29,11 +29,11 @@ export default function ListingCard({ listing: l, onClick }: { listing: Listing;
         </div>
 
         {(l.event_date || l.division || l.gender || l.surface || orgs.length > 0) && (
-          /* Scan order: "can I go" (date) → "are we eligible" (org → division → gender)
-             → "is it right for us" (surface). Type is shown as the title lead, not a chip. */
+          /* Scan order: sanctioning org first (the trust signal) → date ("can I go")
+             → division → gender → surface. Type is shown as the title lead, not a chip. */
           <div className="listing-chips">
-            {l.event_date && <span className="listing-chip chip-event">{formatEventDate(l.event_date, l.event_date_end)}</span>}
             {orgs.map(b => <span key={b} className="listing-chip chip-org">{b}</span>)}
+            {l.event_date && <span className="listing-chip chip-event">{formatEventDate(l.event_date, l.event_date_end)}</span>}
             {l.division && <span className="listing-chip">{formatDivisionRange(l.division)}</span>}
             {l.gender && <span className="listing-chip">{formatGender(l.gender)}</span>}
             {l.surface && <span className="listing-chip">{l.surface}</span>}
