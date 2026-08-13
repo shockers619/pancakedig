@@ -54,7 +54,8 @@ export default async function Home() {
   const { listings, isSample } = await getListings()
   // Scale-forward hero stats: lead with total reach, not a per-type inventory.
   const totalCount = listings.length
-  const stateCount = new Set(listings.map(l => (l.state || '').toLowerCase()).filter(Boolean)).size
+  // DC is a district, not a state — exclude it so the count reads 50, not 51.
+  const stateCount = new Set(listings.map(l => (l.state || '').toLowerCase()).filter(s => s && s !== 'dc')).size
   const eventCount = listings.filter(l => l.type === 'showcase' || l.type === 'tryout').length
   return (
     <>
