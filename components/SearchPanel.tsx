@@ -190,9 +190,10 @@ export default function SearchPanel() {
             </label>
           ))}
         </Dropdown>
-      </div>
 
-      <button className="btn btn-primary search-submit" onClick={applySearch}>Search</button>
+        {/* Search sits in the empty 4th cell of row 2, bottom-aligned (align-items:end) with Gender. */}
+        <button className="btn btn-primary search-submit" onClick={applySearch}>Search</button>
+      </div>
     </div>
   )
 }

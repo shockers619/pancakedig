@@ -303,10 +303,11 @@ header.site-header .wrap { display: flex; align-items: center; justify-content: 
   align-items: end;
 }
 .search-submit {
-  width: 200px;
-  max-width: 100%;
-  margin: 0 auto;
-  padding: 10px;
+  /* Occupies the empty 4th cell of the grid's second row, matching the Gender
+     dropdown's width and bottom edge. Its cell height is the control row only
+     (no label above), so align-items:end lands it flush with the dropdowns. */
+  width: 100%;
+  padding: 12px;
   font-size: 12px;
   justify-content: center;
 }
