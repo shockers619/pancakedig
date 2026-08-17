@@ -58,6 +58,7 @@ export default function PostListingModal({ open, onClose, editing }: { open: boo
   const [details, setDetails] = useState('')
   const [error, setError] = useState('')
   const [submitted, setSubmitted] = useState(false)
+  const [wentLive, setWentLive] = useState(false)
   const [busy, setBusy] = useState(false)
   const [user, setUser] = useState<any>(null)
   const sb = createClient()
@@ -132,7 +133,7 @@ export default function PostListingModal({ open, onClose, editing }: { open: boo
     setType(''); setEventTypes([]); setState(''); setDivisions([]); setSurfaces([])
     setLevels([]); setOrgs([]); setOtherOn(false); setOtherOrg(''); setGenders([]); setClubName(''); setCity(''); setTitle(''); setEmail('')
     setPhone(''); setWebsite(''); setFacebook(''); setInstagram(''); setXUrl(''); setTiktok('')
-    setDetails(''); setError(''); setSubmitted(false)
+    setDetails(''); setError(''); setSubmitted(false); setWentLive(false)
   }
 
   const close = () => { onClose(); setOpenMenu(''); reset() }
@@ -179,17 +180,32 @@ export default function PostListingModal({ open, onClose, editing }: { open: boo
       x_url: normUrl(xUrl),
       tiktok_url: normUrl(tiktok),
     }
-    // Edit → update in place (owner keeps ownership + status). New → insert as pending.
+    // Verified users (>=1 approved claim) self-publish, capped at 5 owned listings;
+    // everyone else still posts pending for admin review. RLS enforces the SAME rule
+    // server-side (schema-verified-posting.sql) — this is just the matching UX.
+    let verifiedUser = false
+    if (!editing) {
+      const { count } = await sb.from('listings').select('id', { count: 'exact', head: true })
+        .eq('user_id', u.id).in('status', ['pending', 'approved'])
+      if ((count || 0) >= 5) { setBusy(false); setError('You’ve reached the 5-listing limit for now — reply to your Pancake Dig email and we’ll lift it.'); return }
+      const { data: vrow } = await sb.from('listings').select('id').eq('user_id', u.id).eq('verified', true).limit(1)
+      verifiedUser = !!(vrow && vrow.length)
+    }
+    // Edit → update in place (owner keeps ownership + status).
+    // Verified → insert already-approved & live. Unverified → insert pending for the queue.
     const { error: writeErr } = editing
       ? await sb.from('listings').update(fields).eq('id', editing.id)
-      : await sb.from('listings').insert({ ...fields, status: 'pending', user_id: u.id, verified: false, claimed: false, featured: false })
+      : await sb.from('listings').insert(verifiedUser
+          ? { ...fields, status: 'approved', user_id: u.id, verified: true, claimed: true, featured: false }
+          : { ...fields, status: 'pending', user_id: u.id, verified: false, claimed: false, featured: false })
     setBusy(false)
     if (writeErr) { setError('Could not save — ' + writeErr.message); return }
+    setWentLive(verifiedUser)
     setSubmitted(true)
-    // Editing an existing (possibly-live) listing changes public content — refresh it.
-    if (editing) revalidateListings()
-    // Confirm to the poster — best-effort, never blocks.
-    if (!editing && u.email) {
+    // A live edit, or a verified user's self-published post, changes public content — refresh it.
+    if (editing || verifiedUser) revalidateListings()
+    // Confirm to the poster — best-effort, never blocks. (Verified posts are already live, no "pending" note needed.)
+    if (!editing && !verifiedUser && u.email) {
       fetch('/api/post-confirmation', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ to: u.email, title: fields.title }),
@@ -215,6 +231,8 @@ export default function PostListingModal({ open, onClose, editing }: { open: boo
           <div style={{ padding: '20px 0', fontSize: '14px', lineHeight: 1.6, color: 'var(--chalk)' }}>
             <p>{editing
               ? <>Your changes were saved.</>
+              : wentLive
+              ? <>Thanks — your listing is <strong>live now</strong> on the directory. You can edit it anytime from your account menu.</>
               : <>Thanks — your listing was submitted and is <strong>pending review</strong>. Once it’s approved it goes live on the directory. You can see and edit it anytime from your account menu.</>}</p>
             <button className="btn btn-primary" style={{ marginTop: '16px' }} onClick={close}>Close</button>
           </div>

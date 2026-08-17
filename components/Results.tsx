@@ -127,7 +127,7 @@ export default function Results({ listings, isSample }: { listings: Listing[]; i
           <div className="results-right">
             <div className="verified-legend">
               <svg viewBox="0 0 24 24" width={18} height={18} style={{ flexShrink: 0 }}>
-                <circle cx="12" cy="12" r="10" fill="var(--ace-teal)" />
+                <circle cx="12" cy="12" r="10" fill="var(--volley-yellow)" />
                 <path d="M8 12.5l2.5 2.5 5.5-5.5" stroke="var(--net-graphite)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
               </svg>
               Verified by Pancake Dig
