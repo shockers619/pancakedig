@@ -1,39 +1,38 @@
 import type { MetadataRoute } from 'next'
-import { createServerSupabaseClient } from '@/lib/supabase-server'
-import { clubPath, SITE_URL } from '@/lib/constants'
+import { getApprovedClubs, statePath, cityPath, MIN_CLUBS_FOR_CITY_PAGE } from '@/lib/clubs'
+import { clubPath, SITE_URL, slugify, US_STATES } from '@/lib/constants'
 
-// Regenerated daily (ISR). Lists the homepage + every real club detail page, so
-// Google/AI crawlers discover the SEO surface even before internal links exist.
-// Only pages we actually render are emitted — no thin combinatorial URLs.
+// Regenerated daily (ISR). Lists the homepage, the discovery hub, every state +
+// gated-city index page, and every real club detail page — so crawlers find the
+// whole SEO surface. Only pages we actually render are emitted (no thin URLs).
 export const revalidate = 86400
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const base: MetadataRoute.Sitemap = [
+  const out: MetadataRoute.Sitemap = [
     { url: SITE_URL, changeFrequency: 'daily', priority: 1 },
+    { url: `${SITE_URL}/volleyball-clubs`, changeFrequency: 'weekly', priority: 0.8 },
   ]
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL) return base
-  try {
-    const sb = createServerSupabaseClient()
-    const rows: any[] = []
-    for (let from = 0; ; from += 1000) {
-      const { data } = await sb.from('listings')
-        .select('id, club, title, state, created_at')
-        .eq('status', 'approved').eq('type', 'club').not('state', 'is', null)
-        .range(from, from + 999)
-      if (!data || data.length === 0) break
-      rows.push(...data)
-      if (data.length < 1000) break
-    }
-    const clubs: MetadataRoute.Sitemap = rows
-      .filter(r => r.state && (r.club || r.title))
-      .map(r => ({
-        url: SITE_URL + clubPath(r),
-        changeFrequency: 'weekly',
-        priority: 0.7,
-        lastModified: r.created_at ? new Date(r.created_at) : undefined,
-      }))
-    return [...base, ...clubs]
-  } catch {
-    return base
+  const clubs = await getApprovedClubs()
+  if (!clubs.length) return out
+
+  // Club detail pages
+  for (const c of clubs) {
+    if (c.state && (c.club || c.title)) out.push({ url: SITE_URL + clubPath(c), changeFrequency: 'weekly', priority: 0.6 })
   }
+  // State index pages
+  const states = new Set(clubs.map(c => (c.state || '').toLowerCase()).filter(s => US_STATES[s]))
+  for (const s of Array.from(states)) out.push({ url: SITE_URL + statePath(s), changeFrequency: 'weekly', priority: 0.7 })
+  // City index pages (only those clearing the depth bar)
+  const cities = new Map<string, { state: string; city: string; n: number }>()
+  for (const c of clubs) {
+    if (!c.city || !c.state) continue
+    const key = `${c.state.toLowerCase()}|${slugify(c.city)}`
+    const cur = cities.get(key) || { state: c.state.toLowerCase(), city: c.city, n: 0 }
+    cur.n++
+    cities.set(key, cur)
+  }
+  for (const { state, city, n } of Array.from(cities.values())) {
+    if (n >= MIN_CLUBS_FOR_CITY_PAGE) out.push({ url: SITE_URL + cityPath(state, city), changeFrequency: 'weekly', priority: 0.7 })
+  }
+  return out
 }

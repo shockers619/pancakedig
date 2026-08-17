@@ -676,6 +676,39 @@ header.site-header .wrap { display: flex; align-items: center; justify-content: 
 .listing-contact { border-top: 1px solid rgba(244,246,242,0.1); padding-top: 16px; display: flex; flex-direction: column; gap: 10px; }
 @media (max-width: 560px) { .listing-detail { padding: 20px; } .listing-detail h1 { font-size: 24px; } }
 
+/* ---------- Index pages: hub / state / city ---------- */
+.index-h1 { font-family: var(--font-display); font-weight: 800; font-size: 30px; line-height: 1.12; color: var(--chalk); margin: 2px 0 10px; }
+.index-h2 { font-family: var(--font-display); font-weight: 700; font-size: 19px; color: var(--chalk); margin: 30px 0 12px; }
+.index-lead { font-size: 14.5px; line-height: 1.6; color: var(--chalk-dim); max-width: 720px; margin-bottom: 24px; }
+.index-back { font-family: var(--font-mono); font-size: 12px; color: var(--volley-yellow); text-decoration: none; }
+.index-back:hover { text-decoration: underline; }
+
+.club-index { list-style: none; display: flex; flex-direction: column; gap: 8px; margin: 0; padding: 0; }
+.club-index-row { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 1px solid rgba(244,246,242,0.12); border-radius: 6px; background: var(--court-navy-2); text-decoration: none; transition: border-color 0.12s ease, background 0.12s ease; }
+.club-index-row:hover { border-color: rgba(255,196,43,0.5); background: rgba(255,196,43,0.04); }
+.club-index-logo { width: 40px; height: 40px; flex-shrink: 0; object-fit: contain; }
+.club-index-main { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.club-index-name { display: flex; align-items: center; gap: 6px; font-weight: 700; font-size: 14.5px; color: var(--chalk); }
+.club-index-meta { font-family: var(--font-mono); font-size: 11.5px; color: var(--chalk-dim); }
+
+.index-cities { margin-top: 26px; }
+.index-cities h2, .index-faq h2 { font-family: var(--font-display); font-weight: 700; font-size: 19px; color: var(--chalk); margin: 0 0 12px; }
+.city-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.city-chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border: 1px solid rgba(244,246,242,0.16); border-radius: 999px; font-size: 13px; color: var(--chalk); text-decoration: none; transition: border-color 0.12s ease; }
+.city-chip:hover { border-color: var(--volley-yellow); }
+.city-chip span { font-family: var(--font-mono); font-size: 10.5px; color: var(--court-navy); background: var(--volley-yellow); border-radius: 999px; padding: 0 6px; }
+
+.index-faq { margin-top: 34px; max-width: 720px; }
+.faq-item { border-top: 1px solid rgba(244,246,242,0.1); padding: 14px 0; }
+.faq-item h3 { font-size: 14.5px; font-weight: 700; color: var(--chalk); margin: 0 0 5px; }
+.faq-item p { font-size: 13.5px; line-height: 1.6; color: var(--chalk-dim); margin: 0; }
+
+.state-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }
+.state-cell { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border: 1px solid rgba(244,246,242,0.12); border-radius: 6px; background: var(--court-navy-2); text-decoration: none; transition: border-color 0.12s ease; }
+.state-cell:hover { border-color: var(--volley-yellow); }
+.state-cell-name { font-weight: 600; font-size: 14px; color: var(--chalk); }
+.state-cell-count { font-family: var(--font-mono); font-size: 11px; color: var(--chalk-dim); }
+
 /* ---------- Live Board ticker: "Just Posted" (ported from FloorBalance, PD palette) ---------- */
 /* Live Board blends up into the hero — same navy as the "One good dig" background */
 .board-zone { background: var(--court-navy-2); padding: 8px 0 28px; }

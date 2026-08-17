@@ -14,9 +14,12 @@ export default function SiteFooter() {
               <span className="pancake">PANCAKE</span> <span className="dig">DIG</span>
             </a>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: 'var(--chalk)', fontWeight: 700 }}>/</span>
-            <div className="footer-links">
+            <div className="footer-links" style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
               <a href="mailto:info@pancakedig.com" style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: 'var(--chalk)', fontWeight: 500 }}>
                 info@pancakedig.com
+              </a>
+              <a href="/volleyball-clubs" style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: 'var(--chalk)', fontWeight: 500 }}>
+                Browse clubs by state
               </a>
             </div>
           </div>

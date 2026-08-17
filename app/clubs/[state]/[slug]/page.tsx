@@ -5,6 +5,7 @@ import {
   Listing, REGION_NAMES, TYPE_LABELS, US_STATES, SITE_URL,
   formatDivisionRange, formatGender, orgChips, clubPath, listingSlug, idFromSlug,
 } from '@/lib/constants'
+import { statePath } from '@/lib/clubs'
 import { VerifiedBadge } from '@/components/VerifiedBadge'
 import { FacebookIcon, InstagramIcon, XIcon, TikTokIcon } from '@/components/SocialIcons'
 import { ClaimListingButton } from '@/components/ClaimListingButton'
@@ -108,7 +109,7 @@ export default async function ClubPage({ params }: { params: { state: string; sl
         <nav className="crumbs" aria-label="Breadcrumb">
           <a href="/">Home</a>
           <span aria-hidden>›</span>
-          <a href={`/?type=club&region=${l.region || ''}&state=${(l.state || '').toLowerCase()}`}>{stateName} volleyball clubs</a>
+          <a href={statePath(l.state)}>{stateName} volleyball clubs</a>
           <span aria-hidden>›</span>
           <span className="crumb-current">{l.club}</span>
         </nav>
@@ -180,7 +181,7 @@ export default async function ClubPage({ params }: { params: { state: string; sl
           </div>
 
           <div style={{ marginTop: '24px' }}>
-            <a href={`/?type=club&region=${l.region || ''}&state=${(l.state || '').toLowerCase()}`} style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--volley-yellow)', textDecoration: 'none' }}>
+            <a href={statePath(l.state)} style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--volley-yellow)', textDecoration: 'none' }}>
               ← More {stateName} volleyball clubs
             </a>
           </div>
