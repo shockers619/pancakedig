@@ -162,6 +162,33 @@ export function formatGender(gender?: string): string {
   return ''
 }
 
+// Absolute site origin — used for canonical URLs, sitemap entries, and JSON-LD.
+export const SITE_URL = 'https://pancakedig.com'
+
+// URL-safe slug from a club/listing name.
+export function slugify(s: string): string {
+  return (s || '')
+    .toLowerCase()
+    .replace(/&/g, ' and ')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+}
+// Canonical slug for a listing: name-slug + id. The trailing id guarantees a
+// unique, stable URL (two clubs can share a name) and a cheap lookup key.
+export function listingSlug(l: { club?: string; title?: string; id: number }): string {
+  const base = slugify(l.club || l.title || 'listing') || 'listing'
+  return `${base}-${l.id}`
+}
+// Canonical path to a club's SEO detail page: /clubs/<state>/<name>-<id>.
+export function clubPath(l: { club?: string; title?: string; id: number; state?: string }): string {
+  return `/clubs/${(l.state || '').toLowerCase()}/${listingSlug(l)}`
+}
+// Pull the trailing numeric id out of a listing slug ("…-395" -> 395).
+export function idFromSlug(slug: string): number | null {
+  const m = (slug || '').match(/-(\d+)$/)
+  return m ? parseInt(m[1], 10) : null
+}
+
 // Types where a blank org is a fillable gap for the internal ?org=Unverified worklist.
 const ORG_TRACKED_TYPES = new Set(['club', 'showcase', 'tryout', 'opening'])
 // Values that mean "no sanctioning body" — they never render a chip.

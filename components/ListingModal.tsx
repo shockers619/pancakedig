@@ -1,4 +1,4 @@
-import { Listing, REGION_NAMES, TYPE_LABELS, formatDivisionRange, formatGender, formatEventDate, eventLead, orgChips } from '@/lib/constants'
+import { Listing, REGION_NAMES, TYPE_LABELS, SITE_URL, formatDivisionRange, formatGender, formatEventDate, eventLead, orgChips, clubPath } from '@/lib/constants'
 import { VerifiedBadge } from './VerifiedBadge'
 import { FacebookIcon, InstagramIcon, XIcon, TikTokIcon, LinkIcon } from './SocialIcons'
 import { ClaimListingButton } from './ClaimListingButton'
@@ -7,6 +7,8 @@ export default function ListingModal({ listing: l, onClose }: { listing: Listing
   const hasSocial = l.facebook_url || l.instagram_url || l.x_url || l.tiktok_url
   const orgs = orgChips(l)
   const lead = eventLead(l)
+  // Clubs now have their own SEO page — share that; other types share the homepage until they get pages.
+  const shareUrl = (l.type === 'club' && l.state) ? SITE_URL + clubPath(l) : SITE_URL
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal" onClick={e => e.stopPropagation()}>
@@ -89,7 +91,7 @@ export default function ListingModal({ listing: l, onClose }: { listing: Listing
             <button
               className="share-listing-btn"
               onClick={() => {
-                navigator.clipboard?.writeText('https://pancakedig.com')
+                navigator.clipboard?.writeText(shareUrl)
                 const span = document.getElementById(`share-txt-${l.id}`)
                 if (span) { span.textContent = 'Link copied!'; setTimeout(() => { span.textContent = 'Share this listing' }, 2000) }
               }}

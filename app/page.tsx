@@ -1,6 +1,5 @@
-import { VolleyballIcon } from '@/components/VolleyballIcon'
-import PostListingButton from '@/components/PostListingButton'
-import AccountControls from '@/components/AccountControls'
+import SiteHeader from '@/components/SiteHeader'
+import SiteFooter from '@/components/SiteFooter'
 import { Suspense } from 'react'
 import LiveTicker from '@/components/LiveTicker'
 import Results from '@/components/Results'
@@ -58,22 +57,7 @@ export default async function Home() {
   const stateCount = new Set(listings.map(l => (l.state || '').toLowerCase()).filter(s => s && s !== 'dc')).size
   return (
     <>
-      <header className="site-header">
-        <div className="wrap">
-          <div className="logo">
-            <VolleyballIcon size={52} />
-            <span>
-              <span className="pancake">PANCAKE</span> <span className="dig">DIG</span>
-              <span className="logo-tag">GRASSROOTS VOLLEYBALL DIRECTORY</span>
-            </span>
-          </div>
-          <div className="header-actions" style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-            <AccountControls />
-            <PostListingButton />
-          </div>
-        </div>
-      </header>
-      <div className="net-line net-line--header" />
+      <SiteHeader />
 
       <section className="hero">
         <div className="wrap">
@@ -113,30 +97,7 @@ export default async function Home() {
       {/* PricingSection parked until we monetize (real traffic first) — component kept
           in components/PricingSection.tsx for a future launch. Re-import + render to bring back. */}
 
-      {/* Volleyball-net divider above the footer, matching the header */}
-      <div className="net-line" />
-
-      <footer>
-        <div className="wrap footer-inner">
-          <div className="footer-left">
-            <div className="logo" style={{ fontSize: '20px' }}>
-              <VolleyballIcon size={22} />
-              <span className="pancake">PANCAKE</span> <span className="dig">DIG</span>
-            </div>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: 'var(--chalk)', fontWeight: 700 }}>/</span>
-            <div className="footer-links">
-              <a href="mailto:info@pancakedig.com" style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: 'var(--chalk)', fontWeight: 500 }}>
-                info@pancakedig.com
-              </a>
-            </div>
-          </div>
-          <a href="https://sitesbyed.com" target="_blank" rel="noopener noreferrer" className="footer-credit">
-            <span className="footer-credit-label">Site created by</span>
-            <img className="footer-credit-logo" src="/sitesbyed-white.png" alt="Sites by Ed" />
-          </a>
-          <div className="foot-note">© 2026 Pancake Dig<span className="foot-sep"> · </span><span className="foot-disclaimer">Not affiliated with any organization.</span></div>
-        </div>
-      </footer>
+      <SiteFooter />
     </>
   )
 }
