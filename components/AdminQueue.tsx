@@ -67,7 +67,20 @@ export default function AdminQueue({ open, onClose }: { open: boolean; onClose: 
     }
     await sb.from('claim_requests').update({ status: approve ? 'approved' : 'rejected' }).eq('id', claim.id)
     setClaims(cs => cs.filter(c => c.id !== claim.id))
-    if (approve) revalidateListings()
+    if (approve) {
+      revalidateListings()
+      // Notify the claimant their claim went through — fire-and-forget; a failed
+      // email must never undo an approval that's already committed.
+      fetch('/api/claim-approved', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          listingTitle: claim.listings?.title || claim.listings?.club || 'your listing',
+          requesterEmail: claim.requester_email,
+          requesterName: claim.requester_name,
+        }),
+      }).catch(() => {})
+    }
   }
 
   if (!open || typeof document === 'undefined') return null
