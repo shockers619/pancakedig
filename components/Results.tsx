@@ -48,10 +48,15 @@ export default function Results({ listings, isSample }: { listings: Listing[]; i
   const csv = (k: string) => { const v = sp.get(k); return v ? v.split(',').map(s => s.trim()).filter(Boolean) : [] }
   const types = csv('type'), regions = csv('region'), states = csv('state'),
         divisions = csv('division'), genders = csv('gender'), orgs = csv('org'), surfaces = csv('surface')
-  const hasFilter = [types, regions, states, divisions, genders, orgs, surfaces].some(a => a.length > 0)
+  const q = (sp.get('q') || '').trim().toLowerCase()
+  const hasFilter = q.length > 0 || [types, regions, states, divisions, genders, orgs, surfaces].some(a => a.length > 0)
 
   const filtered = useMemo(() => {
     const out = listings.filter(l => {
+      if (q) {
+        const hay = `${l.title || ''} ${l.club || ''} ${l.city || ''} ${l.venue || ''}`.toLowerCase()
+        if (!hay.includes(q)) return false
+      }
       if (types.length && !types.includes(l.type)) return false
       if (regions.length && !regions.includes(l.region)) return false
       if (states.length && !states.includes((l.state || '').toLowerCase())) return false

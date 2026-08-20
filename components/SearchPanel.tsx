@@ -1,13 +1,19 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { US_STATES } from '@/lib/constants'
 import { REGIONS, TYPES, EVENT_TYPES, SURFACES, ORG_FILTER_OPTIONS, GENDERS, DIVISIONS, REGION_KEY, toggle } from '@/lib/filterOptions'
 import { Dropdown } from './Dropdown'
 
 export default function SearchPanel() {
   const router = useRouter()
+  const sp = useSearchParams()
   const [openMenu, setOpenMenu] = useState('')
+  // Search-by-name box. Filters live as the user types (the top request from our
+  // first user: type a club/event name instead of clicking through menus). It
+  // writes the `q` URL param directly so Results re-filters immediately.
+  const [q, setQ] = useState(sp.get('q') || '')
+  const lastWroteQ = useRef(q)
   const [types, setTypes] = useState<string[]>([])
   const [eventTypes, setEventTypes] = useState<string[]>([])
   const [regions, setRegions] = useState<string[]>([])
@@ -25,14 +31,35 @@ export default function SearchPanel() {
   // currently open, since React attaches/detaches it automatically as
   // openMenu changes which Dropdown instance renders its menu.
   useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (activeMenuRef.current && !activeMenuRef.current.contains(e.target as Node)) {
+    const handler = (e: Event) => {
+      const el = e.target instanceof Element ? e.target : null
+      // Ignore taps on any dropdown box — those toggle themselves; closing here
+      // too would flicker/reopen. Close only on a tap truly outside the open menu.
+      if (activeMenuRef.current && !activeMenuRef.current.contains(e.target as Node) && !el?.closest('.msel-box')) {
         setOpenMenu('')
       }
     }
     document.addEventListener('mousedown', handler)
-    return () => document.removeEventListener('mousedown', handler)
+    document.addEventListener('touchstart', handler)
+    return () => { document.removeEventListener('mousedown', handler); document.removeEventListener('touchstart', handler) }
   }, [])
+
+  // Write the name query straight to the URL so results filter as you type.
+  const onQ = (val: string) => {
+    setQ(val); lastWroteQ.current = val
+    const p = new URLSearchParams(Array.from(sp.entries()))
+    if (val.trim()) p.set('q', val.trim()); else p.delete('q')
+    const qs = p.toString()
+    router.replace(qs ? `/?${qs}` : '/', { scroll: false })
+  }
+
+  // Reflect external URL changes to `q` (e.g. Results' "Clear filters"), but never
+  // clobber what the user is mid-typing — only sync when the URL differs from our
+  // own last write.
+  useEffect(() => {
+    const urlQ = sp.get('q') || ''
+    if (urlQ !== lastWroteQ.current) { setQ(urlQ); lastWroteQ.current = urlQ }
+  }, [sp])
 
   const selectedRegionKeys = regions.map(r => REGION_KEY[r])
   const availableStates = Object.entries(US_STATES)
@@ -46,6 +73,7 @@ export default function SearchPanel() {
   // every level, so filtering by one can't separate clubs; Surface IS wired.)
   const applySearch = () => {
     const p = new URLSearchParams()
+    if (q.trim()) p.set('q', q.trim())
     if (types.length) p.set('type', types.join(','))
     const regionKeys = regions.map(r => REGION_KEY[r]).filter(Boolean)
     if (regionKeys.length) p.set('region', regionKeys.join(','))
@@ -62,6 +90,23 @@ export default function SearchPanel() {
 
   return (
     <div className="search-panel">
+      {/* Name search — the fast path: type a club or event name directly. */}
+      <div className="name-search">
+        <span className="name-search-icon" aria-hidden="true">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
+        </span>
+        <input
+          type="text"
+          className="name-search-input"
+          placeholder="Search by club or event name…"
+          value={q}
+          onChange={e => onQ(e.target.value)}
+          aria-label="Search by club or event name"
+        />
+        {q && <button className="name-search-clear" onClick={() => onQ('')} aria-label="Clear search">×</button>}
+      </div>
+      <div className="search-or">or filter below · <span className="search-or-hint">searching is free — run a club? sign in to claim your listing free</span></div>
+
       <div className="search-grid">
         {/* ROW 1 */}
         <Dropdown id="type" label="Type" openMenu={openMenu} setOpenMenu={setOpenMenu} activeMenuRef={activeMenuRef} summary={types.length ? `${types.length} selected` : 'All Types'}>
