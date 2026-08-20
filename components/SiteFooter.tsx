@@ -18,9 +18,6 @@ export default function SiteFooter() {
               <a href="mailto:info@pancakedig.com" style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: 'var(--chalk)', fontWeight: 500 }}>
                 info@pancakedig.com
               </a>
-              <a href="/volleyball-clubs" style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: 'var(--chalk)', fontWeight: 500 }}>
-                Browse clubs by state
-              </a>
             </div>
           </div>
           <a href="https://sitesbyed.com" target="_blank" rel="noopener noreferrer" className="footer-credit">
