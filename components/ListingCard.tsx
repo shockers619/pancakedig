@@ -1,4 +1,4 @@
-import { Listing, REGION_NAMES, TYPE_LABELS, formatDivisionRange, formatGender, formatEventDate, eventLead, orgChips } from '@/lib/constants'
+import { Listing, REGION_NAMES, TYPE_LABELS, formatDivisionRange, formatGender, formatEventDate, eventLead, orgChips, displayTown } from '@/lib/constants'
 import { VerifiedBadge } from './VerifiedBadge'
 import { ClaimListingButton } from './ClaimListingButton'
 
@@ -25,7 +25,7 @@ export default function ListingCard({ listing: l, onClick }: { listing: Listing;
 
         <div className="listing-meta">
           📍 {REGION_NAMES[l.region] || l.region}
-          {(l.venue || l.city || l.state) ? ` · ${[l.venue, l.city, l.state?.toUpperCase()].filter(Boolean).join(', ')}` : ''}
+          {(() => { const tail = [displayTown(l.city, l.venue), l.state?.toUpperCase()].filter(Boolean).join(', '); return tail ? ` · ${tail}` : '' })()}
         </div>
 
         {(l.event_date || l.division || l.gender || l.surface || orgs.length > 0) && (

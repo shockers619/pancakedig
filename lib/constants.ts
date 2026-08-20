@@ -162,6 +162,22 @@ export function formatGender(gender?: string): string {
   return ''
 }
 
+// Town/city for a COMPACT row. Prefer the clean `city`; fall back to `venue`,
+// which sometimes holds a facility name or a full street address — in that case
+// take the last non-street comma-segment (after dropping a trailing state code).
+// Detail cards still render the full venue/address; the town-only form is just
+// so street addresses and facility strings don't leak onto the compact rows.
+export function displayTown(city?: string, venue?: string): string {
+  for (const raw of [city, venue]) {
+    if (!raw) continue
+    const parts = raw.split(',').map(p => p.trim()).filter(Boolean)
+    while (parts.length && /^[A-Za-z]{2}$/.test(parts[parts.length - 1]) && parts[parts.length - 1] === parts[parts.length - 1].toUpperCase()) parts.pop()
+    const last = parts[parts.length - 1]
+    if (last && !/^\d/.test(last)) return last   // a real town, not a street number
+  }
+  return (city || venue || '').split(',').map(p => p.trim()).filter(Boolean).pop() || ''
+}
+
 // Absolute site origin — used for canonical URLs, sitemap entries, and JSON-LD.
 export const SITE_URL = 'https://pancakedig.com'
 

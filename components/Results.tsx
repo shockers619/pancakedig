@@ -1,7 +1,7 @@
 'use client'
 import { useState, useMemo, useEffect, useRef } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
-import { Listing, isOrgUnverified, US_STATES, TYPE_LABELS, REGION_NAMES, formatGender } from '@/lib/constants'
+import { Listing, isOrgUnverified, US_STATES, TYPE_LABELS, REGION_NAMES, formatGender, displayTown } from '@/lib/constants'
 import { ORG_OTHER, isOrgOther } from '@/lib/filterOptions'
 import SearchPanel from './SearchPanel'
 import ListingCard from './ListingCard'
@@ -86,15 +86,24 @@ export default function Results({ listings, isSample }: { listings: Listing[]; i
       if (surfaces.length && !surfaces.includes(l.surface || '')) return false
       return true
     })
-    const cityOf = (l: Listing) => l.venue || l.city || ''
+    const cityOf = (l: Listing) => displayTown(l.city, l.venue)
     const name = (l: Listing) => l.title || l.club || ''
     // Sort states by full name (Alabama before Alaska), never by 2-letter code (AK before AL).
     const stateName = (l: Listing) => US_STATES[(l.state || '').toLowerCase()]?.name || l.state || ''
+    // City compare that pushes blank towns LAST (a blank string would otherwise
+    // sort first and lead every city-less listing to the top of the results).
+    const cityCmp = (a: Listing, b: Listing) => {
+      const ca = cityOf(a), cb = cityOf(b)
+      if (!ca && !cb) return 0
+      if (!ca) return 1
+      if (!cb) return -1
+      return ca.localeCompare(cb)
+    }
     const stateFiltered = states.length > 0
     out.sort((a, b) => {
       // Filtering by state auto-arranges results A–Z by city (within state), regardless of the Sort dropdown.
-      if (stateFiltered) return stateName(a).localeCompare(stateName(b)) || cityOf(a).localeCompare(cityOf(b)) || name(a).localeCompare(name(b))
-      if (sort === 'state') return stateName(a).localeCompare(stateName(b)) || cityOf(a).localeCompare(cityOf(b))
+      if (stateFiltered) return stateName(a).localeCompare(stateName(b)) || cityCmp(a, b) || name(a).localeCompare(name(b))
+      if (sort === 'state') return stateName(a).localeCompare(stateName(b)) || cityCmp(a, b)
       if (sort === 'type') return a.type.localeCompare(b.type) || name(a).localeCompare(name(b))
       return 0 // recent = query order (already newest-first)
     })
@@ -119,6 +128,12 @@ export default function Results({ listings, isSample }: { listings: Listing[]; i
     start = Math.max(1, end - max + 1)
     return Array.from({ length: end - start + 1 }, (_, i) => start + i)
   }
+
+  // The default geo sort orders by State A–Z then City A–Z. Labeling it "City /
+  // Town" nationally is misleading, so make it context-aware: single state → the
+  // ordering is effectively by city; all states → it's by state.
+  const geoSortLabel = states.length === 1 ? 'City / Town (A–Z)' : 'State (A–Z)'
+  const sortLabel = (s: Sort) => (s === 'state' ? geoSortLabel : SORT_LABELS[s])
 
   return (
     <section className="section results-section" id="results">
@@ -149,7 +164,7 @@ export default function Results({ listings, isSample }: { listings: Listing[]; i
               <span>Sort by</span>
               <div style={{ position: 'relative' }}>
                 <div className="sort-box" onClick={() => setSortOpen(o => !o)}>
-                  <span>{SORT_LABELS[sort]}</span>
+                  <span>{sortLabel(sort)}</span>
                   <span className="msel-chevron">▾</span>
                 </div>
                 {sortOpen && (
@@ -157,7 +172,7 @@ export default function Results({ listings, isSample }: { listings: Listing[]; i
                     {(Object.keys(SORT_LABELS) as Sort[]).map(s => (
                       <div key={s} className="sort-opt" style={{ color: s === sort ? 'var(--volley-yellow)' : undefined }}
                         onClick={() => { setSort(s); setPage(1); setSortOpen(false) }}>
-                        {SORT_LABELS[s]}
+                        {sortLabel(s)}
                       </div>
                     ))}
                   </div>
