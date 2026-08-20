@@ -98,10 +98,10 @@ export default function SearchPanel() {
         <input
           type="text"
           className="name-search-input"
-          placeholder="Search by club or event name…"
+          placeholder="Search by club, event, or location…"
           value={q}
           onChange={e => onQ(e.target.value)}
-          aria-label="Search by club or event name"
+          aria-label="Search by club, event, or location"
         />
         {q && <button className="name-search-clear" onClick={() => onQ('')} aria-label="Clear search">×</button>}
       </div>
