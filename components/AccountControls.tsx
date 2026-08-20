@@ -16,6 +16,7 @@ import PostListingModal from './PostListingModal'
 export default function AccountControls() {
   const [user, setUser] = useState<any>(null)
   const [authOpen, setAuthOpen] = useState(false)
+  const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin')
   const [menuOpen, setMenuOpen] = useState(false)
   const [menuPos, setMenuPos] = useState<{ top: number; right: number } | null>(null)
   const [dashOpen, setDashOpen] = useState(false)
@@ -32,6 +33,17 @@ export default function AccountControls() {
       if (session?.user) setAuthOpen(false)
     })
     return () => subscription.unsubscribe()
+  }, [])
+
+  // Let other components (e.g. the claim card's "Register" link) open the auth
+  // modal in a chosen mode via a global event, since the modal lives here.
+  useEffect(() => {
+    const onOpenAuth = (e: Event) => {
+      const mode = (e as CustomEvent).detail?.mode === 'signup' ? 'signup' : 'signin'
+      setAuthMode(mode); setAuthOpen(true)
+    }
+    window.addEventListener('pd:open-auth', onOpenAuth)
+    return () => window.removeEventListener('pd:open-auth', onOpenAuth)
   }, [])
 
   // Close the menu on any click outside the trigger or the popover.
@@ -58,7 +70,7 @@ export default function AccountControls() {
   return (
     <>
       {!user ? (
-        <button className="btn btn-outline" onClick={() => setAuthOpen(true)}>Sign In</button>
+        <button className="btn btn-outline" onClick={() => { setAuthMode('signin'); setAuthOpen(true) }}>Sign In</button>
       ) : (
         <button ref={btnRef} className="btn btn-outline" onClick={toggleMenu}>
           {/* Prefer a real first name (Google gives us one); never show the raw
@@ -82,7 +94,7 @@ export default function AccountControls() {
         document.body
       )}
 
-      <AuthSystem open={authOpen} mode="signin" onClose={() => setAuthOpen(false)} />
+      <AuthSystem open={authOpen} mode={authMode} onClose={() => setAuthOpen(false)} />
       <Dashboard open={dashOpen} onClose={() => setDashOpen(false)} onEdit={(l) => { setDashOpen(false); setEditListing(l) }} />
       <PostListingModal open={!!editListing} editing={editListing} onClose={() => setEditListing(null)} />
       {isAdmin && <AdminQueue open={adminOpen} onClose={() => setAdminOpen(false)} />}

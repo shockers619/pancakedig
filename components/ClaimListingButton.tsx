@@ -70,7 +70,9 @@ export function ClaimListingButton({ listingId, listingTitle, compact = false }:
               </div>
             ) : !user ? (
               <div style={{ fontSize: '13.5px', lineHeight: 1.6, color: 'var(--chalk-dim)' }}>
-                <p>You’ll need to sign in before claiming, so we know who to follow up with. Use the <strong style={{ color: 'var(--volley-yellow)' }}>Sign In</strong> button up top, then come back and click “Claim This Listing” again.</p>
+                <p>
+                  <button className="linklike" onClick={() => { setOpen(false); window.dispatchEvent(new CustomEvent('pd:open-auth', { detail: { mode: 'signup' } })) }}>Register</button> for an account, so we know who to follow up with. Once verified, you’ll see a yellow check next to your listing. You’ll then have full access to edit the listing and make additional listings if you choose.
+                </p>
               </div>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>

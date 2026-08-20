@@ -105,7 +105,7 @@ export default function SearchPanel() {
         />
         {q && <button className="name-search-clear" onClick={() => onQ('')} aria-label="Clear search">×</button>}
       </div>
-      <div className="search-or">or filter below · <span className="search-or-hint">searching is free — run a club? sign in to claim your listing free</span></div>
+      <div className="search-or">or filter below</div>
 
       <div className="search-grid">
         {/* ROW 1 */}

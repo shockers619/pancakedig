@@ -333,10 +333,9 @@ header.site-header .wrap { display: flex; align-items: center; justify-content: 
 }
 .name-search-clear:hover { color: var(--chalk); }
 .search-or {
-  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.04em; text-transform: uppercase;
-  color: var(--chalk-faint); margin-top: -6px;
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--volley-yellow); margin-top: -6px;
 }
-.search-or-hint { text-transform: none; letter-spacing: 0; color: var(--chalk-dim); }
 
 .field-label {
   display: block;
