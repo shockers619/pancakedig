@@ -68,29 +68,39 @@ export function ClaimListingButton({ listingId, listingTitle, compact = false }:
                 <p>Thanks — your claim was submitted for review. We’ll reach out at <strong style={{ color: 'var(--chalk)' }}>{user?.email}</strong> once it’s approved, and then you’ll be able to edit this listing from your account.</p>
                 <button className="listing-cta" style={{ marginTop: '12px' }} onClick={() => setOpen(false)}>Close</button>
               </div>
-            ) : !user ? (
-              <div style={{ fontSize: '13.5px', lineHeight: 1.6, color: 'var(--chalk-dim)' }}>
-                <p>
-                  <button className="linklike" onClick={() => { setOpen(false); window.dispatchEvent(new CustomEvent('pd:open-auth', { detail: { mode: 'signup' } })) }}>Register</button> for an account, so we know who to follow up with. Once verified, you’ll see a yellow check next to your listing. You’ll then have full access to edit the listing and make additional listings if you choose.
-                </p>
-              </div>
             ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                <p style={{ fontSize: '13px', color: 'var(--chalk-dim)', lineHeight: 1.5, margin: 0 }}>
-                  Are you affiliated with this club, event, or organization? Submit a claim and we’ll review it — once approved, you can edit this listing directly.
+              // One consistent card regardless of device or sign-in state: same
+              // intro making the free-account requirement explicit, then the action
+              // adapts — register (logged out) or the claim form (logged in).
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                <p style={{ fontSize: '13.5px', color: 'var(--chalk-dim)', lineHeight: 1.6, margin: 0 }}>
+                  Claiming a listing takes a free Pancake Dig account — that’s how we confirm you’re connected to it and know who to follow up with. Once approved, a <strong style={{ color: 'var(--volley-yellow)' }}>yellow check</strong> appears next to your listing and you get full access to edit it and post additional listings.
                 </p>
-                <div>
-                  <label className="field-label">Your Name</label>
-                  <input className="text-input" value={name} onChange={e => setName(e.target.value)} placeholder="e.g. Jamie Rivera" />
-                </div>
-                <div>
-                  <label className="field-label">Your Role / How You’re Connected (optional)</label>
-                  <textarea className="text-input" value={message} onChange={e => setMessage(e.target.value)} placeholder="e.g. I’m the director of this club" rows={3} style={{ resize: 'vertical', fontFamily: 'inherit' }} />
-                </div>
-                {error && <div style={{ color: 'var(--antenna-red)', fontSize: '12.5px' }}>{error}</div>}
-                <button className="listing-cta" disabled={submitting} onClick={submitClaim} style={{ opacity: submitting ? 0.6 : 1 }}>
-                  {submitting ? 'Submitting…' : 'Submit Claim Request'}
-                </button>
+                {!user ? (
+                  <>
+                    <button className="listing-cta" onClick={() => { setOpen(false); window.dispatchEvent(new CustomEvent('pd:open-auth', { detail: { mode: 'signup' } })) }}>
+                      Create a free account
+                    </button>
+                    <p style={{ fontSize: '12.5px', color: 'var(--chalk-faint)', margin: 0, textAlign: 'center' }}>
+                      Already have one? <button className="linklike" onClick={() => { setOpen(false); window.dispatchEvent(new CustomEvent('pd:open-auth', { detail: { mode: 'signin' } })) }}>Sign in</button>
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <div>
+                      <label className="field-label">Your Name</label>
+                      <input className="text-input" value={name} onChange={e => setName(e.target.value)} placeholder="e.g. Jamie Rivera" />
+                    </div>
+                    <div>
+                      <label className="field-label">Your Role / How You’re Connected (optional)</label>
+                      <textarea className="text-input" value={message} onChange={e => setMessage(e.target.value)} placeholder="e.g. I’m the director of this club" rows={3} style={{ resize: 'vertical', fontFamily: 'inherit' }} />
+                    </div>
+                    {error && <div style={{ color: 'var(--antenna-red)', fontSize: '12.5px' }}>{error}</div>}
+                    <button className="listing-cta" disabled={submitting} onClick={submitClaim} style={{ opacity: submitting ? 0.6 : 1 }}>
+                      {submitting ? 'Submitting…' : 'Submit Claim Request'}
+                    </button>
+                  </>
+                )}
               </div>
             )}
           </div>
