@@ -1,7 +1,7 @@
 'use client'
 import { useState, useMemo, useEffect, useRef } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
-import { Listing, isOrgUnverified, US_STATES } from '@/lib/constants'
+import { Listing, isOrgUnverified, US_STATES, TYPE_LABELS, REGION_NAMES, formatGender } from '@/lib/constants'
 import { ORG_OTHER, isOrgOther } from '@/lib/filterOptions'
 import SearchPanel from './SearchPanel'
 import ListingCard from './ListingCard'
@@ -54,7 +54,14 @@ export default function Results({ listings, isSample }: { listings: Listing[]; i
   const filtered = useMemo(() => {
     const out = listings.filter(l => {
       if (q) {
-        const hay = `${l.title || ''} ${l.club || ''} ${l.city || ''} ${l.venue || ''}`.toLowerCase()
+        // Match names + location AND clean category fields, so "tournament",
+        // "beach", "USAV", "girls", "training", "pacific" etc. surface the whole
+        // set — not just listings that happen to have the word in their name.
+        const hay = [
+          l.title, l.club, l.city, l.venue,
+          TYPE_LABELS[l.type], l.event_subtype, l.surface, l.governing_body,
+          formatGender(l.gender), REGION_NAMES[l.region],
+        ].filter(Boolean).join(' ').toLowerCase()
         if (!hay.includes(q)) return false
       }
       if (types.length && !types.includes(l.type)) return false
